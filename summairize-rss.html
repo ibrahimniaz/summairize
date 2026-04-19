@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SummAIrize — Your news, your way</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#9B1C1C;--green-light:#fdf2f2;--green-dark:#6B1111;
+  --ink:#111110;--ink2:#444441;--ink3:#888780;--ink4:#B4B2A9;
+  --paper:#FAFAF8;--paper2:#F1EFE8;--paper3:#E8E6DE;
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --radius:10px;--radius-lg:16px;
+}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);min-height:100vh;font-size:15px;line-height:1.6}
+.hidden{display:none!important}
+.screen{display:none;min-height:100vh;flex-direction:column}
+.screen.active{display:flex}
+.btn{cursor:pointer;font-family:var(--sans);font-size:14px;font-weight:500;border:none;border-radius:var(--radius);padding:10px 22px;transition:all 0.18s}
+.btn-primary{background:var(--ink);color:#fff}.btn-primary:hover{background:var(--ink2)}
+.btn-green{background:var(--green);color:#fff}.btn-green:hover{background:var(--green-dark)}
+.btn-ghost{background:transparent;border:1px solid var(--paper3);color:var(--ink2)}.btn-ghost:hover{background:var(--paper2)}
+.btn-sm{padding:7px 16px;font-size:13px}
+.btn:disabled{background:var(--paper3);color:var(--ink4);cursor:not-allowed}
+input{font-family:var(--sans);font-size:14px;width:100%;padding:10px 14px;border:1px solid var(--paper3);border-radius:var(--radius);background:#fff;color:var(--ink);outline:none;transition:border-color 0.15s}
+input:focus{border-color:var(--green)}
+label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
+
+.ad-slot{background:var(--paper2);border:1px dashed var(--paper3);border-radius:var(--radius);text-align:center;font-size:11px;color:var(--ink4);letter-spacing:0.06em;text-transform:uppercase}
+.ad-banner{height:56px;display:flex;align-items:center;justify-content:center;margin-bottom:0}
+.ad-square{width:100%;height:220px;display:flex;align-items:center;justify-content:center;margin-top:1rem}
+
+.nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:56px;border-bottom:1px solid var(--paper3);background:var(--paper);position:sticky;top:0;z-index:100}
+.nav-logo{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--ink);cursor:pointer}.nav-logo span{color:var(--green)}
+.nav-right{display:flex;align-items:center;gap:10px}
+
+/* LANDING */
+#screen-landing{background:var(--paper)}
+.hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4rem 2rem 3rem}
+.eyebrow{font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--green);margin-bottom:1.25rem;display:flex;align-items:center;gap:8px}
+.eyebrow-line{width:32px;height:1px;background:var(--green)}
+.hero h1{font-family:var(--serif);font-size:clamp(40px,6vw,72px);font-weight:700;line-height:1.1;color:var(--ink);margin-bottom:1.5rem;max-width:700px}
+.hero h1 em{font-style:italic;color:var(--green)}
+.hero p{font-size:17px;color:var(--ink3);max-width:480px;line-height:1.7;margin-bottom:2.5rem}
+.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.hero-cta .btn{padding:13px 30px;font-size:15px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:2.5rem}
+.pill{font-size:12px;padding:5px 13px;border-radius:20px;background:var(--paper2);color:var(--ink3);border:1px solid var(--paper3);display:inline-flex;align-items:center;gap:6px}
+.stats-strip{background:var(--paper2);border-top:1px solid var(--paper3);padding:1.5rem 2rem;display:flex;gap:2rem;justify-content:center;flex-wrap:wrap}
+.stat{text-align:center}.stat-n{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--ink)}.stat-l{font-size:12px;color:var(--ink3);margin-top:2px}
+
+/* AUTH */
+#screen-auth{align-items:center;justify-content:center;background:var(--paper)}
+.auth-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem}
+.auth-card{width:100%;max-width:400px;background:#fff;border:1px solid var(--paper3);border-radius:var(--radius-lg);padding:2.5rem}
+.auth-logo{font-family:var(--serif);font-size:22px;font-weight:700;text-align:center;margin-bottom:0.4rem}.auth-logo span{color:var(--green)}
+.auth-sub{text-align:center;font-size:13px;color:var(--ink3);margin-bottom:2rem}
+.auth-tabs{display:flex;border:1px solid var(--paper3);border-radius:var(--radius);overflow:hidden;margin-bottom:1.75rem}
+.auth-tab{flex:1;padding:9px;text-align:center;font-size:13px;font-weight:500;cursor:pointer;background:transparent;color:var(--ink3);border:none;font-family:var(--sans);transition:all 0.15s}
+.auth-tab.active{background:var(--ink);color:#fff}
+.fg{margin-bottom:1rem}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.divider{display:flex;align-items:center;gap:12px;margin:1rem 0;font-size:12px;color:var(--ink4)}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--paper3)}
+.auth-err{background:#fdf2f2;border:1px solid #f5c6c6;border-radius:var(--radius);padding:10px 14px;font-size:13px;color:#c0392b;margin-bottom:1rem;display:none}
+
+/* CONFIG */
+#screen-config{background:var(--paper)}
+.config-body{display:grid;grid-template-columns:1fr 240px;flex:1}
+.config-main{padding:2rem 2.5rem;border-right:1px solid var(--paper3)}
+.config-aside{padding:1.5rem}
+.prog{height:3px;background:var(--paper3);margin-bottom:2.5rem;border-radius:2px}
+.prog-fill{height:3px;background:var(--green);border-radius:2px;transition:width 0.35s}
+.step-lbl{font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink4);margin-bottom:0.4rem}
+.step-ttl{font-family:var(--serif);font-size:24px;font-weight:700;color:var(--ink);margin-bottom:0.5rem}
+.step-hint{font-size:13px;color:var(--ink3);margin-bottom:1.75rem;line-height:1.5}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.75rem}
+.chip{border:1px solid var(--paper3);border-radius:20px;padding:8px 16px;font-size:13px;cursor:pointer;color:var(--ink2);background:#fff;font-family:var(--sans);transition:all 0.15s;display:inline-flex;align-items:center;gap:7px}
+.chip:hover{border-color:var(--green);color:var(--ink)}
+.chip.sel{background:var(--ink);color:#fff;border-color:var(--ink)}
+.src-logo-tag{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:4px 10px;border-radius:12px;background:var(--paper2);color:var(--ink2);border:1px solid var(--paper3);font-weight:500}
+.src-logo-tag img{width:13px;height:13px;border-radius:2px;object-fit:contain}
+.fn-logo{width:12px;height:12px;border-radius:2px;object-fit:contain;vertical-align:middle;margin-right:4px}
+.og{display:grid;gap:10px;margin-bottom:1.75rem}
+.og.c3{grid-template-columns:1fr 1fr 1fr}
+.oc{border:1px solid var(--paper3);border-radius:var(--radius-lg);padding:14px 16px;cursor:pointer;background:#fff;transition:all 0.15s}
+.oc:hover{border-color:var(--green);background:var(--green-light)}
+.oc.sel{border:2px solid var(--green);background:var(--green-light)}
+.oc-t{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:3px}
+.oc-s{font-size:12px;color:var(--ink3)}
+.step-acts{display:flex;gap:10px;margin-top:0.5rem}
+.aside-ttl{font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink4);margin-bottom:1rem}
+.aside-row{padding:10px 0;border-bottom:1px solid var(--paper3);display:flex;gap:10px;align-items:flex-start}
+.aside-row:last-child{border-bottom:none}
+.aside-dot{width:7px;height:7px;border-radius:50%;background:var(--paper3);margin-top:4px;flex-shrink:0;transition:background 0.2s}
+.aside-dot.on{background:var(--green)}
+.aside-k{font-size:11px;color:var(--ink4);margin-bottom:2px}
+.aside-v{font-size:13px;color:var(--ink);font-weight:500;line-height:1.4}
+.kw-in{width:100%;padding:10px 14px;border:1px solid var(--paper3);border-radius:var(--radius);background:#fff;font-size:14px;color:var(--ink);font-family:var(--sans);outline:none;margin-bottom:1.75rem;transition:border-color 0.15s}
+.kw-in:focus{border-color:var(--green)}
+
+/* LOADING */
+#screen-loading{background:var(--paper);align-items:center;justify-content:center}
+.load-inner{text-align:center;padding:3rem;max-width:340px}
+.spinner{width:36px;height:36px;border:2px solid var(--paper3);border-top-color:var(--green);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 2rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load-ttl{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--ink);margin-bottom:0.5rem}
+.load-sub{font-size:14px;color:var(--ink3);margin-bottom:2rem}
+.load-steps{display:flex;flex-direction:column;gap:10px;text-align:left}
+.ls{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink4)}
+.ls.done{color:var(--ink2)}.ls.cur{color:var(--ink);font-weight:500}
+.ls-dot{width:6px;height:6px;border-radius:50%;background:var(--paper3);flex-shrink:0}
+.ls.done .ls-dot{background:var(--green)}
+.ls.cur .ls-dot{background:var(--green);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.fetch-status{font-size:12px;color:var(--ink3);margin-top:1.5rem;min-height:18px;font-style:italic}
+
+/* OUTPUT */
+#screen-output{background:var(--paper)}
+.out-layout{display:grid;grid-template-columns:1fr 260px;flex:1}
+.out-main{padding:2rem 2.5rem;border-right:1px solid var(--paper3)}
+.out-sidebar{padding:1.5rem}
+.digest-hdr{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--paper3)}
+.digest-title{font-family:var(--serif);font-size:30px;font-weight:700;color:var(--ink);margin-bottom:0.4rem}
+.digest-meta-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:0.75rem}
+.d-date{font-size:13px;color:var(--ink3)}
+.d-tag{font-size:11px;padding:3px 10px;border-radius:12px;background:var(--green-light);color:var(--green-dark);font-weight:500}
+.updated-stamp{font-size:12px;color:var(--ink3);margin-bottom:1rem;display:flex;align-items:center;gap:6px}
+.updated-dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
+.share-bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:0.75rem}
+.share-btn{display:flex;align-items:center;gap:6px;padding:7px 13px;border:1px solid var(--paper3);border-radius:var(--radius);font-size:12px;font-weight:500;cursor:pointer;background:#fff;color:var(--ink2);font-family:var(--sans);transition:all 0.15s}
+.share-btn:hover{background:var(--paper2)}
+.share-icon{width:13px;height:13px;fill:currentColor;flex-shrink:0}
+.digest-section{margin-bottom:0;padding:1.75rem 0;border-bottom:0.5px solid var(--paper3)}
+.digest-section:first-child{padding-top:0}
+.digest-section:last-child{border-bottom:none}
+.sec-hdr{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:0.6rem}
+.sec-kicker{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);margin-bottom:0.35rem}
+.sec-ttl{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--ink);line-height:1.25}
+.sec-body{font-size:15px;color:var(--ink2);line-height:1.8}
+.sec-body p{margin-bottom:1rem}
+.sec-body p:last-child{margin-bottom:0}
+.src-quote{border-left:3px solid var(--green);padding:10px 14px;background:var(--green-light);border-radius:0 var(--radius) var(--radius) 0;margin:1.25rem 0 1rem;font-size:13.5px;color:var(--ink);line-height:1.65;font-style:italic}
+.src-quote cite{display:block;font-style:normal;font-size:11px;color:var(--green-dark);margin-top:5px;font-weight:500}
+.footnotes{margin-top:0.75rem;padding-top:0.75rem;border-top:0.5px solid var(--paper3)}
+.fn-ttl{font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink4);margin-bottom:0.6rem}
+.fn-item{display:flex;gap:8px;margin-bottom:5px;font-size:12px;color:var(--ink3);align-items:flex-start}
+.fn-num{color:var(--green);font-weight:500;flex-shrink:0;min-width:16px}
+.vote-row{display:flex;gap:6px;flex-shrink:0;margin-top:3px}
+.vb{width:28px;height:28px;border:0.5px solid var(--paper3);border-radius:7px;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all 0.15s;font-family:var(--sans)}
+.vb:hover{background:var(--paper2)}
+.vb.up{background:var(--green-light);border-color:var(--green);color:var(--green-dark)}
+.vb.dn{background:#fdf2f2;border-color:#e8b4b4;color:#c0392b}
+.fn-link{color:var(--ink3);text-decoration:none;border-bottom:1px solid var(--paper3);transition:color 0.15s}
+.fn-link:hover{color:var(--green)}
+.no-stories{background:var(--paper2);border:1px solid var(--paper3);border-radius:var(--radius-lg);padding:2rem;text-align:center}
+.no-stories h3{font-family:var(--serif);font-size:18px;margin-bottom:0.5rem;color:var(--ink)}
+.no-stories p{font-size:14px;color:var(--ink3);line-height:1.6}
+.osc{background:#fff;border:1px solid var(--paper3);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:1rem}
+.osc-ttl{font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink4);margin-bottom:0.75rem}
+.osc-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--paper3);font-size:13px}
+.osc-row:last-child{border-bottom:none}
+.osc-l{color:var(--ink3)}.osc-v{color:var(--ink);font-weight:500;text-align:right;max-width:130px;font-size:12px;line-height:1.4}
+.new-btn{width:100%;padding:10px;border:1px solid var(--paper3);border-radius:var(--radius);background:transparent;font-size:13px;color:var(--ink3);cursor:pointer;font-family:var(--sans);transition:all 0.15s;margin-bottom:1rem}
+.new-btn:hover{background:var(--paper2)}
+.err-box{background:#fdf2f2;border:1px solid #f5c6c6;border-radius:var(--radius);padding:14px 16px;color:#c0392b;font-size:14px;margin-bottom:1rem}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 20px;border-radius:var(--radius);font-size:13px;font-weight:500;opacity:0;pointer-events:none;transition:opacity 0.2s;z-index:999}
+.toast.show{opacity:1}
+.fetch-log{background:var(--paper2);border-radius:var(--radius);padding:10px 14px;margin-top:1.5rem;font-size:12px;color:var(--ink3);text-align:left;max-height:80px;overflow:hidden}
+.fetch-log-item{padding:2px 0}
+.fetch-log-item.ok{color:var(--green-dark)}
+.fetch-log-item.err{color:#c0392b}
+.share-btn.email-btn{background:var(--green);color:#fff;border-color:var(--green)}
+.share-btn.email-btn:hover{background:var(--green-dark)}
+.premium-banner{background:linear-gradient(135deg,#1a1a1a,#2d2d2d);color:#fff;border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:1rem;text-align:center}
+.premium-banner h4{font-family:var(--serif);font-size:16px;margin-bottom:0.4rem}
+.premium-banner p{font-size:12px;color:#aaa;margin-bottom:1rem;line-height:1.5}
+.btn-gold{background:#B7791F;color:#fff;border:none;border-radius:var(--radius);padding:9px 18px;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans);width:100%}
+.btn-gold:hover{background:#92400E}
+.pf{display:flex;align-items:center;gap:8px;font-size:12px;color:#ccc;margin-bottom:6px;text-align:left}
+.pf-dot{width:5px;height:5px;border-radius:50%;background:#B7791F;flex-shrink:0}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:200;display:flex;align-items:center;justify-content:center;padding:1.5rem}
+.modal-box{background:#fff;border-radius:var(--radius-lg);padding:2rem;width:100%;max-width:400px}
+.modal-title{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--ink);margin-bottom:0.4rem}
+.modal-sub{font-size:13px;color:var(--ink3);margin-bottom:1.5rem;line-height:1.5}
+.modal-acts{display:flex;gap:10px;margin-top:1.25rem}
+.modal-err{font-size:13px;color:#c0392b;margin-top:0.75rem;display:none}
+.modal-ok{text-align:center;padding:0.5rem 0}
+.modal-ok-icon{font-size:36px;margin-bottom:0.75rem}
+.modal-ok h3{font-family:var(--serif);font-size:18px;margin-bottom:0.5rem;color:var(--ink)}
+.modal-ok p{font-size:13px;color:var(--ink3)}
+@media(max-width:768px){
+  .config-body{grid-template-columns:1fr}
+  .config-aside{display:none}
+  .config-main{padding:1.5rem}
+  .og.c3{grid-template-columns:1fr 1fr}
+  .out-layout{grid-template-columns:1fr}
+  .out-sidebar{display:none}
+  .out-main{padding:1.25rem}
+  .digest-title{font-size:22px}
+  .share-bar{gap:6px}
+  .share-btn{padding:6px 10px;font-size:11px}
+  .hero{padding:2.5rem 1.25rem 2rem}
+  .stats-strip{gap:1rem;padding:1.25rem}
+  .ad-square{display:none}
+  .nav{padding:0 1rem}
+  .nav-user-lbl{display:none}
+  .auth-card{padding:1.5rem}
+  .form-row{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .og.c3{grid-template-columns:1fr}
+  .hero-cta{flex-direction:column;align-items:center}
+  .hero-cta .btn{width:100%;max-width:280px}
+  .step-acts{flex-direction:column}
+  .step-acts .btn{width:100%}
+  .share-bar{gap:4px}
+  .share-btn span{display:none}
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+</head>
+<body>
+
+<!-- EMAIL MODAL -->
+<div class="modal-overlay hidden" id="email-modal">
+  <div class="modal-box">
+    <div id="email-modal-form">
+      <div class="modal-title">Email this digest</div>
+      <div class="modal-sub">Enter your email address and we'll send you a link to this digest.</div>
+      <div class="fg"><label>Your email address</label><input type="email" id="modal-email" placeholder="you@email.com"></div>
+      <div class="modal-err" id="modal-err"></div>
+      <div class="modal-acts">
+        <button class="btn btn-ghost" style="flex:1" onclick="closeEmailModal()">Cancel</button>
+        <button class="btn btn-green" style="flex:2" onclick="sendEmail()">Send digest link</button>
+      </div>
+    </div>
+    <div class="modal-ok hidden" id="email-modal-ok">
+      <div class="modal-ok-icon">✉️</div>
+      <h3>Check your inbox</h3>
+      <p>We've sent a link to your digest. Check your spam folder if it doesn't arrive within a minute.</p>
+      <button class="btn btn-ghost" style="width:100%;margin-top:1.25rem" onclick="closeEmailModal()">Done</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- LANDING -->
+<div class="screen active" id="screen-landing">
+  <nav class="nav">
+    <div class="nav-logo">summ<span>AI</span>rize</div>
+    <div class="nav-right">
+      <button class="btn btn-ghost btn-sm" onclick="showAuth('login')">Sign in</button>
+      <button class="btn btn-green btn-sm" onclick="showAuth('signup')">Get started</button>
+    </div>
+  </nav>
+  <div class="hero">
+    <div class="eyebrow"><div class="eyebrow-line"></div>Live AI news digest<div class="eyebrow-line"></div></div>
+    <h1>Your news.<br><em>Your way.</em></h1>
+    <p>Choose your sources, topics, tone and length. Get a real-time digest synthesised from live news feeds — on demand, in seconds.</p>
+    <div class="hero-cta">
+      <button class="btn btn-green" onclick="showAuth('signup')">Build my digest</button>
+      <button class="btn btn-ghost" onclick="showAuth('login')">Sign in</button>
+    </div>
+    <div class="pills">
+      <div class="pill"><span style="display:inline-flex;align-items:center;justify-content:center;background:#BB1919;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">BBC</span>BBC News</div>
+      <div class="pill"><span style="display:inline-flex;align-items:center;justify-content:center;background:#FF8000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">REU</span>Reuters</div>
+      <div class="pill"><span style="display:inline-flex;align-items:center;justify-content:center;background:#008000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">AJZ</span>Al Jazeera</div>
+      <div class="pill"><span style="display:inline-flex;align-items:center;justify-content:center;background:#052962;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">GDN</span>The Guardian</div>
+      <div class="pill"><span style="display:inline-flex;align-items:center;justify-content:center;background:#CC0000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">AP</span>AP News</div>
+      <div class="pill"><span style="display:inline-flex;align-items:center;justify-content:center;background:#003DA5;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">SKY</span>Sky News</div>
+      <div class="pill"><span style="display:inline-flex;align-items:center;justify-content:center;background:#CC0000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">CNN</span>CNN</div>
+      <div class="pill"><span style="display:inline-flex;align-items:center;justify-content:center;background:#006AB3;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">DW</span>Deutsche Welle</div>
+      <div class="pill"><span style="display:inline-flex;align-items:center;justify-content:center;background:#222222;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">NPR</span>NPR News</div>
+      <div class="pill"><span style="display:inline-flex;align-items:center;justify-content:center;background:#F0063C;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">F24</span>France 24</div>
+      <div class="pill"><span style="display:inline-flex;align-items:center;justify-content:center;background:#003399;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">EUR</span>euronews</div>
+    </div>
+  </div>
+  <div class="stats-strip">
+    <div class="stat"><div class="stat-n">11</div><div class="stat-l">News sources</div></div>
+    <div class="stat"><div class="stat-n">9</div><div class="stat-l">Topic categories</div></div>
+    <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Personalised</div></div>
+  </div>
+</div>
+
+<!-- AUTH -->
+<div class="screen" id="screen-auth" style="flex-direction:column">
+  <nav class="nav">
+    <div class="nav-logo" onclick="showScreen('screen-landing')">summ<span>AI</span>rize</div>
+  </nav>
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-logo">summ<span>AI</span>rize</div>
+      <div class="auth-sub">Your news, your way</div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Sign in</button>
+        <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Create account</button>
+      </div>
+      <div class="auth-err" id="auth-err"></div>
+      <div id="auth-login-form">
+        <div class="fg"><label>Email</label><input type="email" id="li-email" placeholder="you@email.com"></div>
+        <div class="fg"><label>Password</label><input type="password" id="li-pass" placeholder="••••••••"></div>
+        <button class="btn btn-green" style="width:100%;padding:12px;font-size:15px;margin-top:0.5rem" onclick="doLogin()">Sign in</button>
+        <div class="divider">or</div>
+        <button class="btn btn-ghost" style="width:100%;padding:11px" onclick="switchTab('signup')">Create an account</button>
+      </div>
+      <div id="auth-signup-form" class="hidden">
+        <div class="form-row">
+          <div class="fg"><label>First name</label><input type="text" id="su-first" placeholder="Your name"></div>
+          <div class="fg"><label>Last name</label><input type="text" id="su-last" placeholder=""></div>
+        </div>
+        <div class="fg"><label>Email</label><input type="email" id="su-email" placeholder="you@email.com"></div>
+        <div class="fg"><label>Password</label><input type="password" id="su-pass" placeholder="Min. 8 characters"></div>
+        <button class="btn btn-green" style="width:100%;padding:12px;font-size:15px;margin-top:0.5rem" onclick="doSignup()">Create account</button>
+        <div class="divider">or</div>
+        <button class="btn btn-ghost" style="width:100%;padding:11px" onclick="switchTab('login')">Sign in instead</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIG -->
+<div class="screen" id="screen-config">
+  <nav class="nav">
+    <div class="nav-logo">summ<span>AI</span>rize</div>
+    <div class="nav-right">
+      <div id="usage-bar" style="font-size:12px;color:var(--ink3);display:flex;align-items:center;gap:8px"></div>
+      <span id="nav-user" style="font-size:13px;color:var(--ink3)"></span>
+      <button class="btn btn-ghost btn-sm" onclick="showScreen('screen-landing')">Sign out</button>
+    </div>
+  </nav>
+  <div style="padding:10px 2rem;border-bottom:1px solid var(--paper3)"><div class="ad-slot ad-banner">Advertisement</div></div>
+  <div class="config-body">
+    <div class="config-main">
+      <div class="prog"><div class="prog-fill" id="cprog" style="width:20%"></div></div>
+
+      <div class="cfg-step" id="cs1">
+        <div class="step-lbl">Step 1 of 5</div>
+        <div class="step-ttl">Which sources?</div>
+        <div class="step-hint">Select all the news outlets you'd like us to draw from.</div>
+        <div class="chips" id="chip-sources">
+          <div class="chip" onclick="toggleChip(this,'sources')"><span style="display:inline-flex;align-items:center;justify-content:center;background:#BB1919;color:#fff;font-size:7px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:24px;height:16px;font-family:var(--sans)">BBC</span>BBC News</div>
+          <div class="chip" onclick="toggleChip(this,'sources')"><span style="display:inline-flex;align-items:center;justify-content:center;background:#003DA5;color:#fff;font-size:7px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:24px;height:16px;font-family:var(--sans)">SKY</span>Sky News</div>
+          <div class="chip" onclick="toggleChip(this,'sources')"><span style="display:inline-flex;align-items:center;justify-content:center;background:#052962;color:#fff;font-size:7px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:24px;height:16px;font-family:var(--sans)">GDN</span>The Guardian</div>
+          <div class="chip" onclick="toggleChip(this,'sources')"><span style="display:inline-flex;align-items:center;justify-content:center;background:#FF8000;color:#fff;font-size:7px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:24px;height:16px;font-family:var(--sans)">REU</span>Reuters</div>
+          <div class="chip" onclick="toggleChip(this,'sources')"><span style="display:inline-flex;align-items:center;justify-content:center;background:#008000;color:#fff;font-size:7px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:24px;height:16px;font-family:var(--sans)">AJZ</span>Al Jazeera</div>
+          <div class="chip" onclick="toggleChip(this,'sources')"><span style="display:inline-flex;align-items:center;justify-content:center;background:#CC0000;color:#fff;font-size:7px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:24px;height:16px;font-family:var(--sans)">CNN</span>CNN</div>
+          <div class="chip" onclick="toggleChip(this,'sources')"><span style="display:inline-flex;align-items:center;justify-content:center;background:#CC0000;color:#fff;font-size:7px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:24px;height:16px;font-family:var(--sans)">AP</span>AP News</div>
+          <div class="chip" onclick="toggleChip(this,'sources')"><span style="display:inline-flex;align-items:center;justify-content:center;background:#006AB3;color:#fff;font-size:7px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:24px;height:16px;font-family:var(--sans)">DW</span>Deutsche Welle</div>
+          <div class="chip" onclick="toggleChip(this,'sources')"><span style="display:inline-flex;align-items:center;justify-content:center;background:#222222;color:#fff;font-size:7px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:24px;height:16px;font-family:var(--sans)">NPR</span>NPR News</div>
+          <div class="chip" onclick="toggleChip(this,'sources')"><span style="display:inline-flex;align-items:center;justify-content:center;background:#F0063C;color:#fff;font-size:7px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:24px;height:16px;font-family:var(--sans)">F24</span>France 24</div>
+          <div class="chip" onclick="toggleChip(this,'sources')"><span style="display:inline-flex;align-items:center;justify-content:center;background:#003399;color:#fff;font-size:7px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:24px;height:16px;font-family:var(--sans)">EUR</span>euronews</div>
+        </div>
+        <div class="step-acts">
+          <button class="btn btn-ghost" onclick="showScreen('screen-landing')">← Exit</button>
+          <button class="btn btn-primary" id="b1" disabled onclick="cfgGo(2)">Continue</button>
+        </div>
+      </div>
+
+      <div class="cfg-step hidden" id="cs2">
+        <div class="step-lbl">Step 2 of 5</div>
+        <div class="step-ttl">Which topics?</div>
+        <div class="step-hint">Claude will decide which live articles are relevant to these.</div>
+        <div class="chips" id="chip-topics">
+          <div class="chip" onclick="toggleChip(this,'topics')">Finance</div>
+          <div class="chip" onclick="toggleChip(this,'topics')">Politics</div>
+          <div class="chip" onclick="toggleChip(this,'topics')">Technology</div>
+          <div class="chip" onclick="toggleChip(this,'topics')">Science</div>
+          <div class="chip" onclick="toggleChip(this,'topics')">World news</div>
+          <div class="chip" onclick="toggleChip(this,'topics')">Business</div>
+          <div class="chip" onclick="toggleChip(this,'topics')">Stocks & markets</div>
+          <div class="chip" onclick="toggleChip(this,'topics')">Climate</div>
+          <div class="chip" onclick="toggleChip(this,'topics')">Health</div>
+        </div>
+        <div class="step-acts">
+          <button class="btn btn-ghost" onclick="cfgGo(1)">← Back</button>
+          <button class="btn btn-primary" id="b2" disabled onclick="cfgGo(3)">Continue</button>
+        </div>
+      </div>
+
+      <div class="cfg-step hidden" id="cs3">
+        <div class="step-lbl">Step 3 of 5</div>
+        <div class="step-ttl">What tone?</div>
+        <div class="step-hint">Choose how you'd like your digest written.</div>
+        <div class="og c3">
+          <div class="oc" data-val="neutral" onclick="selOpt(this,'tone')"><div class="oc-t">Neutral</div><div class="oc-s">Balanced, objective reporting</div></div>
+          <div class="oc" data-val="analytical" onclick="selOpt(this,'tone')"><div class="oc-t">Analytical</div><div class="oc-s">Data-driven, in-depth context</div></div>
+          <div class="oc" data-val="conversational" onclick="selOpt(this,'tone')"><div class="oc-t">Conversational</div><div class="oc-s">Accessible, plain-English style</div></div>
+        </div>
+        <div class="step-acts">
+          <button class="btn btn-ghost" onclick="cfgGo(2)">← Back</button>
+          <button class="btn btn-primary" id="b3" disabled onclick="cfgGo(4)">Continue</button>
+        </div>
+      </div>
+
+      <div class="cfg-step hidden" id="cs4">
+        <div class="step-lbl">Step 4 of 5</div>
+        <div class="step-ttl">How recent?</div>
+        <div class="step-hint">Only stories published within this window will be included.</div>
+        <div class="og c3">
+          <div class="oc" data-val="6" onclick="selOpt(this,'window')"><div class="oc-t">6 hours</div><div class="oc-s">Breaking news</div></div>
+          <div class="oc" data-val="24" onclick="selOpt(this,'window')"><div class="oc-t">24 hours</div><div class="oc-s">Today's stories</div></div>
+          <div class="oc" data-val="72" onclick="selOpt(this,'window')"><div class="oc-t">72 hours</div><div class="oc-s">Broader picture</div></div>
+        </div>
+        <div class="step-acts">
+          <button class="btn btn-ghost" onclick="cfgGo(3)">← Back</button>
+          <button class="btn btn-primary" id="b4" disabled onclick="cfgGo(5)">Continue</button>
+        </div>
+      </div>
+
+      <div class="cfg-step hidden" id="cs5">
+        <div class="step-lbl">Step 5 of 5</div>
+        <div class="step-ttl">Length & keyword</div>
+        <div class="step-hint">How long should your digest be? Add a keyword to highlight a specific story.</div>
+        <div class="og c3" style="margin-bottom:1.75rem">
+          <div class="oc" data-val="short" onclick="selOpt(this,'length')"><div class="oc-t">Short</div><div class="oc-s">~3 min read</div></div>
+          <div class="oc" data-val="medium" onclick="selOpt(this,'length')"><div class="oc-t">Medium</div><div class="oc-s">~6 min read</div></div>
+          <div class="oc" data-val="long" onclick="selOpt(this,'length')"><div class="oc-t">Long</div><div class="oc-s">~10 min read</div></div>
+        </div>
+        <label style="margin-bottom:8px">Custom keyword <span style="color:var(--ink4)">(optional)</span></label>
+        <input class="kw-in" id="kw" placeholder="e.g. Apple, Gaza, interest rates...">
+        <div class="step-acts">
+          <button class="btn btn-ghost" onclick="cfgGo(4)">← Back</button>
+          <button class="btn btn-green" id="b5" disabled onclick="startGenerate()" style="padding:11px 28px">Generate my digest</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="config-aside">
+      <div class="aside-ttl">Your selections</div>
+      <div class="aside-row"><div class="aside-dot" id="ad-src"></div><div><div class="aside-k">Sources</div><div class="aside-v" id="av-src">—</div></div></div>
+      <div class="aside-row"><div class="aside-dot" id="ad-top"></div><div><div class="aside-k">Topics</div><div class="aside-v" id="av-top">—</div></div></div>
+      <div class="aside-row"><div class="aside-dot" id="ad-tone"></div><div><div class="aside-k">Tone</div><div class="aside-v" id="av-tone">—</div></div></div>
+      <div class="aside-row"><div class="aside-dot" id="ad-win"></div><div><div class="aside-k">Time window</div><div class="aside-v" id="av-win">—</div></div></div>
+      <div class="aside-row"><div class="aside-dot" id="ad-len"></div><div><div class="aside-k">Length</div><div class="aside-v" id="av-len">—</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div class="screen" id="screen-paywall" style="flex-direction:column;align-items:center;justify-content:center">
+  <nav class="nav"><div class="nav-logo" onclick="showScreen('screen-config')">summ<span style="color:#9B1C1C">AI</span>rize</div></nav>
+  <div style="max-width:420px;width:100%;padding:2rem;text-align:center">
+    <div style="font-size:32px;margin-bottom:1rem">📰</div>
+    <div style="font-family:Georgia,serif;font-size:24px;font-weight:700;color:var(--ink);margin-bottom:0.5rem">You've used your 3 free digests today</div>
+    <div style="font-size:14px;color:var(--ink3);line-height:1.6;margin-bottom:2rem">Free accounts get 3 digests per day using our standard AI model. Top up with credits for more — or come back tomorrow.</div>
+    <div style="background:#fff;border:0.5px solid var(--paper3);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1rem;text-align:left">
+      <div style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink4);margin-bottom:1rem">Buy credits</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:1rem">
+        <div class="credit-opt" onclick="buyCredits(20,'1.99')" style="border:1px solid var(--paper3);border-radius:var(--radius);padding:12px;text-align:center;cursor:pointer">
+          <div style="font-size:18px;font-weight:500;color:var(--ink)">20</div>
+          <div style="font-size:11px;color:var(--ink3);margin:2px 0">digests</div>
+          <div style="font-size:13px;font-weight:500;color:#9B1C1C">£1.99</div>
+        </div>
+        <div class="credit-opt" onclick="buyCredits(60,'4.99')" style="border:2px solid #9B1C1C;border-radius:var(--radius);padding:12px;text-align:center;cursor:pointer;background:#fdf2f2;position:relative">
+          <div style="position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:#9B1C1C;color:#fff;font-size:9px;font-weight:500;padding:2px 8px;border-radius:10px;white-space:nowrap">Best value</div>
+          <div style="font-size:18px;font-weight:500;color:var(--ink)">60</div>
+          <div style="font-size:11px;color:var(--ink3);margin:2px 0">digests</div>
+          <div style="font-size:13px;font-weight:500;color:#9B1C1C">£4.99</div>
+        </div>
+        <div class="credit-opt" onclick="buyCredits(150,'9.99')" style="border:1px solid var(--paper3);border-radius:var(--radius);padding:12px;text-align:center;cursor:pointer">
+          <div style="font-size:18px;font-weight:500;color:var(--ink)">150</div>
+          <div style="font-size:11px;color:var(--ink3);margin:2px 0">digests</div>
+          <div style="font-size:13px;font-weight:500;color:#9B1C1C">£9.99</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--ink4);text-align:center">Credits use our premium AI model (Claude Sonnet) — noticeably better quality than the free tier.</div>
+    </div>
+    <button class="btn btn-ghost" style="width:100%" onclick="showScreen('screen-config')">← Back · Come back tomorrow for free digests</button>
+  </div>
+</div>
+
+<div class="screen" id="screen-loading" style="flex-direction:column">
+  <nav class="nav"><div class="nav-logo">summ<span>AI</span>rize</div></nav>
+  <div style="flex:1;display:flex;align-items:center;justify-content:center">
+    <div class="load-inner">
+      <div class="spinner"></div>
+      <div class="load-ttl">Building your digest</div>
+      <div class="load-sub" id="load-sub">Fetching live news feeds…</div>
+      <div class="load-steps">
+        <div class="ls cur" id="ls1"><div class="ls-dot"></div>Fetching live RSS feeds</div>
+        <div class="ls" id="ls2"><div class="ls-dot"></div>Parsing articles</div>
+        <div class="ls" id="ls3"><div class="ls-dot"></div>Sending to Claude</div>
+        <div class="ls" id="ls4"><div class="ls-dot"></div>Writing your digest</div>
+      </div>
+      <div class="fetch-log" id="fetch-log"></div>
+    </div>
+  </div>
+</div>
+
+<!-- OUTPUT -->
+<div class="screen" id="screen-output">
+  <nav class="nav">
+    <div class="nav-logo">summ<span>AI</span>rize</div>
+    <div class="nav-right">
+      <span id="out-user" style="font-size:13px;color:var(--ink3)"></span>
+      <button class="btn btn-ghost btn-sm" onclick="restart()">New digest</button>
+      <button class="btn btn-ghost btn-sm" onclick="showScreen('screen-landing')">Sign out</button>
+    </div>
+  </nav>
+  <div style="padding:10px 2rem;border-bottom:1px solid var(--paper3)"><div class="ad-slot ad-banner">Advertisement — your ad could appear here</div></div>
+  <div class="out-layout">
+    <div class="out-main">
+      <div class="digest-hdr">
+        <div class="digest-title">Your digest</div>
+        <div class="digest-meta-row">
+          <span class="d-date" id="out-date"></span>
+          <span class="d-tag" id="out-tone-tag"></span>
+          <span class="d-tag" id="out-len-tag"></span>
+        </div>
+        <div id="out-src-tags" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0.75rem"></div>
+        <div class="updated-stamp" id="updated-stamp"></div>
+        <div class="share-bar">
+          <button class="share-btn" onclick="shareTwitter()">
+            <svg class="share-icon" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>Share
+          </button>
+          <button class="share-btn" onclick="copyDigest()">
+            <svg class="share-icon" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>Copy
+          </button>
+          <button class="share-btn email-btn" onclick="openEmailModal()">
+            <svg class="share-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg><span>Email me this</span>
+          </button>
+          <button class="share-btn" onclick="downloadPDF()">
+            <svg class="share-icon" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11zM8 15h8v2H8zm0-4h8v2H8z"/></svg>PDF
+          </button>
+        </div>
+      </div>
+      <div id="digest-sections"></div>
+    </div>
+    <div class="out-sidebar">
+      <div class="osc">
+        <div class="osc-ttl">Digest details</div>
+        <div class="osc-row"><span class="osc-l">Sources</span><span class="osc-v" id="det-src"></span></div>
+        <div class="osc-row"><span class="osc-l">Topics</span><span class="osc-v" id="det-top"></span></div>
+        <div class="osc-row"><span class="osc-l">Tone</span><span class="osc-v" id="det-tone"></span></div>
+        <div class="osc-row"><span class="osc-l">Window</span><span class="osc-v" id="det-win"></span></div>
+        <div class="osc-row"><span class="osc-l">Articles fetched</span><span class="osc-v" id="det-arts"></span></div>
+      </div>
+      <button class="new-btn" onclick="restart()">← Build a new digest</button>
+      <div class="premium-banner">
+        <h4>Go Premium</h4>
+        <p>Unlock more sources, longer digests, custom voices and an ad-free experience.</p>
+        <div class="pf"><div class="pf-dot"></div>Unlimited sources</div>
+        <div class="pf"><div class="pf-dot"></div>Ad-free reading</div>
+        <div class="pf"><div class="pf-dot"></div>Daily email delivery</div>
+        <div class="pf" style="margin-bottom:1rem"><div class="pf-dot"></div>Podcast voice output</div>
+        <button class="btn-gold" onclick="toast('Premium coming soon — stay tuned!')">Upgrade — coming soon</button>
+      </div>
+      <div class="ad-slot ad-square">Ad space · 250×250</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const S={sources:[],topics:[],tone:null,window:null,length:null,keyword:'',user:{name:'',email:''},isPremium:false,credits:0,digestsToday:0};
+const RSS_FEEDS={
+  'BBC News':'https://feeds.bbci.co.uk/news/rss.xml',
+  'Sky News':'https://feeds.skynews.com/feeds/rss/home.xml',
+  'The Guardian':'https://www.theguardian.com/world/rss',
+  'Reuters':'https://feeds.reuters.com/reuters/topNews',
+  'Al Jazeera':'https://www.aljazeera.com/xml/rss/all.xml',
+  'CNN':'http://rss.cnn.com/rss/edition.rss',
+  'AP News':'https://feeds.apnews.com/rss/apf-topnews',
+  'Deutsche Welle':'https://rss.dw.com/rdf/rss-en-all',
+  'NPR News':'https://feeds.npr.org/1001/rss.xml',
+  'France 24':'https://www.france24.com/en/rss',
+  'euronews':'https://www.euronews.com/rss'
+};
+const SOURCE_BADGES={
+  'BBC News':     {bg:'#BB1919',color:'#fff',abbr:'BBC'},
+  'Sky News':     {bg:'#003DA5',color:'#fff',abbr:'SKY'},
+  'The Guardian': {bg:'#052962',color:'#fff',abbr:'GDN'},
+  'Reuters':      {bg:'#FF8000',color:'#fff',abbr:'REU'},
+  'Al Jazeera':   {bg:'#008000',color:'#fff',abbr:'AJZ'},
+  'CNN':          {bg:'#CC0000',color:'#fff',abbr:'CNN'},
+  'AP News':      {bg:'#CC0000',color:'#fff',abbr:'AP'},
+  'Deutsche Welle':{bg:'#006AB3',color:'#fff',abbr:'DW'},
+  'NPR News':     {bg:'#222222',color:'#fff',abbr:'NPR'},
+  'France 24':    {bg:'#F0063C',color:'#fff',abbr:'F24'},
+  'euronews':     {bg:'#003399',color:'#fff',abbr:'EUR'}
+};
+function badge(name,size){
+  const b=SOURCE_BADGES[name]||{bg:'#888',color:'#fff',abbr:name.slice(0,3).toUpperCase()};
+  const fs=size==='sm'?6:size==='md'?7:8;
+  const w=size==='sm'?20:size==='md'?24:28;
+  const h=size==='sm'?14:size==='md'?16:18;
+  return `<span style="display:inline-flex;align-items:center;justify-content:center;background:${b.bg};color:${b.color};font-size:${fs}px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:${w}px;height:${h}px;letter-spacing:0.02em;flex-shrink:0;font-family:var(--sans)">${b.abbr}</span>`;
+}
+function srcLogo(name){return badge(name,'sm')}
+function srcTag(name){return `<span class="src-logo-tag">${badge(name,'sm')}${name}</span>`}
+const PROXY='https://api.allorigins.win/get?url=';
+let cfgStep=1,allArticles=[],fetchLog=[];
+
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
+function showAuth(tab){showScreen('screen-auth');switchTab(tab)}
+function switchTab(tab){
+  document.getElementById('tab-login').classList.toggle('active',tab==='login');
+  document.getElementById('tab-signup').classList.toggle('active',tab==='signup');
+  document.getElementById('auth-login-form').classList.toggle('hidden',tab!=='login');
+  document.getElementById('auth-signup-form').classList.toggle('hidden',tab!=='signup');
+  document.getElementById('auth-err').style.display='none';
+}
+function authErr(msg){const e=document.getElementById('auth-err');e.textContent=msg;e.style.display='block'}
+function doLogin(){
+  const email=document.getElementById('li-email').value.trim();
+  const pass=document.getElementById('li-pass').value;
+  if(!email||!pass){authErr('Please enter your email and password.');return}
+  S.user={name:email.split('@')[0],email};enterApp();
+}
+function doSignup(){
+  const first=document.getElementById('su-first').value.trim();
+  const email=document.getElementById('su-email').value.trim();
+  const pass=document.getElementById('su-pass').value;
+  if(!first||!email||!pass){authErr('Please fill in all fields.');return}
+  if(pass.length<8){authErr('Password must be at least 8 characters.');return}
+  S.user={name:first,email};enterApp();
+}
+function enterApp(){
+  document.getElementById('nav-user').textContent='Hi, '+S.user.name;
+  document.getElementById('out-user').textContent=S.user.name;
+  updateUsageBar();
+  showScreen('screen-config');cfgStep=1;showCfgStep(1);
+}
+
+function showCfgStep(n){
+  document.querySelectorAll('.cfg-step').forEach(s=>s.classList.add('hidden'));
+  document.getElementById('cs'+n).classList.remove('hidden');
+  cfgStep=n;
+  document.getElementById('cprog').style.width=(n/5*100)+'%';
+}
+function cfgGo(n){showCfgStep(n)}
+function toggleChip(el,key){
+  el.classList.toggle('sel');
+  S[key]=Array.from(el.parentElement.querySelectorAll('.chip.sel')).map(c=>{
+    return Array.from(c.childNodes).filter(n=>n.nodeType===3).map(n=>n.textContent.trim()).join('').trim();
+  });
+  updateAside();checkBtn();
+}
+function selOpt(el,key){
+  el.closest('.og').querySelectorAll('.oc').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');S[key]=el.dataset.val;
+  updateAside();checkBtn();
+}
+function checkBtn(){
+  const v={1:()=>S.sources.length>0,2:()=>S.topics.length>0,3:()=>S.tone,4:()=>S.window,5:()=>S.length};
+  const b=document.getElementById('b'+cfgStep);
+  if(b)b.disabled=!v[cfgStep]();
+}
+function updateAside(){
+  const set=(vi,di,val)=>{document.getElementById(vi).textContent=val||'—';document.getElementById(di).classList.toggle('on',!!val&&val!=='—')};
+  set('av-src','ad-src',S.sources.length?S.sources.join(', '):'');
+  set('av-top','ad-top',S.topics.length?S.topics.join(', '):'');
+  set('av-tone','ad-tone',S.tone?cap(S.tone):'');
+  set('av-win','ad-win',S.window?'Past '+S.window+'h':'');
+  set('av-len','ad-len',S.length?cap(S.length):'');
+}
+function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
+
+function addFetchLog(msg,ok){
+  const el=document.getElementById('fetch-log');
+  const d=document.createElement('div');
+  d.className='fetch-log-item '+(ok?'ok':'err');
+  d.textContent=msg;
+  el.appendChild(d);
+  el.scrollTop=el.scrollHeight;
+}
+function setLoadStep(n){
+  ['ls1','ls2','ls3','ls4'].forEach((id,i)=>{
+    const el=document.getElementById(id);
+    el.classList.remove('cur','done');
+    if(i<n-1)el.classList.add('done');
+    else if(i===n-1)el.classList.add('cur');
+  });
+}
+
+async function fetchRSS(source,url){
+  const proxyUrl=PROXY+encodeURIComponent(url);
+  const res=await fetch(proxyUrl);
+  const data=await res.json();
+  const xml=new DOMParser().parseFromString(data.contents,'text/xml');
+  const items=Array.from(xml.querySelectorAll('item'));
+  const cutoff=Date.now()-parseInt(S.window)*3600*1000;
+  const articles=[];
+  for(const item of items){
+    const title=item.querySelector('title')?.textContent||'';
+    const desc=(item.querySelector('description')?.textContent||'').replace(/<[^>]+>/g,'').slice(0,400);
+    const link=item.querySelector('link')?.textContent||item.querySelector('link')?.getAttribute('href')||'';
+    const pubDateStr=item.querySelector('pubDate')?.textContent||item.querySelector('published')?.textContent||'';
+    const pubDate=pubDateStr?new Date(pubDateStr):new Date();
+    if(pubDate.getTime()<cutoff)continue;
+    if(title)articles.push({title:title.trim(),desc:desc.trim(),link:link.trim(),source,pubDate:pubDate.toISOString()});
+  }
+  return articles;
+}
+
+async function startGenerate(){
+  const FREE_LIMIT=3;
+  if(!S.isPremium&&S.credits===0&&S.digestsToday>=FREE_LIMIT){
+    showPaywall();return;
+  }
+  S.keyword=document.getElementById('kw').value.trim();
+  showScreen('screen-loading');
+  document.getElementById('fetch-log').innerHTML='';
+  fetchLog=[];allArticles=[];
+  setLoadStep(1);
+
+  for(const source of S.sources){
+    const url=RSS_FEEDS[source];
+    if(!url)continue;
+    try{
+      const arts=await fetchRSS(source,url);
+      allArticles.push(...arts);
+      addFetchLog(`${source}: ${arts.length} articles fetched`,true);
+    }catch(e){
+      addFetchLog(`${source}: failed to fetch`,false);
+    }
+  }
+
+  setLoadStep(2);
+  document.getElementById('load-sub').textContent=`Parsed ${allArticles.length} articles across ${S.sources.length} sources`;
+
+  if(allArticles.length===0){
+    showScreen('screen-output');
+    document.getElementById('digest-sections').innerHTML=`
+      <div class="no-stories">
+        <h3>No stories found</h3>
+        <p>We couldn't find any articles from your selected sources within the past ${S.window} hours matching your topics.<br><br>Try broadening your time window, adding more sources, or choosing different topics.</p>
+        <button class="btn btn-ghost" style="margin-top:1.25rem" onclick="restart()">← Adjust my preferences</button>
+      </div>`;
+    renderOutputMeta([]);
+    return;
+  }
+
+  setLoadStep(3);
+  await callClaude(allArticles);
+}
+
+async function callClaude(articles){
+  const wc={short:'280–350',medium:'500–580',long:'750–850'};
+  const toneDesc={neutral:'balanced, objective, journalistic',analytical:'data-driven, analytical, with context and implications',conversational:'friendly, clear, accessible — explain like talking to a smart friend'};
+  const kw=S.keyword?`Pay special attention to stories involving "${S.keyword}".`:'';
+  const today=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const articleDump=articles.map((a,i)=>`[${i+1}] SOURCE: ${a.source}\nTITLE: ${a.title}\nSUMMARY: ${a.desc}\nURL: ${a.link}\nPUBLISHED: ${a.pubDate}`).join('\n\n');
+
+  const prompt=`You are SummAIrize, a personalised AI news digest. Today is ${today}.
+
+Below are ${articles.length} real live news articles just fetched from RSS feeds. Synthesise them into a ${S.length} digest (${wc[S.length]} words total) written in a ${toneDesc[S.tone]} tone.
+
+Reader's chosen topics: ${S.topics.join(', ')}.
+${kw}
+
+RULES:
+- Only include articles genuinely relevant to the reader's topics. Ignore everything else.
+- Never fabricate facts — only use information present in the provided articles.
+- Each section covers one topic area and synthesises across multiple articles.
+- Write 2 solid paragraphs per section body. No filler. Every sentence must add value.
+- The kicker is the topic name (e.g. "Finance" or "Technology").
+- The pull-quote should be a specific, striking fact or statement from the articles — not a vague summary.
+- Footnotes link to the actual articles used. Match the [number] citations in the body text.
+
+LIVE ARTICLES:
+${articleDump}
+
+Respond ONLY with valid JSON — no markdown, no preamble, no trailing text:
+{
+  "sections": [
+    {
+      "kicker": "Topic name",
+      "title": "Specific, informative headline for this section",
+      "body": "First paragraph with [1] inline citation. Second paragraph with [2] citation.",
+      "quote": "A specific, striking fact or direct quote from the articles.",
+      "quote_source": "Source outlet name",
+      "footnotes": [
+        {"num": 1, "title": "Full article title", "source": "Source name", "url": "https://..."},
+        {"num": 2, "title": "Full article title", "source": "Source name", "url": "https://..."}
+      ]
+    }
+  ],
+  "no_relevant_articles": false
+}
+
+Produce one section per relevant topic from the reader's list. If truly no articles match any topic, return: {"no_relevant_articles": true, "sections": []}`;
+
+  try{
+    setLoadStep(4);
+    const model=S.isPremium?'claude-sonnet-4-20250514':'claude-haiku-4-5-20251001';
+    const res=await fetch('/api/digest',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model,max_tokens:2500,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();
+    const raw=data.content.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
+    const parsed=JSON.parse(raw);
+    if(parsed.no_relevant_articles||!parsed.sections||parsed.sections.length===0){
+      showScreen('screen-output');
+      document.getElementById('digest-sections').innerHTML=`
+        <div class="no-stories">
+          <h3>No relevant stories found</h3>
+          <p>We fetched ${articles.length} live articles but none matched your chosen topics closely enough.<br><br>Try broadening your topics, adding more sources, or extending the time window.</p>
+          <button class="btn btn-ghost" style="margin-top:1.25rem" onclick="restart()">← Adjust my preferences</button>
+        </div>`;
+      renderOutputMeta(articles);
+    }else{
+      renderOutput(parsed,articles);
+    }
+  }catch(e){
+    showScreen('screen-output');
+    document.getElementById('digest-sections').innerHTML=`<div class="err-box">Something went wrong generating your digest. Please try again.</div>`;
+    renderOutputMeta(articles);
+  }
+}
+
+function renderOutputMeta(articles){
+  const today=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('out-date').textContent=today;
+  document.getElementById('out-tone-tag').textContent=cap(S.tone||'');
+  document.getElementById('out-len-tag').textContent=cap(S.length||'');
+  document.getElementById('out-src-tags').innerHTML=S.sources.map(s=>srcTag(s)).join('');
+  const now=new Date();
+  const stamp=document.getElementById('updated-stamp');
+  stamp.innerHTML=`<div class="updated-dot"></div>Last updated ${now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})} · ${articles.length} articles fetched`;
+  document.getElementById('det-src').textContent=S.sources.join(', ');
+  document.getElementById('det-top').textContent=S.topics.join(', ');
+  document.getElementById('det-tone').textContent=cap(S.tone||'');
+  document.getElementById('det-win').textContent='Past '+S.window+'h';
+  document.getElementById('det-arts').textContent=articles.length+' articles';
+}
+
+function renderOutput(data,articles){
+  if(!S.isPremium&&S.credits>0){S.credits--}
+  else if(!S.isPremium){S.digestsToday++}
+  updateUsageBar();
+  renderOutputMeta(articles);
+  const el=document.getElementById('digest-sections');
+  el.innerHTML='';
+  data.sections.forEach((sec,i)=>{
+    const div=document.createElement('div');
+    div.className='digest-section';
+    const bodyHtml=sec.body.split('\n').filter(p=>p.trim()).map(p=>`<p>${p}</p>`).join('');
+    const fnHtml=sec.footnotes&&sec.footnotes.length?`
+      <div class="footnotes">
+        <div class="fn-ttl">Sources used</div>
+        ${sec.footnotes.map(f=>`<div class="fn-item"><span class="fn-num">[${f.num}]</span><a class="fn-link" href="${f.url}" target="_blank" rel="noopener">${srcLogo(f.source)}${f.title} — ${f.source}</a></div>`).join('')}
+      </div>`:'';
+    div.innerHTML=`
+      <div class="sec-kicker">${sec.kicker||''}</div>
+      <div class="sec-hdr">
+        <div class="sec-ttl">${sec.title}</div>
+        <div class="vote-row">
+          <button class="vb" id="up${i}" onclick="vote(${i},'up')" title="Helpful">&#9650;</button>
+          <button class="vb" id="dn${i}" onclick="vote(${i},'dn')" title="Not helpful">&#9660;</button>
+        </div>
+      </div>
+      <div class="sec-body">
+        ${bodyHtml}
+        <div class="src-quote">${sec.quote}<cite>— ${sec.quote_source}</cite></div>
+        ${fnHtml}
+      </div>`;
+    el.appendChild(div);
+  });
+  showScreen('screen-output');
+}
+
+function vote(i,dir){
+  const u=document.getElementById('up'+i),d=document.getElementById('dn'+i);
+  if(dir==='up'){u.classList.toggle('up');d.classList.remove('dn')}
+  else{d.classList.toggle('dn');u.classList.remove('up')}
+}
+
+function getPlainText(){
+  let t=`SummAIrize — Your digest\n${new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}\nSources: ${S.sources.join(', ')}\n\n`;
+  document.querySelectorAll('.digest-section').forEach(s=>{
+    t+=s.querySelector('.sec-ttl').textContent+'\n\n';
+    s.querySelectorAll('.sec-body p').forEach(p=>{t+=p.textContent+'\n'});
+    const q=s.querySelector('.src-quote');if(q)t+='\n"'+q.childNodes[0].textContent.trim()+'"\n\n';
+  });
+  return t;
+}
+function shareTwitter(){const t=encodeURIComponent('My live news digest from SummAIrize — '+S.topics.slice(0,2).join(', ')+' and more. #SummAIrize');window.open('https://twitter.com/intent/tweet?text='+t,'_blank')}
+function copyDigest(){navigator.clipboard.writeText(getPlainText()).then(()=>toast('Copied to clipboard'))}
+const EMAILJS_PUBLIC_KEY='YOUR_PUBLIC_KEY';
+const EMAILJS_SERVICE_ID='YOUR_SERVICE_ID';
+const EMAILJS_TEMPLATE_ID='YOUR_TEMPLATE_ID';
+
+function openEmailModal(){
+  document.getElementById('email-modal').classList.remove('hidden');
+  document.getElementById('email-modal-form').classList.remove('hidden');
+  document.getElementById('email-modal-ok').classList.add('hidden');
+  document.getElementById('modal-email').value=S.user.email||'';
+  document.getElementById('modal-err').style.display='none';
+}
+function closeEmailModal(){document.getElementById('email-modal').classList.add('hidden')}
+
+async function sendEmail(){
+  const email=document.getElementById('modal-email').value.trim();
+  const errEl=document.getElementById('modal-err');
+  errEl.style.display='none';
+  if(!email||!email.includes('@')){errEl.textContent='Please enter a valid email address.';errEl.style.display='block';return}
+
+  const sendBtn=event.target;
+  sendBtn.disabled=true;sendBtn.textContent='Sending...';
+
+  const today=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const subject=`Your SummAIrize digest — ${today}`;
+  const appUrl=window.location.href;
+  const message=`Hi ${S.user.name||'there'},\n\nYour personalised news digest from SummAIrize is ready.\n\nTopics: ${S.topics.join(', ')}\nSources: ${S.sources.join(', ')}\nTone: ${S.tone}\n\nVisit the app to read your full digest:\n${appUrl}\n\n— The SummAIrize team`;
+
+  if(EMAILJS_PUBLIC_KEY==='YOUR_PUBLIC_KEY'){
+    setTimeout(()=>{
+      document.getElementById('email-modal-form').classList.add('hidden');
+      document.getElementById('email-modal-ok').classList.remove('hidden');
+      sendBtn.disabled=false;sendBtn.textContent='Send digest link';
+    },1200);
+    return;
+  }
+
+  try{
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+    await emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_TEMPLATE_ID,{to_email:email,subject,message});
+    document.getElementById('email-modal-form').classList.add('hidden');
+    document.getElementById('email-modal-ok').classList.remove('hidden');
+  }catch(e){
+    errEl.textContent='Failed to send. Please try again or copy the link manually.';
+    errEl.style.display='block';
+  }finally{
+    sendBtn.disabled=false;sendBtn.textContent='Send digest link';
+  }
+}
+function downloadPDF(){
+  const w=window.open('','_blank');
+  w.document.write(`<html><head><title>SummAIrize</title><style>body{font-family:Georgia,serif;max-width:700px;margin:2rem auto;padding:2rem;color:#111}h1{font-size:28px;margin-bottom:0.5rem}h2{font-size:20px;margin:2rem 0 0.75rem;border-bottom:1px solid #ddd;padding-bottom:0.5rem}p{margin-bottom:1rem;line-height:1.7}blockquote{border-left:3px solid #9B1C1C;padding:10px 16px;background:#fdf2f2;margin:1.5rem 0;font-style:italic}cite{font-style:normal;font-size:12px;color:#6B1111}.meta{font-size:13px;color:#888;margin-bottom:2rem}a{color:#9B1C1C}.fn{font-size:12px;color:#888;margin-top:0.5rem}</style></head><body>`);
+  w.document.write(`<h1>SummAIrize</h1><div class="meta">${new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})} · ${S.sources.join(', ')}</div>`);
+  document.querySelectorAll('.digest-section').forEach(s=>{
+    w.document.write('<h2>'+s.querySelector('.sec-ttl').textContent+'</h2>');
+    s.querySelectorAll('.sec-body p').forEach(p=>{w.document.write('<p>'+p.textContent+'</p>')});
+    const q=s.querySelector('.src-quote');if(q){const c=q.querySelector('cite');w.document.write(`<blockquote>${q.childNodes[0].textContent.trim()}<br>${c?c.outerHTML:''}</blockquote>`)}
+    s.querySelectorAll('.fn-item').forEach(f=>{w.document.write('<div class="fn">'+f.textContent+'</div>')});
+  });
+  w.document.write('</body></html>');w.document.close();w.print();
+}
+function showPaywall(){showScreen('screen-paywall')}
+function buyCredits(amount,price){
+  toast(`Stripe integration coming soon — ${amount} credits for £${price}`);
+  setTimeout(()=>{S.credits+=amount;S.isPremium=false;updateUsageBar();showScreen('screen-config');},1800);
+}
+function updateUsageBar(){
+  const el=document.getElementById('usage-bar');
+  if(!el)return;
+  if(S.isPremium){
+    el.innerHTML=`<span style="background:#fdf2f2;color:#9B1C1C;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:500">Premium</span>`;
+  }else if(S.credits>0){
+    el.innerHTML=`<span style="background:#fdf2f2;color:#9B1C1C;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:500">${S.credits} credits remaining</span>`;
+  }else{
+    const left=Math.max(0,3-S.digestsToday);
+    const col=left===0?'#c0392b':left===1?'#e67e22':'var(--ink3)';
+    el.innerHTML=`<span style="font-size:12px;color:${col}">${left} free digest${left===1?'':'s'} left today</span><button onclick="showPaywall()" style="margin-left:6px;font-size:11px;padding:2px 10px;border:0.5px solid var(--paper3);border-radius:10px;background:#fff;cursor:pointer;font-family:var(--font-sans);color:var(--ink2)">Top up</button>`;
+  }
+}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
+function restart(){
+  S.sources=[];S.topics=[];S.tone=null;S.window=null;S.length=null;S.keyword='';
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('sel'));
+  document.querySelectorAll('.oc').forEach(c=>c.classList.remove('sel'));
+  document.getElementById('kw').value='';
+  for(let i=1;i<=5;i++){const b=document.getElementById('b'+i);if(b)b.disabled=true}
+  updateAside();showScreen('screen-config');showCfgStep(1);
+}
+</script>
+</body>
+</html>
