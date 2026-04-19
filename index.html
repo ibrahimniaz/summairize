@@ -593,7 +593,7 @@ function badge(name,size){
 }
 function srcLogo(name){return badge(name,'sm')}
 function srcTag(name){return `<span class="src-logo-tag">${badge(name,'sm')}${name}</span>`}
-const PROXY='/api/rss?url=';'/api/rss?url='; PROXY='/api/rss?url=';/get?url=';
+const PROXY='/api/rss?url=';
 let cfgStep=1,allArticles=[],fetchLog=[];
 
 function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
@@ -681,9 +681,8 @@ function setLoadStep(n){
 async function fetchRSS(source,url){
   const proxyUrl=PROXY+encodeURIComponent(url);
   const res=await fetch(proxyUrl);
-  const data=await res.json();
-  const xml=new DOMParser().parseFromString(const xml=new DOMParser().parseFromString(await res.text(),'text/xml');
-,'text/xml');
+  const text=await res.text();
+  const xml=new DOMParser().parseFromString(text,'text/xml');
   const items=Array.from(xml.querySelectorAll('item'));
   const cutoff=Date.now()-parseInt(S.window)*3600*1000;
   const articles=[];
