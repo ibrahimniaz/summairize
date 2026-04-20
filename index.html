@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +10,7 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --green:#9B1C1C;--green-light:#fdf2f2;--green-dark:#6B1111;
+  --green:#000000;--green-light:#f0f0f0;--green-dark:#222222;
   --ink:#111110;--ink2:#444441;--ink3:#888780;--ink4:#B4B2A9;
   --paper:#FAFAF8;--paper2:#F1EFE8;--paper3:#E8E6DE;
   --serif:'Playfair Display',Georgia,serif;
@@ -34,8 +35,8 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
 .ad-banner{height:56px;display:flex;align-items:center;justify-content:center;margin-bottom:0}
 .ad-square{width:100%;height:220px;display:flex;align-items:center;justify-content:center;margin-top:1rem}
 
-.nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:56px;border-bottom:1px solid var(--paper3);background:var(--paper);position:sticky;top:0;z-index:100}
-.nav-logo{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--ink);cursor:pointer}.nav-logo span{color:var(--green)}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:60px;border-bottom:none;background:#000;position:sticky;top:0;z-index:100}
+.nav-logo{font-family:var(--serif);font-size:20px;font-weight:700;color:#fff;cursor:pointer;display:flex;align-items:center;gap:10px}.nav-logo span{color:#fff}
 .nav-right{display:flex;align-items:center;gap:10px}
 
 /* LANDING */
@@ -66,7 +67,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .divider{display:flex;align-items:center;gap:12px;margin:1rem 0;font-size:12px;color:var(--ink4)}
 .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--paper3)}
-.auth-err{background:#fdf2f2;border:1px solid #f5c6c6;border-radius:var(--radius);padding:10px 14px;font-size:13px;color:#c0392b;margin-bottom:1rem;display:none}
+.auth-err{background:#f5f5f5;border:1px solid #f5c6c6;border-radius:var(--radius);padding:10px 14px;font-size:13px;color:#c0392b;margin-bottom:1rem;display:none}
 
 /* CONFIG */
 #screen-config{background:var(--paper)}
@@ -154,7 +155,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
 .vb{width:28px;height:28px;border:0.5px solid var(--paper3);border-radius:7px;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all 0.15s;font-family:var(--sans)}
 .vb:hover{background:var(--paper2)}
 .vb.up{background:var(--green-light);border-color:var(--green);color:var(--green-dark)}
-.vb.dn{background:#fdf2f2;border-color:#e8b4b4;color:#c0392b}
+.vb.dn{background:#f5f5f5;border-color:#e8b4b4;color:#c0392b}
 .fn-link{color:var(--ink3);text-decoration:none;border-bottom:1px solid var(--paper3);transition:color 0.15s}
 .fn-link:hover{color:var(--green)}
 .no-stories{background:var(--paper2);border:1px solid var(--paper3);border-radius:var(--radius-lg);padding:2rem;text-align:center}
@@ -167,7 +168,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
 .osc-l{color:var(--ink3)}.osc-v{color:var(--ink);font-weight:500;text-align:right;max-width:130px;font-size:12px;line-height:1.4}
 .new-btn{width:100%;padding:10px;border:1px solid var(--paper3);border-radius:var(--radius);background:transparent;font-size:13px;color:var(--ink3);cursor:pointer;font-family:var(--sans);transition:all 0.15s;margin-bottom:1rem}
 .new-btn:hover{background:var(--paper2)}
-.err-box{background:#fdf2f2;border:1px solid #f5c6c6;border-radius:var(--radius);padding:14px 16px;color:#c0392b;font-size:14px;margin-bottom:1rem}
+.err-box{background:#f5f5f5;border:1px solid #f5c6c6;border-radius:var(--radius);padding:14px 16px;color:#c0392b;font-size:14px;margin-bottom:1rem}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 20px;border-radius:var(--radius);font-size:13px;font-weight:500;opacity:0;pointer-events:none;transition:opacity 0.2s;z-index:999}
 .toast.show{opacity:1}
 .fetch-log{background:var(--paper2);border-radius:var(--radius);padding:10px 14px;margin-top:1.5rem;font-size:12px;color:var(--ink3);text-align:left;max-height:80px;overflow:hidden}
@@ -252,46 +253,63 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
 
 <!-- LANDING -->
 <div class="screen active" id="screen-landing">
-  <nav class="nav">
-    <div class="nav-logo">summ<span>AI</span>rize</div>
-    <div class="nav-right">
-      <button class="btn btn-ghost btn-sm" onclick="showAuth('login')">Sign in</button>
-      <button class="btn btn-green btn-sm" onclick="showAuth('signup')">Get started</button>
+  <!-- WHITE NAV -->
+  <nav style="display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;background:#fff;border-bottom:0.5px solid #eee;position:sticky;top:0;z-index:100">
+    <div style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="showScreen('screen-landing')">
+      <div style="width:34px;height:34px;background:#000;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <span style="font-family:'Playfair Display',Georgia,serif;font-size:21px;font-weight:700;color:#fff;line-height:1">S</span>
+      </div>
+      <span style="font-family:'Playfair Display',Georgia,serif;font-size:19px;font-weight:700;color:#000">SummAIrize</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button onclick="showAuth('login')" style="padding:8px 18px;background:transparent;border:1px solid #ddd;border-radius:8px;color:#333;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)">Sign in</button>
+      <button onclick="showAuth('signup')" style="padding:8px 18px;background:#000;border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)">Get started</button>
     </div>
   </nav>
-  <div class="hero">
-    <div class="eyebrow"><div class="eyebrow-line"></div>Live AI news digest<div class="eyebrow-line"></div></div>
-    <h1>Your news.<br><em>Your way.</em></h1>
-    <p>Choose your sources, topics, tone and length. Get a real-time digest synthesised from live news feeds — on demand, in seconds.</p>
-    <div class="hero-cta">
-      <button class="btn btn-green" onclick="showAuth('signup')">Build my digest</button>
-      <button class="btn btn-ghost" onclick="showAuth('login')">Sign in</button>
+
+  <!-- BLACK HERO -->
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:5rem 2rem 4rem;background:#000">
+    <div style="font-size:11px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:#888;margin-bottom:1.5rem;display:flex;align-items:center;gap:10px">
+      <div style="width:32px;height:1px;background:#444"></div>Live AI news digest<div style="width:32px;height:1px;background:#444"></div>
     </div>
-    <div class="pills">
-      <div class="pill"><span style="display:inline-flex;align-items:center;justify-content:center;background:#BB1919;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">BBC</span>BBC News</div>
-      <div class="pill"><span style="display:inline-flex;align-items:center;justify-content:center;background:#FF8000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">REU</span>Reuters</div>
-      <div class="pill"><span style="display:inline-flex;align-items:center;justify-content:center;background:#008000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">AJZ</span>Al Jazeera</div>
-      <div class="pill"><span style="display:inline-flex;align-items:center;justify-content:center;background:#052962;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">GDN</span>The Guardian</div>
-      <div class="pill"><span style="display:inline-flex;align-items:center;justify-content:center;background:#CC0000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">AP</span>AP News</div>
-      <div class="pill"><span style="display:inline-flex;align-items:center;justify-content:center;background:#003DA5;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">SKY</span>Sky News</div>
-      <div class="pill"><span style="display:inline-flex;align-items:center;justify-content:center;background:#CC0000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">CNN</span>CNN</div>
-      <div class="pill"><span style="display:inline-flex;align-items:center;justify-content:center;background:#006AB3;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">DW</span>Deutsche Welle</div>
-      <div class="pill"><span style="display:inline-flex;align-items:center;justify-content:center;background:#222222;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">NPR</span>NPR News</div>
-      <div class="pill"><span style="display:inline-flex;align-items:center;justify-content:center;background:#F0063C;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">F24</span>France 24</div>
-      <div class="pill"><span style="display:inline-flex;align-items:center;justify-content:center;background:#003399;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">EUR</span>euronews</div>
+    <h1 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(28px,4vw,48px);font-weight:700;line-height:1.2;color:#fff;margin-bottom:1.25rem;max-width:500px">Your sources.<br>Your topics.<br>One digest.</h1>
+    <p style="font-size:14px;color:#aaa;line-height:1.9;margin-bottom:2.5rem;white-space:nowrap">Get a real-time digest synthesised from live news feeds — on demand, in seconds.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <button onclick="showAuth('signup')" style="padding:13px 30px;background:#fff;color:#000;border:none;border-radius:8px;font-size:15px;font-weight:500;cursor:pointer;font-family:var(--sans)">Build my digest</button>
+      <button onclick="showAuth('login')" style="padding:13px 22px;background:transparent;border:1px solid #444;border-radius:8px;color:#ccc;font-size:15px;font-weight:500;cursor:pointer;font-family:var(--sans)">Sign in</button>
     </div>
   </div>
-  <div class="stats-strip">
-    <div class="stat"><div class="stat-n">11</div><div class="stat-l">News sources</div></div>
-    <div class="stat"><div class="stat-n">9</div><div class="stat-l">Topic categories</div></div>
-    <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Personalised</div></div>
+
+  <!-- WHITE FOOTER STRIP -->
+  <div style="background:#fff;padding:3rem 2rem;border-top:0.5px solid #eee">
+    <div style="max-width:800px;margin:0 auto">
+      <div style="font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#aaa;margin-bottom:1.5rem;text-align:center">11 live news sources</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:2.5rem">
+        <div style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid #eee;color:#555;display:inline-flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#BB1919;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">BBC</span>BBC News</div>
+        <div style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid #eee;color:#555;display:inline-flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#FF8000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">REU</span>Reuters</div>
+        <div style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid #eee;color:#555;display:inline-flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#008000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">AJZ</span>Al Jazeera</div>
+        <div style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid #eee;color:#555;display:inline-flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#052962;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">GDN</span>The Guardian</div>
+        <div style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid #eee;color:#555;display:inline-flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#CC0000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">AP</span>AP News</div>
+        <div style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid #eee;color:#555;display:inline-flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#003DA5;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">SKY</span>Sky News</div>
+        <div style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid #eee;color:#555;display:inline-flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#CC0000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">CNN</span>CNN</div>
+        <div style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid #eee;color:#555;display:inline-flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#006AB3;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">DW</span>Deutsche Welle</div>
+        <div style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid #eee;color:#555;display:inline-flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#222;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">NPR</span>NPR News</div>
+        <div style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid #eee;color:#555;display:inline-flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#F0063C;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">F24</span>France 24</div>
+        <div style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid #eee;color:#555;display:inline-flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#003399;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">EUR</span>euronews</div>
+      </div>
+      <div style="display:flex;gap:3rem;justify-content:center;flex-wrap:wrap;padding-top:2rem;border-top:0.5px solid #eee">
+        <div style="text-align:center"><div style="font-family:'Playfair Display',Georgia,serif;font-size:28px;font-weight:700;color:#000">11</div><div style="font-size:12px;color:#aaa;margin-top:3px">News sources</div></div>
+        <div style="text-align:center"><div style="font-family:'Playfair Display',Georgia,serif;font-size:28px;font-weight:700;color:#000">9</div><div style="font-size:12px;color:#aaa;margin-top:3px">Topic categories</div></div>
+        <div style="text-align:center"><div style="font-family:'Playfair Display',Georgia,serif;font-size:28px;font-weight:700;color:#000">100%</div><div style="font-size:12px;color:#aaa;margin-top:3px">Personalised</div></div>
+      </div>
+    </div>
   </div>
 </div>
 
 <!-- AUTH -->
 <div class="screen" id="screen-auth" style="flex-direction:column">
   <nav class="nav">
-    <div class="nav-logo" onclick="showScreen('screen-landing')">summ<span>AI</span>rize</div>
+    <div style="display:flex;align-items:center;gap:10px;cursor:pointer"><div style="width:32px;height:32px;background:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#000;line-height:1">S</span></div><span style="font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;color:#fff">summAIrize</span></div>
   </nav>
   <div class="auth-wrap">
     <div class="auth-card">
@@ -327,11 +345,11 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
 <!-- CONFIG -->
 <div class="screen" id="screen-config">
   <nav class="nav">
-    <div class="nav-logo">summ<span>AI</span>rize</div>
+    <div style="display:flex;align-items:center;gap:10px;cursor:pointer"><div style="width:32px;height:32px;background:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#000;line-height:1">S</span></div><span style="font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;color:#fff">summAIrize</span></div>
     <div class="nav-right">
       <div id="usage-bar" style="font-size:12px;color:var(--ink3);display:flex;align-items:center;gap:8px"></div>
-      <span id="nav-user" style="font-size:13px;color:var(--ink3)"></span>
-      <button class="btn btn-ghost btn-sm" onclick="showScreen('screen-landing')">Sign out</button>
+      <span id="nav-user" style="font-size:13px;color:#aaa"></span>
+      <button style="padding:7px 16px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)" onclick="showScreen('screen-landing')">Sign out</button>
     </div>
   </nav>
   <div style="padding:10px 2rem;border-bottom:1px solid var(--paper3)"><div class="ad-slot ad-banner">Advertisement</div></div>
@@ -444,29 +462,37 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
 
 <!-- LOADING -->
 <div class="screen" id="screen-paywall" style="flex-direction:column;align-items:center;justify-content:center">
-  <nav class="nav"><div class="nav-logo" onclick="showScreen('screen-config')">summ<span style="color:#9B1C1C">AI</span>rize</div></nav>
+  <nav class="nav"><div style="display:flex;align-items:center;gap:10px;cursor:pointer"><div style="width:32px;height:32px;background:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#000;line-height:1">S</span></div><span style="font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;color:#fff">summAIrize</span></div></nav>
   <div style="max-width:420px;width:100%;padding:2rem;text-align:center">
     <div style="font-size:32px;margin-bottom:1rem">📰</div>
     <div style="font-family:Georgia,serif;font-size:24px;font-weight:700;color:var(--ink);margin-bottom:0.5rem">You've used your 3 free digests today</div>
     <div style="font-size:14px;color:var(--ink3);line-height:1.6;margin-bottom:2rem">Free accounts get 3 digests per day using our standard AI model. Top up with credits for more — or come back tomorrow.</div>
     <div style="background:#fff;border:0.5px solid var(--paper3);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1rem;text-align:left">
       <div style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink4);margin-bottom:1rem">Buy credits</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:1rem">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <div class="credit-opt" onclick="buyCredits(5,'0.99')" style="border:1px solid var(--paper3);border-radius:var(--radius);padding:12px;text-align:center;cursor:pointer;position:relative">
+          <div style="position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:#444;color:#fff;font-size:9px;font-weight:500;padding:2px 8px;border-radius:10px;white-space:nowrap">Try premium</div>
+          <div style="font-size:18px;font-weight:500;color:var(--ink)">5</div>
+          <div style="font-size:11px;color:var(--ink3);margin:2px 0">digests</div>
+          <div style="font-size:13px;font-weight:500;color:#000000">£0.99</div>
+        </div>
         <div class="credit-opt" onclick="buyCredits(20,'1.99')" style="border:1px solid var(--paper3);border-radius:var(--radius);padding:12px;text-align:center;cursor:pointer">
           <div style="font-size:18px;font-weight:500;color:var(--ink)">20</div>
           <div style="font-size:11px;color:var(--ink3);margin:2px 0">digests</div>
-          <div style="font-size:13px;font-weight:500;color:#9B1C1C">£1.99</div>
+          <div style="font-size:13px;font-weight:500;color:#000000">£1.99</div>
         </div>
-        <div class="credit-opt" onclick="buyCredits(60,'4.99')" style="border:2px solid #9B1C1C;border-radius:var(--radius);padding:12px;text-align:center;cursor:pointer;background:#fdf2f2;position:relative">
-          <div style="position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:#9B1C1C;color:#fff;font-size:9px;font-weight:500;padding:2px 8px;border-radius:10px;white-space:nowrap">Best value</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem">
+        <div class="credit-opt" onclick="buyCredits(60,'4.99')" style="border:2px solid #000000;border-radius:var(--radius);padding:12px;text-align:center;cursor:pointer;background:#f5f5f5;position:relative">
+          <div style="position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:#000000;color:#fff;font-size:9px;font-weight:500;padding:2px 8px;border-radius:10px;white-space:nowrap">Best value</div>
           <div style="font-size:18px;font-weight:500;color:var(--ink)">60</div>
           <div style="font-size:11px;color:var(--ink3);margin:2px 0">digests</div>
-          <div style="font-size:13px;font-weight:500;color:#9B1C1C">£4.99</div>
+          <div style="font-size:13px;font-weight:500;color:#000000">£4.99</div>
         </div>
         <div class="credit-opt" onclick="buyCredits(150,'9.99')" style="border:1px solid var(--paper3);border-radius:var(--radius);padding:12px;text-align:center;cursor:pointer">
           <div style="font-size:18px;font-weight:500;color:var(--ink)">150</div>
           <div style="font-size:11px;color:var(--ink3);margin:2px 0">digests</div>
-          <div style="font-size:13px;font-weight:500;color:#9B1C1C">£9.99</div>
+          <div style="font-size:13px;font-weight:500;color:#000000">£9.99</div>
         </div>
       </div>
       <div style="font-size:11px;color:var(--ink4);text-align:center">Credits use our premium AI model (Claude Sonnet) — noticeably better quality than the free tier.</div>
@@ -476,10 +502,31 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
 </div>
 
 <div class="screen" id="screen-loading" style="flex-direction:column">
-  <nav class="nav"><div class="nav-logo">summ<span>AI</span>rize</div></nav>
+  <nav class="nav"><div style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;background:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#000;line-height:1">S</span></div><span style="font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;color:#fff">SummAIrize</span></div></nav>
+  <style>
+    @keyframes s-pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.08);opacity:0.85}}
+    @keyframes ring-spin{0%{stroke-dashoffset:220}100%{stroke-dashoffset:0}}
+    @keyframes ring-rotate{0%{transform:rotate(-90deg)}100%{transform:rotate(270deg)}}
+    @keyframes ticker-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    .s-logo-anim{animation:s-pulse 1.8s ease-in-out infinite}
+    .ring-arc{animation:ring-spin 1.8s ease-in-out infinite,ring-rotate 1.8s linear infinite;transform-origin:center;fill:none;stroke:#000;stroke-width:3;stroke-linecap:round;stroke-dasharray:220;stroke-dashoffset:220}
+    .ticker-wrap{overflow:hidden;width:100%;max-width:320px;margin:1.5rem auto 0;border-top:0.5px solid var(--paper3);border-bottom:0.5px solid var(--paper3);padding:6px 0}
+    .ticker-inner{display:flex;gap:2rem;width:max-content;animation:ticker-scroll 8s linear infinite}
+    .ticker-item{font-size:11px;color:var(--ink4);white-space:nowrap;font-style:italic}
+  </style>
   <div style="flex:1;display:flex;align-items:center;justify-content:center">
     <div class="load-inner">
-      <div class="spinner"></div>
+      <div style="position:relative;width:80px;height:80px;margin:0 auto 2rem">
+        <svg width="80" height="80" viewBox="0 0 80 80" style="position:absolute;top:0;left:0">
+          <circle cx="40" cy="40" r="35" fill="none" stroke="var(--paper3)" stroke-width="3"/>
+          <circle cx="40" cy="40" r="35" class="ring-arc" style="transform-origin:40px 40px"/>
+        </svg>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
+          <div class="s-logo-anim" style="width:48px;height:48px;background:#000;border-radius:10px;display:flex;align-items:center;justify-content:center">
+            <span style="font-family:'Playfair Display',Georgia,serif;font-size:30px;font-weight:700;color:#fff;line-height:1">S</span>
+          </div>
+        </div>
+      </div>
       <div class="load-ttl">Building your digest</div>
       <div class="load-sub" id="load-sub">Fetching live news feeds…</div>
       <div class="load-steps">
@@ -487,6 +534,22 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
         <div class="ls" id="ls2"><div class="ls-dot"></div>Parsing articles</div>
         <div class="ls" id="ls3"><div class="ls-dot"></div>Sending to Claude</div>
         <div class="ls" id="ls4"><div class="ls-dot"></div>Writing your digest</div>
+      </div>
+      <div class="ticker-wrap">
+        <div class="ticker-inner" id="ticker-inner">
+          <span class="ticker-item">Fetching BBC News…</span>
+          <span class="ticker-item">Reading Reuters…</span>
+          <span class="ticker-item">Scanning Al Jazeera…</span>
+          <span class="ticker-item">Processing Guardian…</span>
+          <span class="ticker-item">Analysing AP News…</span>
+          <span class="ticker-item">Filtering by your topics…</span>
+          <span class="ticker-item">Fetching BBC News…</span>
+          <span class="ticker-item">Reading Reuters…</span>
+          <span class="ticker-item">Scanning Al Jazeera…</span>
+          <span class="ticker-item">Processing Guardian…</span>
+          <span class="ticker-item">Analysing AP News…</span>
+          <span class="ticker-item">Filtering by your topics…</span>
+        </div>
       </div>
       <div class="fetch-log" id="fetch-log"></div>
     </div>
@@ -496,11 +559,11 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
 <!-- OUTPUT -->
 <div class="screen" id="screen-output">
   <nav class="nav">
-    <div class="nav-logo">summ<span>AI</span>rize</div>
+    <div style="display:flex;align-items:center;gap:10px;cursor:pointer"><div style="width:32px;height:32px;background:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#000;line-height:1">S</span></div><span style="font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;color:#fff">summAIrize</span></div>
     <div class="nav-right">
-      <span id="out-user" style="font-size:13px;color:var(--ink3)"></span>
-      <button class="btn btn-ghost btn-sm" onclick="restart()">New digest</button>
-      <button class="btn btn-ghost btn-sm" onclick="showScreen('screen-landing')">Sign out</button>
+      <span id="out-user" style="font-size:13px;color:#aaa"></span>
+      <button style="padding:7px 16px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)" onclick="restart()">New digest</button>
+      <button style="padding:7px 16px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)" onclick="showScreen('screen-landing')">Sign out</button>
     </div>
   </nav>
   <div style="padding:10px 2rem;border-bottom:1px solid var(--paper3)"><div class="ad-slot ad-banner">Advertisement — your ad could appear here</div></div>
@@ -737,7 +800,8 @@ async function startGenerate(){
   }
 
   setLoadStep(3);
-  await callClaude(allArticles);
+  const capped=allArticles.length>50?allArticles.sort(()=>Math.random()-0.5).slice(0,50):allArticles;
+  await callClaude(capped);
 }
 
 async function callClaude(articles){
@@ -930,7 +994,7 @@ async function sendEmail(){
 }
 function downloadPDF(){
   const w=window.open('','_blank');
-  w.document.write(`<html><head><title>SummAIrize</title><style>body{font-family:Georgia,serif;max-width:700px;margin:2rem auto;padding:2rem;color:#111}h1{font-size:28px;margin-bottom:0.5rem}h2{font-size:20px;margin:2rem 0 0.75rem;border-bottom:1px solid #ddd;padding-bottom:0.5rem}p{margin-bottom:1rem;line-height:1.7}blockquote{border-left:3px solid #9B1C1C;padding:10px 16px;background:#fdf2f2;margin:1.5rem 0;font-style:italic}cite{font-style:normal;font-size:12px;color:#6B1111}.meta{font-size:13px;color:#888;margin-bottom:2rem}a{color:#9B1C1C}.fn{font-size:12px;color:#888;margin-top:0.5rem}</style></head><body>`);
+  w.document.write(`<html><head><title>SummAIrize</title><style>body{font-family:Georgia,serif;max-width:700px;margin:2rem auto;padding:2rem;color:#111}h1{font-size:28px;margin-bottom:0.5rem}h2{font-size:20px;margin:2rem 0 0.75rem;border-bottom:1px solid #ddd;padding-bottom:0.5rem}p{margin-bottom:1rem;line-height:1.7}blockquote{border-left:3px solid #000000;padding:10px 16px;background:#f5f5f5;margin:1.5rem 0;font-style:italic}cite{font-style:normal;font-size:12px;color:#222222}.meta{font-size:13px;color:#888;margin-bottom:2rem}a{color:#000000}.fn{font-size:12px;color:#888;margin-top:0.5rem}</style></head><body>`);
   w.document.write(`<h1>SummAIrize</h1><div class="meta">${new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})} · ${S.sources.join(', ')}</div>`);
   document.querySelectorAll('.digest-section').forEach(s=>{
     w.document.write('<h2>'+s.querySelector('.sec-ttl').textContent+'</h2>');
@@ -949,9 +1013,9 @@ function updateUsageBar(){
   const el=document.getElementById('usage-bar');
   if(!el)return;
   if(S.isPremium){
-    el.innerHTML=`<span style="background:#fdf2f2;color:#9B1C1C;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:500">Premium</span>`;
+    el.innerHTML=`<span style="background:#f5f5f5;color:#000000;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:500">Premium</span>`;
   }else if(S.credits>0){
-    el.innerHTML=`<span style="background:#fdf2f2;color:#9B1C1C;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:500">${S.credits} credits remaining</span>`;
+    el.innerHTML=`<span style="background:#f5f5f5;color:#000000;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:500">${S.credits} credits remaining</span>`;
   }else{
     const left=Math.max(0,3-S.digestsToday);
     const col=left===0?'#c0392b':left===1?'#e67e22':'var(--ink3)';
