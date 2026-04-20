@@ -310,8 +310,12 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
 <div class="screen" id="screen-auth" style="flex-direction:column;background:var(--paper)">
   <div class="auth-wrap">
     <div class="auth-card">
-      <div class="auth-logo">summ<span>AI</span>rize</div>
-      <div class="auth-sub">Your news, your way</div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:2rem">
+        <div style="width:36px;height:36px;background:#000;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <span style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:#fff;line-height:1">S</span>
+        </div>
+        <span style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:#000">SummAIrize</span>
+      </div>
       <div class="auth-tabs">
         <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Sign in</button>
         <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Create account</button>
