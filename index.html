@@ -272,7 +272,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
     <div style="font-size:11px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:#888;margin-bottom:1.5rem;display:flex;align-items:center;gap:10px">
       <div style="width:32px;height:1px;background:#444"></div>Live AI news digest<div style="width:32px;height:1px;background:#444"></div>
     </div>
-    <h1 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(28px,4vw,48px);font-weight:700;line-height:1.2;color:#fff;margin-bottom:1.25rem;max-width:500px">Your sources.<br>Your topics.<br>One digest.</h1>
+    <h1 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(28px,4vw,48px);font-weight:700;line-height:1.2;color:#fff;margin-bottom:1.25rem;max-width:500px">Your sources.<br>Your topics.<br>Your digest.</h1>
     <p style="font-size:14px;color:#aaa;line-height:1.9;margin-bottom:2.5rem;white-space:nowrap">Get a real-time digest synthesised from live news feeds — on demand, in seconds.</p>
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
       <button onclick="showAuth('signup')" style="padding:13px 30px;background:#fff;color:#000;border:none;border-radius:8px;font-size:15px;font-weight:500;cursor:pointer;font-family:var(--sans)">Build my digest</button>
@@ -301,6 +301,30 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
         <div style="text-align:center"><div style="font-family:'Playfair Display',Georgia,serif;font-size:28px;font-weight:700;color:#000">11</div><div style="font-size:12px;color:#aaa;margin-top:3px">News sources</div></div>
         <div style="text-align:center"><div style="font-family:'Playfair Display',Georgia,serif;font-size:28px;font-weight:700;color:#000">9</div><div style="font-size:12px;color:#aaa;margin-top:3px">Topic categories</div></div>
         <div style="text-align:center"><div style="font-family:'Playfair Display',Georgia,serif;font-size:28px;font-weight:700;color:#000">100%</div><div style="font-size:12px;color:#aaa;margin-top:3px">Personalised</div></div>
+      </div>
+    </div>
+  </div>
+  <!-- FOOTER -->
+  <div style="background:#000;padding:2rem;margin-top:auto">
+    <div style="max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:1.25rem">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:26px;height:26px;background:#fff;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <span style="font-family:'Playfair Display',Georgia,serif;font-size:16px;font-weight:700;color:#000;line-height:1">S</span>
+          </div>
+          <span style="font-family:'Playfair Display',Georgia,serif;font-size:15px;font-weight:700;color:#fff">SummAIrize</span>
+        </div>
+        <div style="display:flex;gap:1.5rem;flex-wrap:wrap">
+          <a href="#" style="font-size:12px;color:#555;text-decoration:none" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#555'">Home</a>
+          <a href="#" style="font-size:12px;color:#555;text-decoration:none" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#555'">About</a>
+          <a href="#" style="font-size:12px;color:#555;text-decoration:none" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#555'">Privacy policy</a>
+          <a href="#" style="font-size:12px;color:#555;text-decoration:none" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#555'">Terms of use</a>
+          <a href="#" style="font-size:12px;color:#555;text-decoration:none" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#555'">Contact</a>
+        </div>
+      </div>
+      <div style="border-top:0.5px solid #222;padding-top:1.25rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.5rem">
+        <span style="font-size:11px;color:#444">© 2026 SummAIrize. All rights reserved.</span>
+        <span style="font-size:11px;color:#444">Powered by Claude AI</span>
       </div>
     </div>
   </div>
@@ -340,6 +364,35 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
         <button class="btn btn-ghost" style="width:100%;padding:11px" onclick="switchTab('login')">Sign in instead</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- HOME — history + new digest -->
+<div class="screen" id="screen-home" style="flex-direction:column">
+  <nav class="nav">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:32px;height:32px;background:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <span style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#000;line-height:1">S</span>
+      </div>
+      <span style="font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;color:#fff">SummAIrize</span>
+    </div>
+    <div class="nav-right">
+      <div id="usage-bar-home" style="font-size:12px;color:#aaa;display:flex;align-items:center;gap:8px"></div>
+      <span id="nav-user-home" style="font-size:13px;color:#aaa"></span>
+      <button style="padding:7px 16px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)" onclick="showScreen('screen-landing')">Sign out</button>
+    </div>
+  </nav>
+  <div style="flex:1;padding:2.5rem 2rem;max-width:860px;margin:0 auto;width:100%">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem">
+      <div>
+        <div style="font-family:'Playfair Display',Georgia,serif;font-size:24px;font-weight:700;color:var(--ink)">Good to see you, <span id="home-name"></span>.</div>
+        <div style="font-size:14px;color:var(--ink3);margin-top:4px">Your digest history is below — or build a new one.</div>
+      </div>
+      <button onclick="startNewDigest()" style="padding:11px 24px;background:#000;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;font-family:var(--sans);display:flex;align-items:center;gap:8px">
+        + New digest
+      </button>
+    </div>
+    <div id="history-list"></div>
   </div>
 </div>
 
@@ -687,8 +740,66 @@ function doSignup(){
 function enterApp(){
   document.getElementById('nav-user').textContent='Hi, '+S.user.name;
   document.getElementById('out-user').textContent=S.user.name;
+  document.getElementById('nav-user-home').textContent='Hi, '+S.user.name;
+  document.getElementById('home-name').textContent=S.user.name;
   updateUsageBar();
-  showScreen('screen-config');cfgStep=1;showCfgStep(1);
+  updateUsageBarHome();
+  renderHistory();
+  showScreen('screen-home');
+}
+function updateUsageBarHome(){
+  const el=document.getElementById('usage-bar-home');
+  if(!el)return;
+  if(S.isPremium){
+    el.innerHTML=`<span style="background:#333;color:#fff;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:500">Premium</span>`;
+  }else if(S.credits>0){
+    el.innerHTML=`<span style="background:#333;color:#fff;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:500">${S.credits} credits</span>`;
+  }else{
+    const left=Math.max(0,3-S.digestsToday);
+    el.innerHTML=`<span style="font-size:12px;color:#aaa">${left} free digest${left===1?'':'s'} left today</span>`;
+  }
+}
+function startNewDigest(){
+  S.sources=[];S.topics=[];S.tone=null;S.window=null;S.length=null;S.keyword='';
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('sel'));
+  document.querySelectorAll('.oc').forEach(c=>c.classList.remove('sel'));
+  if(document.getElementById('kw'))document.getElementById('kw').value='';
+  for(let i=1;i<=5;i++){const b=document.getElementById('b'+i);if(b)b.disabled=true}
+  updateAside();showScreen('screen-config');showCfgStep(1);
+}
+function saveDigest(sections,articles){
+  const digests=JSON.parse(localStorage.getItem('summairize_history')||'[]');
+  digests.unshift({
+    id:Date.now(),
+    date:new Date().toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'}),
+    sources:S.sources.join(', '),
+    topics:S.topics.join(', '),
+    tone:S.tone,
+    articles:articles.length,
+    sections:sections.map(s=>({kicker:s.kicker,title:s.title}))
+  });
+  localStorage.setItem('summairize_history',JSON.stringify(digests.slice(0,20)));
+}
+function renderHistory(){
+  const el=document.getElementById('history-list');
+  const digests=JSON.parse(localStorage.getItem('summairize_history')||'[]');
+  if(digests.length===0){
+    el.innerHTML=`<div style="text-align:center;padding:4rem 2rem;background:var(--paper2);border-radius:var(--radius-lg);border:1px solid var(--paper3)">
+      <div style="font-family:'Playfair Display',Georgia,serif;font-size:20px;color:var(--ink);margin-bottom:0.5rem">No digests yet</div>
+      <div style="font-size:14px;color:var(--ink3);margin-bottom:1.5rem">Build your first digest to get started.</div>
+      <button onclick="startNewDigest()" style="padding:10px 24px;background:#000;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;font-family:var(--sans)">Build my first digest</button>
+    </div>`;
+    return;
+  }
+  el.innerHTML=digests.map(d=>`
+    <div style="background:#fff;border:0.5px solid var(--paper3);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:0.75rem;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+      <div style="flex:1">
+        <div style="font-size:11px;color:var(--ink4);margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.06em">${d.date} · ${d.articles} articles · ${d.tone||''}</div>
+        <div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:0.4rem">${d.sources}</div>
+        <div style="font-size:12px;color:var(--ink3)">${d.topics}</div>
+        ${d.sections&&d.sections.length?`<div style="margin-top:0.75rem;display:flex;flex-wrap:wrap;gap:6px">${d.sections.map(s=>`<span style="font-size:11px;padding:3px 10px;border-radius:12px;background:var(--paper2);color:var(--ink3);border:0.5px solid var(--paper3)">${s.kicker}</span>`).join('')}</div>`:''}
+      </div>
+    </div>`).join('');
 }
 
 function showCfgStep(n){
@@ -897,6 +1008,7 @@ function renderOutput(data,articles){
   if(!S.isPremium&&S.credits>0){S.credits--}
   else if(!S.isPremium){S.digestsToday++}
   updateUsageBar();
+  saveDigest(data.sections,articles);
   renderOutputMeta(articles);
   const el=document.getElementById('digest-sections');
   el.innerHTML='';
@@ -1030,7 +1142,7 @@ function restart(){
   document.querySelectorAll('.oc').forEach(c=>c.classList.remove('sel'));
   document.getElementById('kw').value='';
   for(let i=1;i<=5;i++){const b=document.getElementById('b'+i);if(b)b.disabled=true}
-  updateAside();showScreen('screen-config');showCfgStep(1);
+  updateAside();renderHistory();showScreen('screen-home');
 }
 </script>
 </body>
