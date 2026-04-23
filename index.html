@@ -279,11 +279,11 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
     </div>
     <h1 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(26px,3.5vw,44px);font-weight:700;line-height:1.2;color:#fff;margin-bottom:1rem;max-width:500px">Your sources.<br>Your topics.<br>Your digest.</h1>
     <p style="font-size:13px;color:#aaa;line-height:1.8;margin-bottom:1.75rem;white-space:nowrap">Get a real-time digest synthesised from live news feeds — on demand, in seconds.</p>
-    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:2rem">
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:1.5rem">
       <button onclick="showAuth('signup')" style="padding:11px 28px;background:#fff;color:#000;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;font-family:var(--sans)">Build my digest</button>
       <button onclick="showAuth('login')" style="padding:11px 20px;background:transparent;border:1px solid #444;border-radius:8px;color:#ccc;font-size:14px;font-weight:500;cursor:pointer;font-family:var(--sans)">Sign in</button>
     </div>
-    <!-- 11 sources -->
+
     <div style="font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#555;margin-bottom:0.75rem">11 live news sources</div>
     <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;max-width:680px;margin-bottom:2rem">
       <div style="font-size:11px;padding:3px 9px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#BB1919;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">BBC</span>BBC News</div>
@@ -303,6 +303,39 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
       <div style="text-align:center"><div style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:#fff">11</div><div style="font-size:10px;color:#555;margin-top:2px">News sources</div></div>
       <div style="text-align:center"><div style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:#fff">9</div><div style="font-size:10px;color:#555;margin-top:2px">Topic categories</div></div>
       <div style="text-align:center"><div style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:#fff">100%</div><div style="font-size:10px;color:#555;margin-top:2px">Personalised</div></div>
+    </div>
+  </div>
+
+  <!-- FULL WIDTH BREAKING TICKER — between stats and white footer -->
+  <div style="width:100%;background:#111;border-top:0.5px solid #222;border-bottom:0.5px solid #222;padding:8px 2rem;display:flex;align-items:center;overflow:hidden;flex-shrink:0;box-sizing:border-box">
+    <div style="flex-shrink:0;background:#fff;color:#000;font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:5px 14px;margin-right:16px;white-space:nowrap;border-radius:8px">Breaking</div>
+    <div style="overflow:hidden;flex:1">
+      <div id="ticker-track" style="display:inline-flex;gap:0;white-space:nowrap;will-change:transform">
+        <span style="font-size:12px;color:#888;padding-right:3rem">Markets rattled as US tariff talks stall — investors eye Fed response</span>
+        <span style="font-size:12px;color:#555;padding-right:3rem">·</span>
+        <span style="font-size:12px;color:#888;padding-right:3rem">Tech earnings season kicks off — AI spending in focus</span>
+        <span style="font-size:12px;color:#555;padding-right:3rem">·</span>
+        <span style="font-size:12px;color:#888;padding-right:3rem">UN climate summit opens in Geneva amid record temperature warnings</span>
+        <span style="font-size:12px;color:#555;padding-right:3rem">·</span>
+        <span style="font-size:12px;color:#888;padding-right:3rem">UK inflation holds steady — Bank of England rate cut hopes rise</span>
+        <span style="font-size:12px;color:#555;padding-right:3rem">·</span>
+        <span style="font-size:12px;color:#888;padding-right:3rem">Middle East ceasefire talks resume in Cairo</span>
+        <span style="font-size:12px;color:#555;padding-right:3rem">·</span>
+        <span style="font-size:12px;color:#888;padding-right:3rem">Global semiconductor shortage eases as TSMC boosts capacity</span>
+        <span style="font-size:12px;color:#555;padding-right:3rem">·</span>
+        <span style="font-size:12px;color:#888;padding-right:3rem">Markets rattled as US tariff talks stall — investors eye Fed response</span>
+        <span style="font-size:12px;color:#555;padding-right:3rem">·</span>
+        <span style="font-size:12px;color:#888;padding-right:3rem">Tech earnings season kicks off — AI spending in focus</span>
+        <span style="font-size:12px;color:#555;padding-right:3rem">·</span>
+        <span style="font-size:12px;color:#888;padding-right:3rem">UN climate summit opens in Geneva amid record temperature warnings</span>
+        <span style="font-size:12px;color:#555;padding-right:3rem">·</span>
+        <span style="font-size:12px;color:#888;padding-right:3rem">UK inflation holds steady — Bank of England rate cut hopes rise</span>
+        <span style="font-size:12px;color:#555;padding-right:3rem">·</span>
+        <span style="font-size:12px;color:#888;padding-right:3rem">Middle East ceasefire talks resume in Cairo</span>
+        <span style="font-size:12px;color:#555;padding-right:3rem">·</span>
+        <span style="font-size:12px;color:#888;padding-right:3rem">Global semiconductor shortage eases as TSMC boosts capacity</span>
+        <span style="font-size:12px;color:#555;padding-right:3rem">·</span>
+      </div>
     </div>
   </div>
 
@@ -672,6 +705,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
         <div id="out-src-tags" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0.75rem"></div>
         <div class="updated-stamp" id="updated-stamp"></div>
         <div class="share-bar">
+          <button id="audio-btn" onclick="toggleAudio()" style="display:flex;align-items:center;gap:6px;padding:7px 13px;border:1px solid var(--paper3);border-radius:var(--radius);font-size:12px;font-weight:500;cursor:pointer;background:transparent;color:var(--ink2);font-family:var(--sans);transition:all 0.15s">&#9654; Listen to digest</button>
           <button class="share-btn" onclick="shareTwitter()">
             <svg class="share-icon" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>Share
           </button>
@@ -1176,10 +1210,59 @@ function updateUsageBar(){
 }
 function scrollTo(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
 
+// Breaking news ticker animation
+(function(){
+  const track=document.getElementById('ticker-track');
+  if(!track)return;
+  let pos=0;
+  const speed=0.5;
+  const half=track.scrollWidth/2;
+  function tick(){
+    pos+=speed;
+    if(pos>=half)pos=0;
+    track.style.transform=`translateX(-${pos}px)`;
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
 const revealObserver=new IntersectionObserver((entries)=>{
   entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');}});
 },{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
 document.querySelectorAll('.reveal-section').forEach(el=>revealObserver.observe(el));
+
+// Audio playback
+let audioUtterance=null;
+let audioPlaying=false;
+function toggleAudio(){
+  const btn=document.getElementById('audio-btn');
+  if(!('speechSynthesis' in window)){toast('Audio not supported in this browser');return;}
+  if(audioPlaying){
+    window.speechSynthesis.cancel();
+    audioPlaying=false;
+    btn.innerHTML='&#9654; Listen to digest';
+    btn.style.background='transparent';
+    return;
+  }
+  let text='SummAIrize digest. ';
+  document.querySelectorAll('.digest-section').forEach(s=>{
+    const title=s.querySelector('.sec-ttl');
+    const paras=s.querySelectorAll('.sec-body p');
+    if(title)text+=title.textContent+'. ';
+    paras.forEach(p=>{text+=p.textContent+' ';});
+  });
+  audioUtterance=new SpeechSynthesisUtterance(text);
+  audioUtterance.rate=0.95;
+  audioUtterance.pitch=1;
+  audioUtterance.onend=()=>{
+    audioPlaying=false;
+    if(btn){btn.innerHTML='&#9654; Listen to digest';btn.style.background='transparent';}
+  };
+  window.speechSynthesis.speak(audioUtterance);
+  audioPlaying=true;
+  btn.innerHTML='&#9646;&#9646; Stop audio';
+  btn.style.background='#222';
+}
 
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
 function restart(){
