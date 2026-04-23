@@ -252,9 +252,14 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
 <div class="toast" id="toast"></div>
 
 <!-- LANDING -->
-<div class="screen active" id="screen-landing">
-  <!-- WHITE NAV -->
-  <nav style="display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;background:#fff;border-bottom:0.5px solid #eee;position:sticky;top:0;z-index:100">
+<div class="screen active" id="screen-landing" style="flex-direction:column">
+  <style>
+    .reveal-section{opacity:0;transform:translateY(40px);transition:opacity 0.7s cubic-bezier(.4,0,.2,1),transform 0.7s cubic-bezier(.4,0,.2,1)}
+    .reveal-section.visible{opacity:1;transform:translateY(0)}
+  </style>
+  <div style="height:100vh;display:flex;flex-direction:column;overflow:hidden">
+  <!-- WHITE NAV — 64px -->
+  <nav style="display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;flex-shrink:0;background:#fff;border-bottom:0.5px solid #eee;z-index:100">
     <div style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="showScreen('screen-landing')">
       <div style="width:34px;height:34px;background:#000;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
         <span style="font-family:'Playfair Display',Georgia,serif;font-size:21px;font-weight:700;color:#fff;line-height:1">S</span>
@@ -267,60 +272,56 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
     </div>
   </nav>
 
-  <!-- BLACK HERO — centred, core section -->
-  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:5rem 2rem 3rem;background:#000">
-    <div style="font-size:11px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:#888;margin-bottom:1.5rem;display:flex;align-items:center;gap:10px">
+  <!-- BLACK HERO — fills remaining space between nav and footer -->
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1.5rem 2rem;background:#000;overflow:hidden">
+    <div style="font-size:11px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:#888;margin-bottom:1rem;display:flex;align-items:center;gap:10px">
       <div style="width:32px;height:1px;background:#444"></div>Live AI news digest<div style="width:32px;height:1px;background:#444"></div>
     </div>
-    <h1 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(28px,4vw,48px);font-weight:700;line-height:1.2;color:#fff;margin-bottom:1.25rem;max-width:500px">Your sources.<br>Your topics.<br>Your digest.</h1>
-    <p style="font-size:14px;color:#aaa;line-height:1.9;margin-bottom:2.5rem;white-space:nowrap">Get a real-time digest synthesised from live news feeds — on demand, in seconds.</p>
-    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:3rem">
-      <button onclick="showAuth('signup')" style="padding:13px 30px;background:#fff;color:#000;border:none;border-radius:8px;font-size:15px;font-weight:500;cursor:pointer;font-family:var(--sans)">Build my digest</button>
-      <button onclick="showAuth('login')" style="padding:13px 22px;background:transparent;border:1px solid #444;border-radius:8px;color:#ccc;font-size:15px;font-weight:500;cursor:pointer;font-family:var(--sans)">Sign in</button>
+    <h1 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(26px,3.5vw,44px);font-weight:700;line-height:1.2;color:#fff;margin-bottom:1rem;max-width:500px">Your sources.<br>Your topics.<br>Your digest.</h1>
+    <p style="font-size:13px;color:#aaa;line-height:1.8;margin-bottom:1.75rem;white-space:nowrap">Get a real-time digest synthesised from live news feeds — on demand, in seconds.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:2rem">
+      <button onclick="showAuth('signup')" style="padding:11px 28px;background:#fff;color:#000;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;font-family:var(--sans)">Build my digest</button>
+      <button onclick="showAuth('login')" style="padding:11px 20px;background:transparent;border:1px solid #444;border-radius:8px;color:#ccc;font-size:14px;font-weight:500;cursor:pointer;font-family:var(--sans)">Sign in</button>
     </div>
-    <!-- 11 sources inside hero, close to buttons -->
-    <div style="font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#555;margin-bottom:1rem">11 live news sources</div>
-    <div style="display:flex;gap:7px;flex-wrap:wrap;justify-content:center;max-width:680px">
-      <div style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#BB1919;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">BBC</span>BBC News</div>
-      <div style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#FF8000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">REU</span>Reuters</div>
-      <div style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#008000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">AJZ</span>Al Jazeera</div>
-      <div style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#052962;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">GDN</span>The Guardian</div>
-      <div style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#CC0000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">AP</span>AP News</div>
-      <div style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#003DA5;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">SKY</span>Sky News</div>
-      <div style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#CC0000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">CNN</span>CNN</div>
-      <div style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#006AB3;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">DW</span>Deutsche Welle</div>
-      <div style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#222;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">NPR</span>NPR News</div>
-      <div style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#F0063C;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">F24</span>France 24</div>
-      <div style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#003399;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">EUR</span>euronews</div>
+    <!-- 11 sources -->
+    <div style="font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#555;margin-bottom:0.75rem">11 live news sources</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;max-width:680px;margin-bottom:2rem">
+      <div style="font-size:11px;padding:3px 9px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#BB1919;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">BBC</span>BBC News</div>
+      <div style="font-size:11px;padding:3px 9px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#FF8000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">REU</span>Reuters</div>
+      <div style="font-size:11px;padding:3px 9px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#008000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">AJZ</span>Al Jazeera</div>
+      <div style="font-size:11px;padding:3px 9px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#052962;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">GDN</span>The Guardian</div>
+      <div style="font-size:11px;padding:3px 9px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#CC0000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">AP</span>AP News</div>
+      <div style="font-size:11px;padding:3px 9px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#003DA5;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">SKY</span>Sky News</div>
+      <div style="font-size:11px;padding:3px 9px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#CC0000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">CNN</span>CNN</div>
+      <div style="font-size:11px;padding:3px 9px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#006AB3;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">DW</span>Deutsche Welle</div>
+      <div style="font-size:11px;padding:3px 9px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#222;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">NPR</span>NPR News</div>
+      <div style="font-size:11px;padding:3px 9px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#F0063C;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">F24</span>France 24</div>
+      <div style="font-size:11px;padding:3px 9px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#003399;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">EUR</span>euronews</div>
     </div>
-  </div>
-
-  <!-- WHITE STATS + FOOTER — tight, no logo -->
-  <div style="background:#fff;padding:1.5rem 2rem 0">
-    <div style="max-width:800px;margin:0 auto">
-      <div style="display:flex;gap:2rem;justify-content:flex-end;flex-wrap:wrap;padding-bottom:1.25rem;border-bottom:0.5px solid #eee">
-        <div style="text-align:center"><div style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:#000">11</div><div style="font-size:11px;color:#aaa;margin-top:2px">News sources</div></div>
-        <div style="text-align:center"><div style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:#000">9</div><div style="font-size:11px;color:#aaa;margin-top:2px">Topic categories</div></div>
-        <div style="text-align:center"><div style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:#000">100%</div><div style="font-size:11px;color:#aaa;margin-top:2px">Personalised</div></div>
-      </div>
+    <!-- STATS -->
+    <div style="display:flex;gap:2.5rem;justify-content:center;flex-wrap:wrap;padding-top:1.5rem;border-top:0.5px solid #222;width:100%;max-width:680px">
+      <div style="text-align:center"><div style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:#fff">11</div><div style="font-size:10px;color:#555;margin-top:2px">News sources</div></div>
+      <div style="text-align:center"><div style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:#fff">9</div><div style="font-size:10px;color:#555;margin-top:2px">Topic categories</div></div>
+      <div style="text-align:center"><div style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:#fff">100%</div><div style="font-size:10px;color:#555;margin-top:2px">Personalised</div></div>
     </div>
   </div>
 
-  <!-- FOOTER — white, black text, no logo -->
-  <div style="background:#fff;padding:1.25rem 2rem">
-    <div style="max-width:800px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+  <!-- WHITE FOOTER — 64px matching nav -->
+  <div style="height:64px;flex-shrink:0;background:#fff;border-top:0.5px solid #eee;display:flex;align-items:center;padding:0 2rem">
+    <div style="width:100%;display:flex;align-items:center;justify-content:space-between">
       <span style="font-size:11px;color:#aaa">© 2026 SummAIrize. All rights reserved.</span>
-      <div style="display:flex;gap:1.5rem;flex-wrap:wrap">
+      <div style="display:flex;gap:1.5rem;align-items:center">
         <a href="#screen-landing" style="font-size:12px;color:#aaa;text-decoration:none" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#aaa'">Home</a>
-        <a href="#section-about" onclick="scrollTo('section-about')" style="font-size:12px;color:#aaa;text-decoration:none;cursor:pointer" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#aaa'">About</a>
-        <a href="#section-privacy" onclick="scrollTo('section-privacy')" style="font-size:12px;color:#aaa;text-decoration:none;cursor:pointer" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#aaa'">Privacy policy</a>
-        <a href="#section-terms" onclick="scrollTo('section-terms')" style="font-size:12px;color:#aaa;text-decoration:none;cursor:pointer" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#aaa'">Terms of use</a>
+        <a onclick="scrollTo('section-about')" style="font-size:12px;color:#aaa;text-decoration:none;cursor:pointer" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#aaa'">About</a>
+        <a onclick="scrollTo('section-privacy')" style="font-size:12px;color:#aaa;text-decoration:none;cursor:pointer" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#aaa'">Privacy policy</a>
+        <a onclick="scrollTo('section-terms')" style="font-size:12px;color:#aaa;text-decoration:none;cursor:pointer" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#aaa'">Terms of use</a>
       </div>
     </div>
   </div>
+  </div><!-- end 100vh above-fold wrapper -->
 
-  <!-- ABOUT -->
-  <div id="section-about" style="background:#fff;padding:4rem 2rem;border-top:0.5px solid #eee">
+  <!-- ABOUT — hidden until scroll -->
+  <div id="section-about" class="reveal-section" style="background:#fff;padding:4rem 2rem;border-top:0.5px solid #eee">
     <div style="max-width:680px;margin:0 auto">
       <div style="font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#aaa;margin-bottom:1rem">About</div>
       <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:32px;font-weight:700;color:#000;margin-bottom:1.5rem;line-height:1.2">Built for people who care about staying informed.</h2>
@@ -331,8 +332,8 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
     </div>
   </div>
 
-  <!-- PRIVACY POLICY -->
-  <div id="section-privacy" style="background:#fafafa;padding:4rem 2rem;border-top:0.5px solid #eee">
+  <!-- PRIVACY POLICY — hidden until scroll -->
+  <div id="section-privacy" class="reveal-section" style="background:#fafafa;padding:4rem 2rem;border-top:0.5px solid #eee">
     <div style="max-width:680px;margin:0 auto">
       <div style="font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#aaa;margin-bottom:1rem">Privacy policy</div>
       <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:32px;font-weight:700;color:#000;margin-bottom:0.5rem">Privacy Policy</h2>
@@ -350,7 +351,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
   </div>
 
   <!-- TERMS OF USE -->
-  <div id="section-terms" style="background:#fff;padding:4rem 2rem;border-top:0.5px solid #eee">
+  <div id="section-terms" class="reveal-section" style="background:#fff;padding:4rem 2rem;border-top:0.5px solid #eee">
     <div style="max-width:680px;margin:0 auto">
       <div style="font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#aaa;margin-bottom:1rem">Terms of use</div>
       <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:32px;font-weight:700;color:#000;margin-bottom:0.5rem">Terms of Use</h2>
@@ -1174,6 +1175,12 @@ function updateUsageBar(){
   }
 }
 function scrollTo(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
+
+const revealObserver=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');}});
+},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal-section').forEach(el=>revealObserver.observe(el));
+
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
 function restart(){
   S.sources=[];S.topics=[];S.tone=null;S.window=null;S.length=null;S.keyword='';
