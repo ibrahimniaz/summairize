@@ -267,64 +267,102 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
     </div>
   </nav>
 
-  <!-- BLACK HERO -->
-  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:5rem 2rem 4rem;background:#000">
+  <!-- BLACK HERO — centred, core section -->
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:5rem 2rem 3rem;background:#000">
     <div style="font-size:11px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:#888;margin-bottom:1.5rem;display:flex;align-items:center;gap:10px">
       <div style="width:32px;height:1px;background:#444"></div>Live AI news digest<div style="width:32px;height:1px;background:#444"></div>
     </div>
     <h1 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(28px,4vw,48px);font-weight:700;line-height:1.2;color:#fff;margin-bottom:1.25rem;max-width:500px">Your sources.<br>Your topics.<br>Your digest.</h1>
     <p style="font-size:14px;color:#aaa;line-height:1.9;margin-bottom:2.5rem;white-space:nowrap">Get a real-time digest synthesised from live news feeds — on demand, in seconds.</p>
-    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:3rem">
       <button onclick="showAuth('signup')" style="padding:13px 30px;background:#fff;color:#000;border:none;border-radius:8px;font-size:15px;font-weight:500;cursor:pointer;font-family:var(--sans)">Build my digest</button>
       <button onclick="showAuth('login')" style="padding:13px 22px;background:transparent;border:1px solid #444;border-radius:8px;color:#ccc;font-size:15px;font-weight:500;cursor:pointer;font-family:var(--sans)">Sign in</button>
     </div>
+    <!-- 11 sources inside hero, close to buttons -->
+    <div style="font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#555;margin-bottom:1rem">11 live news sources</div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap;justify-content:center;max-width:680px">
+      <div style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#BB1919;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">BBC</span>BBC News</div>
+      <div style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#FF8000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">REU</span>Reuters</div>
+      <div style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#008000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">AJZ</span>Al Jazeera</div>
+      <div style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#052962;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">GDN</span>The Guardian</div>
+      <div style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#CC0000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">AP</span>AP News</div>
+      <div style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#003DA5;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">SKY</span>Sky News</div>
+      <div style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#CC0000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">CNN</span>CNN</div>
+      <div style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#006AB3;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">DW</span>Deutsche Welle</div>
+      <div style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#222;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">NPR</span>NPR News</div>
+      <div style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#F0063C;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">F24</span>France 24</div>
+      <div style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid #333;color:#999;display:inline-flex;align-items:center;gap:5px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#003399;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:18px;height:12px;font-family:var(--sans)">EUR</span>euronews</div>
+    </div>
   </div>
 
-  <!-- WHITE FOOTER STRIP -->
-  <div style="background:#fff;padding:3rem 2rem;border-top:0.5px solid #eee">
+  <!-- WHITE STATS + FOOTER — tight, no logo -->
+  <div style="background:#fff;padding:1.5rem 2rem 0">
     <div style="max-width:800px;margin:0 auto">
-      <div style="font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#aaa;margin-bottom:1.5rem;text-align:center">11 live news sources</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:2.5rem">
-        <div style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid #eee;color:#555;display:inline-flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#BB1919;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">BBC</span>BBC News</div>
-        <div style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid #eee;color:#555;display:inline-flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#FF8000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">REU</span>Reuters</div>
-        <div style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid #eee;color:#555;display:inline-flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#008000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">AJZ</span>Al Jazeera</div>
-        <div style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid #eee;color:#555;display:inline-flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#052962;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">GDN</span>The Guardian</div>
-        <div style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid #eee;color:#555;display:inline-flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#CC0000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">AP</span>AP News</div>
-        <div style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid #eee;color:#555;display:inline-flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#003DA5;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">SKY</span>Sky News</div>
-        <div style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid #eee;color:#555;display:inline-flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#CC0000;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">CNN</span>CNN</div>
-        <div style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid #eee;color:#555;display:inline-flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#006AB3;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">DW</span>Deutsche Welle</div>
-        <div style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid #eee;color:#555;display:inline-flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#222;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">NPR</span>NPR News</div>
-        <div style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid #eee;color:#555;display:inline-flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#F0063C;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">F24</span>France 24</div>
-        <div style="font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid #eee;color:#555;display:inline-flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;justify-content:center;background:#003399;color:#fff;font-size:6px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:20px;height:14px;font-family:var(--sans)">EUR</span>euronews</div>
-      </div>
-      <div style="display:flex;gap:3rem;justify-content:center;flex-wrap:wrap;padding-top:2rem;border-top:0.5px solid #eee">
-        <div style="text-align:center"><div style="font-family:'Playfair Display',Georgia,serif;font-size:28px;font-weight:700;color:#000">11</div><div style="font-size:12px;color:#aaa;margin-top:3px">News sources</div></div>
-        <div style="text-align:center"><div style="font-family:'Playfair Display',Georgia,serif;font-size:28px;font-weight:700;color:#000">9</div><div style="font-size:12px;color:#aaa;margin-top:3px">Topic categories</div></div>
-        <div style="text-align:center"><div style="font-family:'Playfair Display',Georgia,serif;font-size:28px;font-weight:700;color:#000">100%</div><div style="font-size:12px;color:#aaa;margin-top:3px">Personalised</div></div>
+      <div style="display:flex;gap:2rem;justify-content:flex-end;flex-wrap:wrap;padding-bottom:1.25rem;border-bottom:0.5px solid #eee">
+        <div style="text-align:center"><div style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:#000">11</div><div style="font-size:11px;color:#aaa;margin-top:2px">News sources</div></div>
+        <div style="text-align:center"><div style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:#000">9</div><div style="font-size:11px;color:#aaa;margin-top:2px">Topic categories</div></div>
+        <div style="text-align:center"><div style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:#000">100%</div><div style="font-size:11px;color:#aaa;margin-top:2px">Personalised</div></div>
       </div>
     </div>
   </div>
-  <!-- FOOTER -->
-  <div style="background:#000;padding:2rem;margin-top:auto">
-    <div style="max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:1.25rem">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
-        <div style="display:flex;align-items:center;gap:8px">
-          <div style="width:26px;height:26px;background:#fff;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <span style="font-family:'Playfair Display',Georgia,serif;font-size:16px;font-weight:700;color:#000;line-height:1">S</span>
-          </div>
-          <span style="font-family:'Playfair Display',Georgia,serif;font-size:15px;font-weight:700;color:#fff">SummAIrize</span>
-        </div>
-        <div style="display:flex;gap:1.5rem;flex-wrap:wrap">
-          <a href="#" style="font-size:12px;color:#555;text-decoration:none" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#555'">Home</a>
-          <a href="#" style="font-size:12px;color:#555;text-decoration:none" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#555'">About</a>
-          <a href="#" style="font-size:12px;color:#555;text-decoration:none" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#555'">Privacy policy</a>
-          <a href="#" style="font-size:12px;color:#555;text-decoration:none" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#555'">Terms of use</a>
-          <a href="#" style="font-size:12px;color:#555;text-decoration:none" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#555'">Contact</a>
-        </div>
+
+  <!-- FOOTER — white, black text, no logo -->
+  <div style="background:#fff;padding:1.25rem 2rem">
+    <div style="max-width:800px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+      <span style="font-size:11px;color:#aaa">© 2026 SummAIrize. All rights reserved.</span>
+      <div style="display:flex;gap:1.5rem;flex-wrap:wrap">
+        <a href="#screen-landing" style="font-size:12px;color:#aaa;text-decoration:none" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#aaa'">Home</a>
+        <a href="#section-about" onclick="scrollTo('section-about')" style="font-size:12px;color:#aaa;text-decoration:none;cursor:pointer" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#aaa'">About</a>
+        <a href="#section-privacy" onclick="scrollTo('section-privacy')" style="font-size:12px;color:#aaa;text-decoration:none;cursor:pointer" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#aaa'">Privacy policy</a>
+        <a href="#section-terms" onclick="scrollTo('section-terms')" style="font-size:12px;color:#aaa;text-decoration:none;cursor:pointer" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#aaa'">Terms of use</a>
       </div>
-      <div style="border-top:0.5px solid #222;padding-top:1.25rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.5rem">
-        <span style="font-size:11px;color:#444">© 2026 SummAIrize. All rights reserved.</span>
-        <span style="font-size:11px;color:#444">Powered by Claude AI</span>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div id="section-about" style="background:#fff;padding:4rem 2rem;border-top:0.5px solid #eee">
+    <div style="max-width:680px;margin:0 auto">
+      <div style="font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#aaa;margin-bottom:1rem">About</div>
+      <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:32px;font-weight:700;color:#000;margin-bottom:1.5rem;line-height:1.2">Built for people who care about staying informed.</h2>
+      <p style="font-size:15px;color:#555;line-height:1.8;margin-bottom:1.25rem">SummAIrize is an AI-powered personalised news digest. We built it because staying on top of the news is important — but reading through dozens of websites every day isn't a realistic ask for most people.</p>
+      <p style="font-size:15px;color:#555;line-height:1.8;margin-bottom:1.25rem">You choose the sources you trust, the topics you care about, and the format that works for you. Our AI reads everything, filters out the noise, and writes you a sharp, concise digest — on demand, in seconds.</p>
+      <p style="font-size:15px;color:#555;line-height:1.8;margin-bottom:1.25rem">SummAIrize draws from 11 live news sources including BBC News, Reuters, The Guardian, Al Jazeera, AP News, and more. Every digest is unique — built around you, not trending topics or algorithmic clicks.</p>
+      <p style="font-size:15px;color:#555;line-height:1.8;">We're a small independent product, built in London. We're just getting started — and we'd love your feedback.</p>
+    </div>
+  </div>
+
+  <!-- PRIVACY POLICY -->
+  <div id="section-privacy" style="background:#fafafa;padding:4rem 2rem;border-top:0.5px solid #eee">
+    <div style="max-width:680px;margin:0 auto">
+      <div style="font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#aaa;margin-bottom:1rem">Privacy policy</div>
+      <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:32px;font-weight:700;color:#000;margin-bottom:0.5rem">Privacy Policy</h2>
+      <p style="font-size:13px;color:#aaa;margin-bottom:2rem">Last updated: April 2026</p>
+      <div style="font-size:15px;color:#555;line-height:1.8">
+        <p style="margin-bottom:1.25rem"><strong style="color:#000">1. What we collect.</strong> When you use SummAIrize, we collect the email address you register with, your digest preferences (sources, topics, tone, length), and basic usage data (number of digests generated). We do not collect payment details directly — payments are processed securely by Stripe.</p>
+        <p style="margin-bottom:1.25rem"><strong style="color:#000">2. How we use it.</strong> We use your data solely to provide the SummAIrize service — generating your personalised digest, managing your account, and improving the product. We do not sell your data to third parties. We do not use your data for advertising.</p>
+        <p style="margin-bottom:1.25rem"><strong style="color:#000">3. AI processing.</strong> Your digest preferences and the articles fetched from live RSS feeds are sent to Anthropic's Claude API to generate your digest. No personal identifying information is included in these requests. Anthropic's privacy policy applies to that processing.</p>
+        <p style="margin-bottom:1.25rem"><strong style="color:#000">4. Cookies.</strong> We use minimal session cookies to keep you logged in. We do not use tracking cookies or third-party advertising cookies.</p>
+        <p style="margin-bottom:1.25rem"><strong style="color:#000">5. Your rights (GDPR).</strong> If you are based in the UK or EU, you have the right to access, correct, or delete your personal data at any time. To exercise these rights, please contact us.</p>
+        <p style="margin-bottom:1.25rem"><strong style="color:#000">6. Data retention.</strong> We retain your account data for as long as your account is active. You may delete your account at any time.</p>
+        <p><strong style="color:#000">7. Contact.</strong> For any privacy-related questions, please reach out to us via the contact details on this page.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TERMS OF USE -->
+  <div id="section-terms" style="background:#fff;padding:4rem 2rem;border-top:0.5px solid #eee">
+    <div style="max-width:680px;margin:0 auto">
+      <div style="font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#aaa;margin-bottom:1rem">Terms of use</div>
+      <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:32px;font-weight:700;color:#000;margin-bottom:0.5rem">Terms of Use</h2>
+      <p style="font-size:13px;color:#aaa;margin-bottom:2rem">Last updated: April 2026</p>
+      <div style="font-size:15px;color:#555;line-height:1.8">
+        <p style="margin-bottom:1.25rem"><strong style="color:#000">1. Acceptance.</strong> By using SummAIrize, you agree to these terms. If you do not agree, please do not use the service.</p>
+        <p style="margin-bottom:1.25rem"><strong style="color:#000">2. The service.</strong> SummAIrize provides AI-generated news digests based on live RSS feeds and user preferences. Digests are generated by an AI model and may contain errors, omissions, or inaccuracies. They are provided for informational purposes only and should not be relied upon as the sole source of news or for any decision-making.</p>
+        <p style="margin-bottom:1.25rem"><strong style="color:#000">3. Acceptable use.</strong> You may use SummAIrize for personal, non-commercial purposes. You may not use the service to scrape, reproduce, or redistribute AI-generated content at scale, or to circumvent any usage limits.</p>
+        <p style="margin-bottom:1.25rem"><strong style="color:#000">4. Credits and payments.</strong> Credits are purchased in advance and are non-refundable. Free tier usage is subject to daily limits which may change at any time. Pricing is displayed at point of purchase and may change with notice.</p>
+        <p style="margin-bottom:1.25rem"><strong style="color:#000">5. Intellectual property.</strong> The SummAIrize brand, logo, and interface are our intellectual property. AI-generated digest content draws from third-party news sources and is subject to their respective copyright terms.</p>
+        <p style="margin-bottom:1.25rem"><strong style="color:#000">6. Limitation of liability.</strong> SummAIrize is provided "as is." We are not liable for any inaccuracies in AI-generated content, any interruptions to the service, or any losses arising from reliance on digest content.</p>
+        <p><strong style="color:#000">7. Changes.</strong> We may update these terms from time to time. Continued use of the service after changes constitutes acceptance of the updated terms.</p>
       </div>
     </div>
   </div>
@@ -1135,6 +1173,7 @@ function updateUsageBar(){
     el.innerHTML=`<span style="font-size:12px;color:${col}">${left} free digest${left===1?'':'s'} left today</span><button onclick="showPaywall()" style="margin-left:6px;font-size:11px;padding:2px 10px;border:0.5px solid var(--paper3);border-radius:10px;background:#fff;cursor:pointer;font-family:var(--font-sans);color:var(--ink2)">Top up</button>`;
   }
 }
+function scrollTo(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
 function restart(){
   S.sources=[];S.topics=[];S.tone=null;S.window=null;S.length=null;S.keyword='';
