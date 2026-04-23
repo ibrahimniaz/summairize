@@ -843,13 +843,31 @@ function saveDigest(sections,articles){
     sources:S.sources.join(', '),
     topics:S.topics.join(', '),
     tone:S.tone,
+    window:S.window,
+    length:S.length,
+    keyword:S.keyword,
+    sourcesArr:[...S.sources],
+    topicsArr:[...S.topics],
     articles:articles.length,
     sections:sections.map(s=>({kicker:s.kicker,title:s.title}))
   });
   localStorage.setItem('summairize_history',JSON.stringify(digests.slice(0,20)));
 }
+function rerunDigest(id){
+  const digests=JSON.parse(localStorage.getItem('summairize_history')||'[]');
+  const d=digests.find(x=>x.id===id);
+  if(!d)return;
+  S.sources=d.sourcesArr||d.sources.split(', ');
+  S.topics=d.topicsArr||d.topics.split(', ');
+  S.tone=d.tone;
+  S.window=d.window||'24';
+  S.length=d.length||'short';
+  S.keyword=d.keyword||'';
+  startGenerate();
+}
 function renderHistory(){
   const el=document.getElementById('history-list');
+  if(!el)return;
   const digests=JSON.parse(localStorage.getItem('summairize_history')||'[]');
   if(digests.length===0){
     el.innerHTML=`<div style="text-align:center;padding:4rem 2rem;background:var(--paper2);border-radius:var(--radius-lg);border:1px solid var(--paper3)">
@@ -861,12 +879,13 @@ function renderHistory(){
   }
   el.innerHTML=digests.map(d=>`
     <div style="background:#fff;border:0.5px solid var(--paper3);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:0.75rem;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap">
-      <div style="flex:1">
+      <div style="flex:1;min-width:0">
         <div style="font-size:11px;color:var(--ink4);margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.06em">${d.date} · ${d.articles} articles · ${d.tone||''}</div>
-        <div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:0.4rem">${d.sources}</div>
-        <div style="font-size:12px;color:var(--ink3)">${d.topics}</div>
-        ${d.sections&&d.sections.length?`<div style="margin-top:0.75rem;display:flex;flex-wrap:wrap;gap:6px">${d.sections.map(s=>`<span style="font-size:11px;padding:3px 10px;border-radius:12px;background:var(--paper2);color:var(--ink3);border:0.5px solid var(--paper3)">${s.kicker}</span>`).join('')}</div>`:''}
+        <div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:0.3rem">${d.sources}</div>
+        <div style="font-size:12px;color:var(--ink3);margin-bottom:0.6rem">${d.topics}</div>
+        ${d.sections&&d.sections.length?`<div style="display:flex;flex-wrap:wrap;gap:5px">${d.sections.map(s=>`<span style="font-size:11px;padding:3px 10px;border-radius:12px;background:var(--paper2);color:var(--ink3);border:0.5px solid var(--paper3)">${s.kicker}</span>`).join('')}</div>`:''}
       </div>
+      <button onclick="rerunDigest(${d.id})" style="flex-shrink:0;padding:8px 14px;background:#000;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--sans);white-space:nowrap;align-self:center">↺ Regenerate</button>
     </div>`).join('');
 }
 
