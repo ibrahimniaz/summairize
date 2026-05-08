@@ -454,6 +454,7 @@ iframe[src*="vercel"],[data-vercel-tb-host],#vercel-live-feedback,
     <div class="nav-right">
       <div id="usage-bar-home" style="font-size:12px;color:#aaa;display:flex;align-items:center;gap:8px"></div>
       <span id="nav-user-home" style="font-size:13px;color:#aaa"></span>
+      <button id="admin-btn" onclick="showAdmin()" style="display:none;padding:7px 14px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)">📊 Dashboard</button>
       <button style="padding:7px 16px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)" onclick="doSignOut()">Sign out</button>
     </div>
   </nav>
@@ -467,7 +468,47 @@ iframe[src*="vercel"],[data-vercel-tb-host],#vercel-live-feedback,
         + New digest
       </button>
     </div>
+    <div id="usage-bar-home-msg"></div>
     <div id="history-list"></div>
+  </div>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div class="screen" id="screen-admin" style="flex-direction:column">
+  <nav class="nav">
+    <div style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="showScreen('screen-home')">
+      <div style="width:32px;height:32px;background:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <span style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#000;line-height:1">S</span>
+      </div>
+      <span style="font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;color:#fff">SummAIrise</span>
+    </div>
+    <div class="nav-right">
+      <button onclick="showScreen('screen-home')" style="padding:7px 16px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;cursor:pointer;font-family:var(--sans)">← Back</button>
+    </div>
+  </nav>
+  <div style="flex:1;padding:2.5rem 2rem;max-width:960px;margin:0 auto;width:100%">
+    <div style="font-family:'Playfair Display',Georgia,serif;font-size:24px;font-weight:700;color:var(--ink);margin-bottom:0.25rem">Founder Dashboard</div>
+    <div style="font-size:13px;color:var(--ink3);margin-bottom:2rem">Live data from Supabase</div>
+    <div id="admin-stats" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem">
+      <div style="background:#fff;border:0.5px solid var(--paper3);border-radius:12px;padding:1.25rem;text-align:center">
+        <div style="font-family:'Playfair Display',Georgia,serif;font-size:32px;font-weight:700;color:#000" id="stat-total">—</div>
+        <div style="font-size:12px;color:var(--ink3);margin-top:4px">Total digests</div>
+      </div>
+      <div style="background:#fff;border:0.5px solid var(--paper3);border-radius:12px;padding:1.25rem;text-align:center">
+        <div style="font-family:'Playfair Display',Georgia,serif;font-size:32px;font-weight:700;color:#000" id="stat-users">—</div>
+        <div style="font-size:12px;color:var(--ink3);margin-top:4px">Unique users</div>
+      </div>
+      <div style="background:#fff;border:0.5px solid var(--paper3);border-radius:12px;padding:1.25rem;text-align:center">
+        <div style="font-family:'Playfair Display',Georgia,serif;font-size:32px;font-weight:700;color:#000" id="stat-today">—</div>
+        <div style="font-size:12px;color:var(--ink3);margin-top:4px">Digests today</div>
+      </div>
+    </div>
+    <div style="background:#fff;border:0.5px solid var(--paper3);border-radius:12px;overflow:hidden">
+      <div style="padding:1rem 1.25rem;border-bottom:0.5px solid var(--paper3);font-size:13px;font-weight:500;color:var(--ink)">All users</div>
+      <div id="admin-users-list" style="padding:0.5rem 0">
+        <div style="text-align:center;padding:2rem;color:var(--ink3);font-size:13px">Loading...</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -909,11 +950,11 @@ async function getTodayDigestCount(){
 }
 
 async function enterApp(){
-  // Check if admin/founder — unlimited access
   if(ADMIN_EMAILS.includes(S.user.email)){
     S.isPremium=true;
+    const adminBtn=document.getElementById('admin-btn');
+    if(adminBtn)adminBtn.style.display='block';
   }
-  // Get real digest count from Supabase
   S.digestsToday=await getTodayDigestCount();
   document.getElementById('nav-user').textContent='Hi, '+S.user.name;
   document.getElementById('out-user').textContent=S.user.name;
@@ -923,6 +964,53 @@ async function enterApp(){
   updateUsageBarHome();
   renderHistory();
   showScreen('screen-home');
+}
+
+async function showAdmin(){
+  showScreen('screen-admin');
+  // Total digests
+  const{count:total}=await sb.from('digests').select('*',{count:'exact',head:true});
+  document.getElementById('stat-total').textContent=total||0;
+  // Unique users
+  const{data:allDigests}=await sb.from('digests').select('user_id');
+  const uniqueUsers=new Set(allDigests?.map(d=>d.user_id)||[]).size;
+  document.getElementById('stat-users').textContent=uniqueUsers;
+  // Today's digests
+  const today=new Date();today.setHours(0,0,0,0);
+  const{count:todayCount}=await sb.from('digests').select('*',{count:'exact',head:true}).gte('created_at',today.toISOString());
+  document.getElementById('stat-today').textContent=todayCount||0;
+  // Per user breakdown
+  const userMap={};
+  allDigests?.forEach(d=>{
+    if(!userMap[d.user_id])userMap[d.user_id]={count:0,id:d.user_id};
+    userMap[d.user_id].count++;
+  });
+  // Get latest digest per user for last active
+  const{data:latest}=await sb.from('digests').select('user_id,created_at,sources').order('created_at',{ascending:false});
+  const seen=new Set();
+  const rows=[];
+  latest?.forEach(d=>{
+    if(!seen.has(d.user_id)){
+      seen.add(d.user_id);
+      rows.push({id:d.user_id,lastActive:d.created_at,sources:d.sources,count:userMap[d.user_id]?.count||1});
+    }
+  });
+  const list=document.getElementById('admin-users-list');
+  if(!rows.length){list.innerHTML='<div style="text-align:center;padding:2rem;color:var(--ink3);font-size:13px">No users yet</div>';return;}
+  list.innerHTML=rows.map((r,i)=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1.25rem;border-bottom:0.5px solid var(--paper3);gap:1rem;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:28px;height:28px;background:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:600;flex-shrink:0">${i+1}</div>
+        <div>
+          <div style="font-size:12px;color:var(--ink3);font-family:monospace">${r.id.slice(0,8)}...</div>
+          <div style="font-size:11px;color:var(--ink4)">Last: ${r.sources||'—'}</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:1.5rem;align-items:center">
+        <div style="text-align:center"><div style="font-size:16px;font-weight:600;color:var(--ink)">${r.count}</div><div style="font-size:10px;color:var(--ink4)">digests</div></div>
+        <div style="font-size:11px;color:var(--ink3)">${new Date(r.lastActive).toLocaleDateString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</div>
+      </div>
+    </div>`).join('');
 }
 
 async function doSignOut(){
