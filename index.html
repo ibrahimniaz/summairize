@@ -451,7 +451,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
     <div class="nav-right">
       <div id="usage-bar-home" style="font-size:12px;color:#aaa;display:flex;align-items:center;gap:8px"></div>
       <span id="nav-user-home" style="font-size:13px;color:#aaa"></span>
-      <button style="padding:7px 16px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)" onclick="showScreen('screen-landing')">Sign out</button>
+      <button style="padding:7px 16px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)" onclick="doSignOut()">Sign out</button>
     </div>
   </nav>
   <div style="flex:1;padding:2.5rem 2rem;max-width:860px;margin:0 auto;width:100%">
@@ -475,7 +475,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
     <div class="nav-right">
       <div id="usage-bar" style="font-size:12px;color:var(--ink3);display:flex;align-items:center;gap:8px"></div>
       <span id="nav-user" style="font-size:13px;color:#aaa"></span>
-      <button style="padding:7px 16px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)" onclick="showScreen('screen-landing')">Sign out</button>
+      <button style="padding:7px 16px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)" onclick="doSignOut()">Sign out</button>
     </div>
   </nav>
   <div style="padding:10px 2rem;border-bottom:1px solid var(--paper3)"><div class="ad-slot ad-banner">Advertisement</div></div>
@@ -741,7 +741,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
     <div class="nav-right">
       <span id="out-user" style="font-size:13px;color:#aaa"></span>
       <button style="padding:7px 16px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)" onclick="restart()">New digest</button>
-      <button style="padding:7px 16px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)" onclick="showScreen('screen-landing')">Sign out</button>
+      <button style="padding:7px 16px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)" onclick="doSignOut()">Sign out</button>
     </div>
   </nav>
   <div style="padding:10px 2rem;border-bottom:1px solid var(--paper3)"><div class="ad-slot ad-banner">Advertisement — your ad could appear here</div></div>
@@ -794,7 +794,11 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+const SUPABASE_URL='https://lmwjijzvoqleoukaxjae.supabase.co';
+const SUPABASE_KEY='sb_publishable_TbB02YbMdrvwzYuQixDV8g_mTF2eTdV';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const S={sources:[],topics:[],tone:null,window:null,length:null,keyword:'',user:{name:'',email:''},isPremium:false,credits:0,digestsToday:0};
 const RSS_FEEDS={
   'BBC News':       'https://feeds.bbci.co.uk/news/rss.xml',
@@ -854,20 +858,47 @@ function switchTab(tab){
   document.getElementById('auth-err').style.display='none';
 }
 function authErr(msg){const e=document.getElementById('auth-err');e.textContent=msg;e.style.display='block'}
-function doLogin(){
+
+async function doLogin(){
   const email=document.getElementById('li-email').value.trim();
   const pass=document.getElementById('li-pass').value;
   if(!email||!pass){authErr('Please enter your email and password.');return}
-  S.user={name:email.split('@')[0],email};enterApp();
+  const btn=document.querySelector('#auth-login-form .btn-green');
+  btn.textContent='Signing in...';btn.disabled=true;
+  const{data,error}=await sb.auth.signInWithPassword({email,password:pass});
+  btn.textContent='Sign in';btn.disabled=false;
+  if(error){authErr(error.message);return}
+  const name=data.user.user_metadata?.first_name||email.split('@')[0];
+  S.user={name,email:data.user.email,id:data.user.id};
+  enterApp();
 }
-function doSignup(){
+
+async function doSignup(){
   const first=document.getElementById('su-first').value.trim();
   const email=document.getElementById('su-email').value.trim();
   const pass=document.getElementById('su-pass').value;
   if(!first||!email||!pass){authErr('Please fill in all fields.');return}
   if(pass.length<8){authErr('Password must be at least 8 characters.');return}
-  S.user={name:first,email};enterApp();
+  const btn=document.querySelector('#auth-signup-form .btn-green');
+  btn.textContent='Creating account...';btn.disabled=true;
+  const{data,error}=await sb.auth.signUp({email,password:pass,options:{data:{first_name:first}}});
+  btn.textContent='Create account';btn.disabled=false;
+  if(error){authErr(error.message);return}
+  if(data.user&&!data.session){
+    authErr('');
+    document.getElementById('auth-login-form').classList.add('hidden');
+    document.getElementById('auth-signup-form').innerHTML=`
+      <div style="text-align:center;padding:1rem 0">
+        <div style="font-size:32px;margin-bottom:1rem">📧</div>
+        <div style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#000;margin-bottom:0.5rem">Check your email</div>
+        <div style="font-size:14px;color:#666;line-height:1.6">We sent a confirmation link to <strong>${email}</strong>. Click it to activate your account, then come back to sign in.</div>
+      </div>`;
+    return;
+  }
+  S.user={name:first,email:data.user.email,id:data.user.id};
+  enterApp();
 }
+
 function enterApp(){
   document.getElementById('nav-user').textContent='Hi, '+S.user.name;
   document.getElementById('out-user').textContent=S.user.name;
@@ -877,6 +908,12 @@ function enterApp(){
   updateUsageBarHome();
   renderHistory();
   showScreen('screen-home');
+}
+
+async function doSignOut(){
+  await sb.auth.signOut();
+  S.user=null;
+  showScreen('screen-landing');
 }
 function updateUsageBarHome(){
   const el=document.getElementById('usage-bar-home');
@@ -898,41 +935,50 @@ function startNewDigest(){
   for(let i=1;i<=5;i++){const b=document.getElementById('b'+i);if(b)b.disabled=true}
   updateAside();showScreen('screen-config');showCfgStep(1);
 }
-function saveDigest(sections,articles){
-  const digests=JSON.parse(localStorage.getItem('summairise_history')||'[]');
-  digests.unshift({
-    id:Date.now(),
+async function saveDigest(sections,articles){
+  if(!S.user?.id)return;
+  await sb.from('digests').insert({
+    user_id:S.user.id,
     date:new Date().toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'}),
     sources:S.sources.join(', '),
     topics:S.topics.join(', '),
     tone:S.tone,
-    window:S.window,
+    time_window:S.window,
     length:S.length,
     keyword:S.keyword,
-    sourcesArr:[...S.sources],
-    topicsArr:[...S.topics],
-    articles:articles.length,
+    sources_arr:S.sources,
+    topics_arr:S.topics,
+    article_count:articles.length,
     sections:sections.map(s=>({kicker:s.kicker,title:s.title}))
   });
-  localStorage.setItem('summairise_history',JSON.stringify(digests.slice(0,20)));
 }
-function rerunDigest(id){
-  const digests=JSON.parse(localStorage.getItem('summairise_history')||'[]');
-  const d=digests.find(x=>x.id===id);
-  if(!d)return;
-  S.sources=d.sourcesArr||d.sources.split(', ');
-  S.topics=d.topicsArr||d.topics.split(', ');
-  S.tone=d.tone;
-  S.window=d.window||'24';
-  S.length=d.length||'short';
-  S.keyword=d.keyword||'';
+
+async function deleteDigest(id){
+  await sb.from('digests').delete().eq('id',id);
+  renderHistory();
+}
+
+async function rerunDigest(id){
+  const{data}=await sb.from('digests').select('*').eq('id',id).single();
+  if(!data)return;
+  S.sources=data.sources_arr||data.sources.split(', ');
+  S.topics=data.topics_arr||data.topics.split(', ');
+  S.tone=data.tone;
+  S.window=data.time_window||'24';
+  S.length=data.length||'short';
+  S.keyword=data.keyword||'';
   startGenerate();
 }
-function renderHistory(){
+
+async function renderHistory(){
   const el=document.getElementById('history-list');
   if(!el)return;
-  const digests=JSON.parse(localStorage.getItem('summairise_history')||'[]');
-  if(digests.length===0){
+  if(!S.user?.id){
+    el.innerHTML='';return;
+  }
+  el.innerHTML=`<div style="text-align:center;padding:2rem;color:var(--ink3);font-size:13px">Loading history...</div>`;
+  const{data:digests,error}=await sb.from('digests').select('*').eq('user_id',S.user.id).order('created_at',{ascending:false}).limit(20);
+  if(error||!digests||digests.length===0){
     el.innerHTML=`<div style="text-align:center;padding:4rem 2rem;background:var(--paper2);border-radius:var(--radius-lg);border:1px solid var(--paper3)">
       <div style="font-family:'Playfair Display',Georgia,serif;font-size:20px;color:var(--ink);margin-bottom:0.5rem">No digests yet</div>
       <div style="font-size:14px;color:var(--ink3);margin-bottom:1.5rem">Build your first digest to get started.</div>
@@ -943,12 +989,15 @@ function renderHistory(){
   el.innerHTML=digests.map(d=>`
     <div style="background:#fff;border:0.5px solid var(--paper3);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:0.75rem;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap">
       <div style="flex:1;min-width:0">
-        <div style="font-size:11px;color:var(--ink4);margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.06em">${d.date} · ${d.articles} articles · ${d.tone||''}</div>
+        <div style="font-size:11px;color:var(--ink4);margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.06em">${d.date} · ${d.article_count} articles · ${d.tone||''}</div>
         <div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:0.3rem">${d.sources}</div>
         <div style="font-size:12px;color:var(--ink3);margin-bottom:0.6rem">${d.topics}</div>
         ${d.sections&&d.sections.length?`<div style="display:flex;flex-wrap:wrap;gap:5px">${d.sections.map(s=>`<span style="font-size:11px;padding:3px 10px;border-radius:12px;background:var(--paper2);color:var(--ink3);border:0.5px solid var(--paper3)">${s.kicker}</span>`).join('')}</div>`:''}
       </div>
-      <button onclick="rerunDigest(${d.id})" style="flex-shrink:0;padding:8px 14px;background:#000;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--sans);white-space:nowrap;align-self:center">↺ Regenerate</button>
+      <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
+        <button onclick="rerunDigest('${d.id}')" style="padding:8px 14px;background:#000;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--sans);white-space:nowrap">↺ Regenerate</button>
+        <button onclick="if(confirm('Delete this digest?'))deleteDigest('${d.id}')" style="padding:8px 10px;background:transparent;color:#aaa;border:0.5px solid #eee;border-radius:8px;font-size:13px;cursor:pointer" title="Delete">🗑</button>
+      </div>
     </div>`).join('');
 }
 
@@ -1334,11 +1383,11 @@ function renderOutputMeta(articles){
   document.getElementById('det-arts').textContent=articles.length+' articles';
 }
 
-function renderOutput(data,articles){
+async function renderOutput(data,articles){
   if(!S.isPremium&&S.credits>0){S.credits--}
   else if(!S.isPremium){S.digestsToday++}
   updateUsageBar();
-  saveDigest(data.sections,articles);
+  await saveDigest(data.sections,articles);
   renderOutputMeta(articles);
   const el=document.getElementById('digest-sections');
   el.innerHTML='';
@@ -1465,6 +1514,17 @@ function updateUsageBar(){
     el.innerHTML=`<span style="font-size:12px;color:${col}">${left} free digest${left===1?'':'s'} left today</span><button onclick="showPaywall()" style="margin-left:6px;font-size:11px;padding:2px 10px;border:0.5px solid var(--paper3);border-radius:10px;background:#fff;cursor:pointer;font-family:var(--font-sans);color:var(--ink2)">Top up</button>`;
   }
 }
+// Restore session on page load
+(async()=>{
+  const{data:{session}}=await sb.auth.getSession();
+  if(session?.user){
+    const u=session.user;
+    const name=u.user_metadata?.first_name||u.email.split('@')[0];
+    S.user={name,email:u.email,id:u.id};
+    enterApp();
+  }
+})();
+
 function scrollTo(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
 
 // Breaking news ticker animation
