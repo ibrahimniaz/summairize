@@ -797,17 +797,27 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
 <script>
 const S={sources:[],topics:[],tone:null,window:null,length:null,keyword:'',user:{name:'',email:''},isPremium:false,credits:0,digestsToday:0};
 const RSS_FEEDS={
-  'BBC News':'https://feeds.bbci.co.uk/news/rss.xml',
-  'Sky News':'https://feeds.skynews.com/feeds/rss/home.xml',
-  'The Guardian':'https://www.theguardian.com/world/rss',
-  'Reuters':'https://feeds.reuters.com/reuters/topNews',
-  'Al Jazeera':'https://www.aljazeera.com/xml/rss/all.xml',
-  'CNN':'http://rss.cnn.com/rss/edition.rss',
-  'AP News':'https://feeds.apnews.com/rss/apf-topnews',
-  'Deutsche Welle':'https://rss.dw.com/rdf/rss-en-all',
-  'NPR News':'https://feeds.npr.org/1001/rss.xml',
-  'France 24':'https://www.france24.com/en/rss',
-  'euronews':'https://www.euronews.com/rss'
+  'BBC News':       'https://feeds.bbci.co.uk/news/rss.xml',
+  'Sky News':       'https://feeds.skynews.com/feeds/rss/home.xml',
+  'The Guardian':   'https://www.theguardian.com/world/rss',
+  'Reuters':        'https://feeds.reuters.com/reuters/topNews',
+  'Al Jazeera':     'https://www.aljazeera.com/xml/rss/all.xml',
+  'CNN':            'http://rss.cnn.com/rss/edition.rss',
+  'AP News':        'https://feeds.apnews.com/rss/apf-topnews',
+  'Deutsche Welle': 'https://rss.dw.com/rdf/rss-en-all',
+  'NPR News':       'https://feeds.npr.org/1001/rss.xml',
+  'France 24':      'https://www.france24.com/en/rss',
+  'euronews':       'https://www.euronews.com/rss'
+};
+
+// Fallback URLs if primary fails
+const RSS_FALLBACKS={
+  'Reuters':        'https://feeds.reuters.com/Reuters/worldNews',
+  'Al Jazeera':     'https://aljazeera.com/xml/rss/all.xml',
+  'France 24':      'https://www.france24.com/en/top-stories/rss',
+  'euronews':       'https://feeds.euronews.com/news/en',
+  'CNN':            'https://rss.cnn.com/rss/cnn_topstories.rss',
+  'Deutsche Welle': 'https://rss.dw.com/rdf/rss-en-news'
 };
 const SOURCE_BADGES={
   'BBC News':     {bg:'#BB1919',color:'#fff',abbr:'BBC'},
@@ -1026,24 +1036,81 @@ function setLoadStep(n){
   });
 }
 
-async function fetchRSS(source,url){
-  const proxyUrl=PROXY+encodeURIComponent(url);
-  const res=await fetch(proxyUrl);
-  const text=await res.text();
+async function fetchWithTimeout(url,ms=12000){
+  const controller=new AbortController();
+  const tid=setTimeout(()=>controller.abort(),ms);
+  try{
+    const res=await fetch(url,{signal:controller.signal});
+    clearTimeout(tid);
+    return res;
+  }catch(e){clearTimeout(tid);throw e;}
+}
+
+function extractText(el){
+  if(!el)return '';
+  return (el.textContent||el.innerHTML||'').replace(/<!\[CDATA\[|\]\]>/g,'').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&nbsp;/g,' ').trim();
+}
+
+function getItemText(item){
+  // Try content:encoded first (richest), then description, then summary, then media:description
+  const selectors=['content\\:encoded','encoded','description','summary','media\\:description'];
+  for(const sel of selectors){
+    try{
+      const el=item.querySelector(sel)||item.getElementsByTagNameNS('*',sel.replace(/\\/g,''))[0];
+      const text=extractText(el);
+      if(text&&text.length>30)return text.slice(0,500);
+    }catch(e){}
+  }
+  return '';
+}
+
+function getItemDate(item){
+  const selectors=['pubDate','published','updated','dc\\:date'];
+  for(const sel of selectors){
+    try{
+      const el=item.querySelector(sel)||item.getElementsByTagNameNS('*',sel.replace(/\\/g,''))[0];
+      if(el){const d=new Date(extractText(el));if(!isNaN(d))return d;}
+    }catch(e){}
+  }
+  return new Date(); // default to now if no date found
+}
+
+function parseXML(text,source){
   const xml=new DOMParser().parseFromString(text,'text/xml');
-  const items=Array.from(xml.querySelectorAll('item'));
   const cutoff=Date.now()-parseInt(S.window)*3600*1000;
   const articles=[];
+
+  // Support both RSS <item> and Atom <entry>
+  const items=Array.from(xml.querySelectorAll('item, entry'));
   for(const item of items){
-    const title=item.querySelector('title')?.textContent||'';
-    const desc=(item.querySelector('description')?.textContent||'').replace(/<[^>]+>/g,'').slice(0,400);
-    const link=item.querySelector('link')?.textContent||item.querySelector('link')?.getAttribute('href')||'';
-    const pubDateStr=item.querySelector('pubDate')?.textContent||item.querySelector('published')?.textContent||'';
-    const pubDate=pubDateStr?new Date(pubDateStr):new Date();
+    const title=extractText(item.querySelector('title'));
+    if(!title||title.length<5)continue;
+
+    const desc=getItemText(item);
+    const pubDate=getItemDate(item);
+
+    // Skip if too old
     if(pubDate.getTime()<cutoff)continue;
-    if(title)articles.push({title:title.trim(),desc:desc.trim(),link:link.trim(),source,pubDate:pubDate.toISOString()});
+
+    // Get link — RSS uses <link> text, Atom uses <link href="...">
+    let link=extractText(item.querySelector('link'));
+    if(!link){
+      const linkEl=item.querySelector('link');
+      link=linkEl?.getAttribute('href')||'';
+    }
+
+    articles.push({title:title.trim(),desc:desc.trim(),link:link.trim(),source,pubDate:pubDate.toISOString()});
   }
   return articles;
+}
+
+async function fetchRSS(source,url,isFallback=false){
+  const proxyUrl=PROXY+encodeURIComponent(url);
+  const res=await fetchWithTimeout(proxyUrl,12000);
+  if(!res.ok)throw new Error(`HTTP ${res.status}`);
+  const text=await res.text();
+  if(!text||text.length<100)throw new Error('Empty response');
+  return parseXML(text,source);
 }
 
 async function startGenerate(){
@@ -1051,23 +1118,54 @@ async function startGenerate(){
   if(!S.isPremium&&S.credits===0&&S.digestsToday>=FREE_LIMIT){
     showPaywall();return;
   }
-  S.keyword=document.getElementById('kw').value.trim();
+  S.keyword=document.getElementById('kw')?.value.trim()||'';
   showScreen('screen-loading');
   document.getElementById('fetch-log').innerHTML='';
   fetchLog=[];allArticles=[];
   setLoadStep(1);
 
-  for(const source of S.sources){
+  // Fetch all sources in parallel with fallback
+  const fetchPromises=S.sources.map(async source=>{
     const url=RSS_FEEDS[source];
-    if(!url)continue;
+    if(!url)return;
     try{
       const arts=await fetchRSS(source,url);
-      allArticles.push(...arts);
-      addFetchLog(`${source}: ${arts.length} articles fetched`,true);
+      if(arts.length>0){
+        allArticles.push(...arts);
+        addFetchLog(`${source}: ${arts.length} articles`,true);
+      } else {
+        // Try fallback URL if primary returned 0 articles
+        const fallback=RSS_FALLBACKS[source];
+        if(fallback){
+          try{
+            const arts2=await fetchRSS(source,fallback,true);
+            allArticles.push(...arts2);
+            addFetchLog(`${source}: ${arts2.length} articles (alt feed)`,arts2.length>0);
+          }catch(e2){
+            addFetchLog(`${source}: no articles found`,false);
+          }
+        } else {
+          addFetchLog(`${source}: 0 articles in time window`,false);
+        }
+      }
     }catch(e){
-      addFetchLog(`${source}: failed to fetch`,false);
+      // Try fallback on error
+      const fallback=RSS_FALLBACKS[source];
+      if(fallback){
+        try{
+          const arts2=await fetchRSS(source,fallback,true);
+          allArticles.push(...arts2);
+          addFetchLog(`${source}: ${arts2.length} articles (alt feed)`,arts2.length>0);
+        }catch(e2){
+          addFetchLog(`${source}: fetch failed`,false);
+        }
+      } else {
+        addFetchLog(`${source}: fetch failed`,false);
+      }
     }
-  }
+  });
+
+  await Promise.allSettled(fetchPromises);
 
   setLoadStep(2);
   document.getElementById('load-sub').textContent=`Parsed ${allArticles.length} articles across ${S.sources.length} sources`;
@@ -1077,8 +1175,11 @@ async function startGenerate(){
     document.getElementById('digest-sections').innerHTML=`
       <div class="no-stories">
         <h3>No stories found</h3>
-        <p>We couldn't find any articles from your selected sources within the past ${S.window} hours matching your topics.<br><br>Try broadening your time window, adding more sources, or choosing different topics.</p>
-        <button class="btn btn-ghost" style="margin-top:1.25rem" onclick="restart()">← Adjust my preferences</button>
+        <p>We couldn't fetch articles from your selected sources within the past ${S.window} hours. This can happen if the feeds are temporarily unavailable or your time window is too narrow.</p>
+        <div style="display:flex;gap:10px;margin-top:1.25rem;flex-wrap:wrap">
+          <button class="btn btn-green" onclick="startGenerate()">↺ Try again</button>
+          <button class="btn btn-ghost" onclick="restart()">← Adjust preferences</button>
+        </div>
       </div>`;
     renderOutputMeta([]);
     return;
@@ -1086,7 +1187,21 @@ async function startGenerate(){
 
   setLoadStep(3);
   const capped=allArticles.length>50?allArticles.sort(()=>Math.random()-0.5).slice(0,50):allArticles;
-  await callClaude(capped);
+  try{
+    await callClaude(capped);
+  }catch(e){
+    showScreen('screen-output');
+    document.getElementById('digest-sections').innerHTML=`
+      <div class="no-stories">
+        <h3>Generation failed</h3>
+        <p>Something went wrong while generating your digest. This is usually a temporary issue — please try again.</p>
+        <div style="display:flex;gap:10px;margin-top:1.25rem;flex-wrap:wrap">
+          <button class="btn btn-green" onclick="startGenerate()">↺ Try again</button>
+          <button class="btn btn-ghost" onclick="restart()">← Adjust preferences</button>
+        </div>
+      </div>`;
+    renderOutputMeta([]);
+  }
 }
 
 async function callClaude(articles){
@@ -1104,14 +1219,16 @@ Below are ${articles.length} real live news articles just fetched from RSS feeds
 Reader's chosen topics: ${S.topics.join(', ')}.
 ${kw}
 
-RULES:
-- Only include articles genuinely relevant to the reader's topics. Ignore everything else.
-- Never fabricate facts — only use information present in the provided articles.
-- Each section covers one topic area and synthesises across multiple articles.
-- Write 2 solid paragraphs per section body. No filler. Every sentence must add value.
-- The kicker is the topic name (e.g. "Finance" or "Technology").
-- The pull-quote should be a specific, striking fact or statement from the articles — not a vague summary.
-- Footnotes link to the actual articles used. Match the [number] citations in the body text.
+CRITICAL RULES — follow exactly:
+- FOCUS: Each section must cover ONE specific story or development only. Do not mix different stories in one section.
+- RELEVANCE: Only include articles genuinely relevant to the reader's chosen topics. Ignore everything else.
+- ACCURACY: Never fabricate facts — only use information from the provided articles.
+- STRUCTURE: Write 2 focused paragraphs per section. Every sentence must add value. No filler phrases.
+- KICKER: The topic label (e.g. "Finance", "Technology", "Politics").
+- HEADLINE: Specific and informative — tells the reader exactly what happened.
+- PULL QUOTE: A specific, striking fact or statement from the articles — not a vague summary.
+- CITATIONS: Add [number] inline citations in body text matching footnote numbers.
+- SEPARATION: If there are 2 big stories in the same topic, create 2 separate sections — do NOT merge them.
 
 LIVE ARTICLES:
 ${articleDump}
@@ -1122,7 +1239,7 @@ Respond ONLY with valid JSON — no markdown, no preamble, no trailing text:
     {
       "kicker": "Topic name",
       "title": "Specific, informative headline for this section",
-      "body": "First paragraph with [1] inline citation. Second paragraph with [2] citation.",
+      "body": "First paragraph about ONE story with [1] inline citation.\n\nSecond paragraph with more detail [2].",
       "quote": "A specific, striking fact or direct quote from the articles.",
       "quote_source": "Source outlet name",
       "footnotes": [
@@ -1134,13 +1251,23 @@ Respond ONLY with valid JSON — no markdown, no preamble, no trailing text:
   "no_relevant_articles": false
 }
 
-Produce one section per relevant topic from the reader's list. If truly no articles match any topic, return: {"no_relevant_articles": true, "sections": []}`;
+Produce one section per distinct story relevant to the reader's topics. If truly no articles match, return: {"no_relevant_articles": true, "sections": []}`;
 
   try{
     setLoadStep(4);
     const model=S.isPremium?'claude-sonnet-4-20250514':'claude-haiku-4-5-20251001';
-    const res=await fetch('/api/digest',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model,max_tokens:2500,messages:[{role:'user',content:prompt}]})});
+    const controller=new AbortController();
+    const timeout=setTimeout(()=>controller.abort(),55000); // 55s timeout
+    const res=await fetch('/api/digest',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model,max_tokens:3000,messages:[{role:'user',content:prompt}]}),
+      signal:controller.signal
+    });
+    clearTimeout(timeout);
+    if(!res.ok)throw new Error(`API error ${res.status}`);
     const data=await res.json();
+    if(data.error)throw new Error(data.error.message||'API error');
     const raw=data.content.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
     const parsed=JSON.parse(raw);
     if(parsed.no_relevant_articles||!parsed.sections||parsed.sections.length===0){
@@ -1148,16 +1275,28 @@ Produce one section per relevant topic from the reader's list. If truly no artic
       document.getElementById('digest-sections').innerHTML=`
         <div class="no-stories">
           <h3>No relevant stories found</h3>
-          <p>We fetched ${articles.length} live articles but none matched your chosen topics closely enough.<br><br>Try broadening your topics, adding more sources, or extending the time window.</p>
-          <button class="btn btn-ghost" style="margin-top:1.25rem" onclick="restart()">← Adjust my preferences</button>
+          <p>We fetched ${articles.length} live articles but none matched your chosen topics closely enough. Try broadening your topics, adding more sources, or extending the time window.</p>
+          <div style="display:flex;gap:10px;margin-top:1.25rem;flex-wrap:wrap">
+            <button class="btn btn-green" onclick="startGenerate()">↺ Try again</button>
+            <button class="btn btn-ghost" onclick="restart()">← Adjust preferences</button>
+          </div>
         </div>`;
       renderOutputMeta(articles);
     }else{
       renderOutput(parsed,articles);
     }
   }catch(e){
+    const isTimeout=e.name==='AbortError';
     showScreen('screen-output');
-    document.getElementById('digest-sections').innerHTML=`<div class="err-box">Something went wrong generating your digest. Please try again.</div>`;
+    document.getElementById('digest-sections').innerHTML=`
+      <div class="no-stories">
+        <h3>${isTimeout?'Request timed out':'Generation failed'}</h3>
+        <p>${isTimeout?'The digest took too long to generate — this sometimes happens with many sources. Please try again.':'Something went wrong. Please try again — it\'s usually a temporary issue.'}</p>
+        <div style="display:flex;gap:10px;margin-top:1.25rem;flex-wrap:wrap">
+          <button class="btn btn-green" onclick="startGenerate()">↺ Try again</button>
+          <button class="btn btn-ghost" onclick="restart()">← Adjust preferences</button>
+        </div>
+      </div>`;
     renderOutputMeta(articles);
   }
 }
