@@ -1427,7 +1427,7 @@ Produce one section per distinct story. Quality over quantity — 4 excellent fo
 
   try{
     setLoadStep(4);
-    const model=S.isPremium?'claude-sonnet-4-20250514':'claude-haiku-4-5-20251001';
+    const model=S.isPremium?'claude-sonnet-4-6':'claude-haiku-4-5-20251001';
     const controller=new AbortController();
     const timeout=setTimeout(()=>controller.abort(),55000); // 55s timeout
     const res=await fetch('/api/digest',{
