@@ -1544,31 +1544,42 @@ function buyCredits(amount,price){
   toast(`Stripe integration coming soon — ${amount} credits for £${price}`);
   setTimeout(()=>{S.credits+=amount;S.isPremium=false;updateUsageBar();showScreen('screen-config');},1800);
 }
+function getTimeUntilMidnight(){
+  const now=new Date();
+  const midnight=new Date();
+  midnight.setHours(24,0,0,0);
+  const diff=midnight-now;
+  const h=Math.floor(diff/3600000);
+  const m=Math.floor((diff%3600000)/60000);
+  return h>0?`${h}h ${m}m`:`${m}m`;
+}
+
 function updateUsageBar(){
   const el=document.getElementById('usage-bar');
   if(!el)return;
   if(S.isPremium){
-    el.innerHTML=`<span style="background:#f5f5f5;color:#000;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:500">✦ Premium</span>`;
+    el.innerHTML=`<span style="background:#f5f5f5;color:#000;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:500">✦ Premium · ${S.digestsToday} digests today</span>`;
   }else if(S.credits>0){
     el.innerHTML=`<span style="background:#f5f5f5;color:#000;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:500">${S.credits} credits remaining</span>`;
   }else{
     const left=Math.max(0,FREE_LIMIT-S.digestsToday);
-    const col=left===0?'#c0392b':left===1?'#e67e22':'var(--ink3)';
-    el.innerHTML=`<span style="font-size:12px;color:${col}">${left===0?'No free digests left today':left+' free digest left today'}</span><button onclick="showPaywall()" style="margin-left:6px;font-size:11px;padding:2px 10px;border:0.5px solid var(--paper3);border-radius:10px;background:#fff;cursor:pointer;font-family:var(--sans);color:var(--ink2)">Top up</button>`;
+    if(left===0){
+      el.innerHTML=`<span style="font-size:12px;color:#c0392b">No free digests left — resets in ${getTimeUntilMidnight()}</span><button onclick="showPaywall()" style="margin-left:6px;font-size:11px;padding:2px 10px;border:0.5px solid var(--paper3);border-radius:10px;background:#fff;cursor:pointer;font-family:var(--sans);color:var(--ink2)">Top up</button>`;
+    }else{
+      el.innerHTML=`<span style="font-size:12px;color:var(--ink3)">${left} free digest left today</span><button onclick="showPaywall()" style="margin-left:6px;font-size:11px;padding:2px 10px;border:0.5px solid var(--paper3);border-radius:10px;background:#fff;cursor:pointer;font-family:var(--sans);color:var(--ink2)">Top up</button>`;
+    }
   }
 }
 
 function updateUsageBarHome(){
   const el=document.getElementById('usage-bar-home');
   if(!el)return;
-  if(S.isPremium){
-    el.innerHTML='';return;
-  }
+  if(S.isPremium){el.innerHTML='';return;}
   const left=Math.max(0,FREE_LIMIT-S.digestsToday);
   if(left===0){
-    el.innerHTML=`<div style="background:#fff3cd;border:0.5px solid #ffc107;border-radius:10px;padding:10px 16px;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:1rem">
-      <span style="font-size:13px;color:#856404">⚠️ You've used your free digest for today. Come back tomorrow or top up for more.</span>
-      <button onclick="showPaywall()" style="padding:6px 14px;background:#000;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--sans);white-space:nowrap">Top up</button>
+    el.innerHTML=`<div style="background:#fff3cd;border:0.5px solid #ffc107;border-radius:10px;padding:10px 16px;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+      <span style="font-size:13px;color:#856404">⚠️ You've used your free digest for today. Next one available in <strong>${getTimeUntilMidnight()}</strong>.</span>
+      <button onclick="showPaywall()" style="padding:6px 14px;background:#000;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--sans);white-space:nowrap">Top up for more</button>
     </div>`;
   }else{
     el.innerHTML=`<div style="font-size:12px;color:var(--ink3);margin-bottom:0.5rem">${left} free digest remaining today</div>`;
