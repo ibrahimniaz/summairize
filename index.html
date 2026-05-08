@@ -222,6 +222,9 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
   .share-bar{gap:4px}
   .share-btn span{display:none}
 }
+/* Hide Vercel injected toolbar/banners */
+iframe[src*="vercel"],[data-vercel-tb-host],#vercel-live-feedback,
+.__vercel_toolbar,[class*="vercel-speed"]{display:none!important;height:0!important}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
@@ -780,16 +783,6 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
         <div class="osc-row"><span class="osc-l">Articles fetched</span><span class="osc-v" id="det-arts"></span></div>
       </div>
       <button class="new-btn" onclick="restart()">← Build a new digest</button>
-      <div class="premium-banner">
-        <h4>Go Premium</h4>
-        <p>Unlock more sources, longer digests, custom voices and an ad-free experience.</p>
-        <div class="pf"><div class="pf-dot"></div>Unlimited sources</div>
-        <div class="pf"><div class="pf-dot"></div>Ad-free reading</div>
-        <div class="pf"><div class="pf-dot"></div>Daily email delivery</div>
-        <div class="pf" style="margin-bottom:1rem"><div class="pf-dot"></div>Podcast voice output</div>
-        <button class="btn-gold" onclick="toast('Premium coming soon — stay tuned!')">Upgrade — coming soon</button>
-      </div>
-      <div class="ad-slot ad-square">Ad space · 250×250</div>
     </div>
   </div>
 </div>
@@ -901,7 +894,27 @@ async function doSignup(){
   enterApp();
 }
 
-function enterApp(){
+const ADMIN_EMAILS=['ibrahimniaz@hotmail.com','ibrahim@summairise.com'];
+const FREE_LIMIT=1;
+
+async function getTodayDigestCount(){
+  if(!S.user?.id)return 0;
+  const today=new Date();
+  today.setHours(0,0,0,0);
+  const{count}=await sb.from('digests')
+    .select('*',{count:'exact',head:true})
+    .eq('user_id',S.user.id)
+    .gte('created_at',today.toISOString());
+  return count||0;
+}
+
+async function enterApp(){
+  // Check if admin/founder — unlimited access
+  if(ADMIN_EMAILS.includes(S.user.email)){
+    S.isPremium=true;
+  }
+  // Get real digest count from Supabase
+  S.digestsToday=await getTodayDigestCount();
   document.getElementById('nav-user').textContent='Hi, '+S.user.name;
   document.getElementById('out-user').textContent=S.user.name;
   document.getElementById('nav-user-home').textContent='Hi, '+S.user.name;
@@ -1165,7 +1178,10 @@ async function fetchRSS(source,url,isFallback=false){
 }
 
 async function startGenerate(){
-  const FREE_LIMIT=1;
+  // Refresh real count from Supabase
+  if(!S.isPremium){
+    S.digestsToday=await getTodayDigestCount();
+  }
   if(!S.isPremium&&S.credits===0&&S.digestsToday>=FREE_LIMIT){
     showPaywall();return;
   }
@@ -1389,14 +1405,39 @@ async function renderOutput(data,articles){
   if(!S.isPremium&&S.credits>0){S.credits--}
   else if(!S.isPremium){S.digestsToday++}
   updateUsageBar();
+  updateUsageBarHome();
   await saveDigest(data.sections,articles);
   renderOutputMeta(articles);
   const el=document.getElementById('digest-sections');
   el.innerHTML='';
-  data.sections.forEach((sec,i)=>{
+
+  // Build keyword highlighter
+  const kwList=S.keyword?S.keyword.split(',').map(k=>k.trim().toLowerCase()).filter(k=>k):[];
+  function highlightKw(text){
+    if(!kwList.length)return text;
+    let out=text;
+    kwList.forEach(kw=>{
+      const re=new RegExp(`(${kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+      out=out.replace(re,`<mark style="background:#fff3cd;color:#000;font-weight:600;border-radius:3px;padding:0 2px">$1</mark>`);
+    });
+    return out;
+  }
+
+  // Sort sections — put keyword-matching ones first
+  const sections=[...data.sections];
+  if(kwList.length){
+    sections.sort((a,b)=>{
+      const aMatch=kwList.some(k=>(a.title+a.body).toLowerCase().includes(k));
+      const bMatch=kwList.some(k=>(b.title+b.body).toLowerCase().includes(k));
+      return bMatch-aMatch;
+    });
+  }
+
+  sections.forEach((sec,i)=>{
     const div=document.createElement('div');
     div.className='digest-section';
-    const bodyHtml=sec.body.split('\n').filter(p=>p.trim()).map(p=>`<p>${p}</p>`).join('');
+    const bodyHtml=sec.body.split('\n').filter(p=>p.trim()).map(p=>`<p>${highlightKw(p)}</p>`).join('');
+    const titleHtml=highlightKw(sec.title);
     const fnHtml=sec.footnotes&&sec.footnotes.length?`
       <div class="footnotes">
         <div class="fn-ttl">Sources used</div>
@@ -1405,7 +1446,7 @@ async function renderOutput(data,articles){
     div.innerHTML=`
       <div class="sec-kicker">${sec.kicker||''}</div>
       <div class="sec-hdr">
-        <div class="sec-ttl">${sec.title}</div>
+        <div class="sec-ttl">${titleHtml}</div>
         <div class="vote-row">
           <button class="vb" id="up${i}" onclick="vote(${i},'up')" title="Helpful">&#9650;</button>
           <button class="vb" id="dn${i}" onclick="vote(${i},'dn')" title="Not helpful">&#9660;</button>
@@ -1507,13 +1548,30 @@ function updateUsageBar(){
   const el=document.getElementById('usage-bar');
   if(!el)return;
   if(S.isPremium){
-    el.innerHTML=`<span style="background:#f5f5f5;color:#000000;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:500">Premium</span>`;
+    el.innerHTML=`<span style="background:#f5f5f5;color:#000;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:500">✦ Premium</span>`;
   }else if(S.credits>0){
-    el.innerHTML=`<span style="background:#f5f5f5;color:#000000;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:500">${S.credits} credits remaining</span>`;
+    el.innerHTML=`<span style="background:#f5f5f5;color:#000;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:500">${S.credits} credits remaining</span>`;
   }else{
-    const left=Math.max(0,3-S.digestsToday);
+    const left=Math.max(0,FREE_LIMIT-S.digestsToday);
     const col=left===0?'#c0392b':left===1?'#e67e22':'var(--ink3)';
-    el.innerHTML=`<span style="font-size:12px;color:${col}">${left} free digest${left===1?'':'s'} left today</span><button onclick="showPaywall()" style="margin-left:6px;font-size:11px;padding:2px 10px;border:0.5px solid var(--paper3);border-radius:10px;background:#fff;cursor:pointer;font-family:var(--font-sans);color:var(--ink2)">Top up</button>`;
+    el.innerHTML=`<span style="font-size:12px;color:${col}">${left===0?'No free digests left today':left+' free digest left today'}</span><button onclick="showPaywall()" style="margin-left:6px;font-size:11px;padding:2px 10px;border:0.5px solid var(--paper3);border-radius:10px;background:#fff;cursor:pointer;font-family:var(--sans);color:var(--ink2)">Top up</button>`;
+  }
+}
+
+function updateUsageBarHome(){
+  const el=document.getElementById('usage-bar-home');
+  if(!el)return;
+  if(S.isPremium){
+    el.innerHTML='';return;
+  }
+  const left=Math.max(0,FREE_LIMIT-S.digestsToday);
+  if(left===0){
+    el.innerHTML=`<div style="background:#fff3cd;border:0.5px solid #ffc107;border-radius:10px;padding:10px 16px;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:1rem">
+      <span style="font-size:13px;color:#856404">⚠️ You've used your free digest for today. Come back tomorrow or top up for more.</span>
+      <button onclick="showPaywall()" style="padding:6px 14px;background:#000;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--sans);white-space:nowrap">Top up</button>
+    </div>`;
+  }else{
+    el.innerHTML=`<div style="font-size:12px;color:var(--ink3);margin-bottom:0.5rem">${left} free digest remaining today</div>`;
   }
 }
 // Restore session on page load
