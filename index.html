@@ -1223,16 +1223,21 @@ Below are ${articles.length} real live news articles just fetched from RSS feeds
 Reader's chosen topics: ${S.topics.join(', ')}.
 ${kw}
 
-CRITICAL RULES — follow exactly:
-- FOCUS: Each section must cover ONE specific story or development only. Do not mix different stories in one section.
-- RELEVANCE: Only include articles genuinely relevant to the reader's chosen topics. Ignore everything else.
-- ACCURACY: Never fabricate facts — only use information from the provided articles.
-- STRUCTURE: Write 2 focused paragraphs per section. Every sentence must add value. No filler phrases.
-- KICKER: The topic label (e.g. "Finance", "Technology", "Politics").
-- HEADLINE: Specific and informative — tells the reader exactly what happened.
-- PULL QUOTE: A specific, striking fact or statement from the articles — not a vague summary.
-- CITATIONS: Add [number] inline citations in body text matching footnote numbers.
-- SEPARATION: If there are 2 big stories in the same topic, create 2 separate sections — do NOT merge them.
+CRITICAL RULES — follow every one exactly:
+
+FOCUS: Each section covers ONE specific story or development. Never blend two different stories into one section. If there are two significant stories in the same topic area, write two separate sections.
+
+KICKER: Be specific — not "Politics" but "UK Politics". Not "Africa" but "Southern Africa". Not "Energy" but "Energy Security".
+
+HEADLINE: Must tell the reader exactly what happened. Specific names, numbers, outcomes. No vague headlines.
+
+BODY: Write exactly 2 paragraphs per section. Each paragraph must be 3-4 sentences. Never write only 1 paragraph. Each sentence must contain a specific fact, figure, name or development — no vague filler like "marking a significant moment" or "ending a life marked by leadership".
+
+PULL QUOTE: Must be the single most striking, specific, surprising fact or number from the articles — something that makes the reader stop. Never paraphrase the body text. Never use a vague summary statement.
+
+CITATIONS: Use [number] inline in the body. Each footnote must link to a DIFFERENT article — never cite the same article twice in one section. If only one article exists for a section, only use one footnote.
+
+SOURCES: Prefer sections where you have 2+ different source articles — this produces the richest synthesis.
 
 LIVE ARTICLES:
 ${articleDump}
@@ -1241,21 +1246,21 @@ Respond ONLY with valid JSON — no markdown, no preamble, no trailing text:
 {
   "sections": [
     {
-      "kicker": "Topic name",
-      "title": "Specific, informative headline for this section",
-      "body": "First paragraph about ONE story with [1] inline citation.\n\nSecond paragraph with more detail [2].",
-      "quote": "A specific, striking fact or direct quote from the articles.",
+      "kicker": "Specific topic label e.g. UK Politics",
+      "title": "Specific headline with names and outcomes",
+      "body": "First paragraph — 3-4 sentences, all specific facts [1]. Second sentence adds detail [2].\n\nSecond paragraph — 3-4 more sentences expanding the story with different angle or context [3].",
+      "quote": "The single most striking specific fact or stat from the articles — not a summary.",
       "quote_source": "Source outlet name",
       "footnotes": [
         {"num": 1, "title": "Full article title", "source": "Source name", "url": "https://..."},
-        {"num": 2, "title": "Full article title", "source": "Source name", "url": "https://..."}
+        {"num": 2, "title": "Different article title", "source": "Source name", "url": "https://..."}
       ]
     }
   ],
   "no_relevant_articles": false
 }
 
-Produce one section per distinct story relevant to the reader's topics. If truly no articles match, return: {"no_relevant_articles": true, "sections": []}`;
+Produce one section per distinct story. Quality over quantity — 4 excellent focused sections is better than 7 thin ones. If truly no articles match, return: {"no_relevant_articles": true, "sections": []}`;
 
   try{
     setLoadStep(4);
