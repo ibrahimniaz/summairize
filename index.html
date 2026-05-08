@@ -1186,9 +1186,13 @@ async function startGenerate(){
   }
 
   setLoadStep(3);
-  const capped=allArticles.length>50?allArticles.sort(()=>Math.random()-0.5).slice(0,50):allArticles;
+  // Cap at 30 articles max, trim desc to 200 chars to keep prompt lean
+  const capped=allArticles.length>30
+    ?allArticles.sort(()=>Math.random()-0.5).slice(0,30)
+    :allArticles;
+  const trimmed=capped.map(a=>({...a,desc:a.desc.slice(0,200)}));
   try{
-    await callClaude(capped);
+    await callClaude(trimmed);
   }catch(e){
     showScreen('screen-output');
     document.getElementById('digest-sections').innerHTML=`
