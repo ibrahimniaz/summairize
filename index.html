@@ -8,6 +8,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23000'/><text x='50%25' y='73%25' text-anchor='middle' font-family='Georgia,serif' font-size='22' font-weight='700' fill='white'>S</text></svg>">
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23000'/><text x='50%25' y='73%25' text-anchor='middle' font-family='Georgia,serif' font-size='22' font-weight='700' fill='white'>S</text></svg>">
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="SummAIrise">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;SummAIrise&quot;,&quot;short_name&quot;:&quot;SummAIrise&quot;,&quot;start_url&quot;:&quot;/&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;%23000000&quot;,&quot;theme_color&quot;:&quot;%23000000&quot;,&quot;icons&quot;:[{&quot;src&quot;:&quot;data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='42' fill='%23000'/><text x='50%25' y='73%25' text-anchor='middle' font-family='Georgia,serif' font-size='132' font-weight='700' fill='white'>S</text></svg>&quot;,&quot;sizes&quot;:&quot;192x192&quot;,&quot;type&quot;:&quot;image/svg+xml&quot;}]}">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -221,8 +227,21 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
   .hero-cta .btn{width:100%;max-width:280px}
   .step-acts{flex-direction:column}
   .step-acts .btn{width:100%}
-  .share-bar{gap:4px}
+  .share-bar{gap:4px;flex-wrap:wrap}
   .share-btn span{display:none}
+  .config-aside{display:none!important}
+  .config-main{padding:1.25rem 1rem}
+  .step-ttl{font-size:18px}
+  .chips{gap:6px}
+  .chip{font-size:12px;padding:5px 10px}
+  .sec-ttl{font-size:17px!important}
+  .sec-body{font-size:14px}
+  .digest-hdr>div:first-child{flex-direction:column;align-items:flex-start;gap:0.5rem}
+  #admin-stats{grid-template-columns:1fr!important}
+  .nav-right span{display:none}
+  .nav-right button{padding:5px 10px;font-size:11px}
+  #screen-home .flex-row{flex-direction:column;align-items:flex-start}
+  #screen-home .new-digest-btn{width:100%}
 }
 /* Hide Vercel injected toolbar/banners */
 iframe[src*="vercel"],[data-vercel-tb-host],#vercel-live-feedback,
@@ -534,7 +553,10 @@ div[style*="z-index: 9999"]:not(#toast){display:none!important;height:0!importan
       <div class="cfg-step" id="cs1">
         <div class="step-lbl">Step 1 of 5</div>
         <div class="step-ttl">Which sources?</div>
-        <div class="step-hint">Select all the news outlets you'd like us to draw from.</div>
+        <div class="step-hint">Select the news outlets you'd like us to draw from.</div>
+        <div id="free-src-banner" style="display:none;background:#fff3cd;border:0.5px solid #ffc107;border-radius:8px;padding:8px 12px;margin-bottom:0.75rem;font-size:12px;color:#856404">
+          ⚡ Free tier: pick up to 2 sources. <a onclick="showPaywall()" style="color:#000;font-weight:600;cursor:pointer;text-decoration:underline">Upgrade for all 11 →</a>
+        </div>
         <div class="chips" id="chip-sources">
           <div class="chip" onclick="toggleChip(this,'sources')"><span style="display:inline-flex;align-items:center;justify-content:center;background:#BB1919;color:#fff;font-size:7px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:24px;height:16px;font-family:var(--sans)">BBC</span>BBC News</div>
           <div class="chip" onclick="toggleChip(this,'sources')"><span style="display:inline-flex;align-items:center;justify-content:center;background:#003DA5;color:#fff;font-size:7px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:24px;height:16px;font-family:var(--sans)">SKY</span>Sky News</div>
@@ -558,6 +580,9 @@ div[style*="z-index: 9999"]:not(#toast){display:none!important;height:0!importan
         <div class="step-lbl">Step 2 of 5</div>
         <div class="step-ttl">Which topics?</div>
         <div class="step-hint">Claude will decide which live articles are relevant to these.</div>
+        <div id="free-top-banner" style="display:none;background:#fff3cd;border:0.5px solid #ffc107;border-radius:8px;padding:8px 12px;margin-bottom:0.75rem;font-size:12px;color:#856404">
+          ⚡ Free tier: pick up to 2 topics. <a onclick="showPaywall()" style="color:#000;font-weight:600;cursor:pointer;text-decoration:underline">Upgrade for all 9 →</a>
+        </div>
         <div class="chips" id="chip-topics">
           <div class="chip" onclick="toggleChip(this,'topics')">Finance</div>
           <div class="chip" onclick="toggleChip(this,'topics')">Politics</div>
@@ -814,6 +839,7 @@ div[style*="z-index: 9999"]:not(#toast){display:none!important;height:0!importan
         </div>
         <div id="out-src-tags" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0.6rem"></div>
         <div class="updated-stamp" id="updated-stamp"></div>
+        <div id="out-coverage" style="display:none;font-size:11px;color:var(--ink4);margin-top:4px"></div>
       </div>
       <div id="digest-sections"></div>
     </div>
@@ -1039,6 +1065,28 @@ function startNewDigest(){
   document.querySelectorAll('.oc').forEach(c=>c.classList.remove('sel'));
   if(document.getElementById('kw'))document.getElementById('kw').value='';
   for(let i=1;i<=5;i++){const b=document.getElementById('b'+i);if(b)b.disabled=true}
+  const isFree=!S.isPremium&&S.credits===0;
+  const srcBanner=document.getElementById('free-src-banner');
+  const topBanner=document.getElementById('free-top-banner');
+  if(srcBanner)srcBanner.style.display=isFree?'block':'none';
+  if(topBanner)topBanner.style.display=isFree?'block':'none';
+  if(isFree){
+    document.querySelectorAll('#cs3 .oc,#cs4 .oc').forEach(el=>{
+      const val=el.dataset.val;
+      const locked=(el.closest('#cs3')&&val!=='neutral')||(el.closest('#cs4')&&val!=='24');
+      el.style.opacity=locked?'0.4':'';el.style.pointerEvents=locked?'none':'';
+      el.title=locked?'Upgrade to unlock':'';
+    });
+    document.querySelectorAll('#cs5 .og .oc').forEach(el=>{
+      const locked=el.dataset.val!=='short';
+      el.style.opacity=locked?'0.4':'';el.style.pointerEvents=locked?'none':'';
+      el.title=locked?'Upgrade to unlock':'';
+    });
+  }else{
+    document.querySelectorAll('#cs3 .oc,#cs4 .oc,#cs5 .og .oc').forEach(el=>{
+      el.style.opacity='';el.style.pointerEvents='';el.title='';
+    });
+  }
   updateAside();showScreen('screen-config');showCfgStep(1);
 }
 async function saveDigest(sections,articles){
@@ -1115,6 +1163,17 @@ function showCfgStep(n){
 }
 function cfgGo(n){showCfgStep(n)}
 function toggleChip(el,key){
+  const isFree=!S.isPremium&&S.credits===0;
+  const limit=isFree?2:99;
+  const currentSel=Array.from(el.parentElement.querySelectorAll('.chip.sel'));
+  if(!el.classList.contains('sel')&&currentSel.length>=limit){
+    const banner=document.getElementById(key==='sources'?'free-src-banner':'free-top-banner');
+    if(banner){
+      banner.style.background='#ffe0e0';banner.style.borderColor='#f44';
+      setTimeout(()=>{banner.style.background='#fff3cd';banner.style.borderColor='#ffc107';},600);
+    }
+    return;
+  }
   el.classList.toggle('sel');
   S[key]=Array.from(el.parentElement.querySelectorAll('.chip.sel')).map(c=>{
     return Array.from(c.childNodes).filter(n=>n.nodeType===3).map(n=>n.textContent.trim()).join('').trim();
@@ -1327,6 +1386,8 @@ async function startGenerate(){
 
   setLoadStep(2);
   document.getElementById('load-sub').textContent=`Parsed ${allArticles.length} articles across ${S.sources.length} sources`;
+  // Store total for coverage display
+  S.totalArticlesFetched=allArticles.length;
 
   if(allArticles.length===0){
     showScreen('screen-output');
@@ -1428,13 +1489,20 @@ Produce one section per distinct story. Quality over quantity — 4 excellent fo
 
   try{
     setLoadStep(4);
-    const model=S.isPremium?'claude-sonnet-4-6':'claude-haiku-4-5-20251001';
+    const effectivePremium=S.isPremium||S.credits>0;
+    const model=effectivePremium?'claude-sonnet-4-6':'claude-haiku-4-5-20251001';
     const controller=new AbortController();
     const timeout=setTimeout(()=>controller.abort(),55000); // 55s timeout
     const res=await fetch('/api/digest',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model,max_tokens:3000,messages:[{role:'user',content:prompt}]}),
+      body:JSON.stringify({
+        model,
+        max_tokens:3000,
+        messages:[{role:'user',content:prompt}],
+        isPremium:effectivePremium,
+        userEmail:S.user?.email||''
+      }),
       signal:controller.signal
     });
     clearTimeout(timeout);
@@ -1481,6 +1549,13 @@ function renderOutputMeta(articles){
   document.getElementById('out-len-tag').textContent=cap(S.length||'');
   const kwTag=document.getElementById('out-kw-tag');
   if(kwTag){kwTag.textContent=S.keyword?'🔍 '+S.keyword:'';kwTag.style.display=S.keyword?'inline-block':'none';}
+  // Article coverage
+  const coverageEl=document.getElementById('out-coverage');
+  if(coverageEl&&S.totalArticlesFetched){
+    const pct=Math.round((30/S.totalArticlesFetched)*100);
+    coverageEl.textContent=`${Math.min(30,S.totalArticlesFetched)} of ${S.totalArticlesFetched} articles analysed (${Math.min(100,pct)}% coverage)`;
+    coverageEl.style.display='block';
+  }
   document.getElementById('out-src-tags').innerHTML=S.sources.map(s=>srcTag(s)).join('');
   const now=new Date();
   const stamp=document.getElementById('updated-stamp');
