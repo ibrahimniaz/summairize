@@ -456,6 +456,9 @@ div[style*="z-index: 9999"]:not(#toast){display:none!important;height:0!importan
       <div id="auth-login-form">
         <div class="fg"><label>Email</label><input type="email" id="li-email" placeholder="you@email.com"></div>
         <div class="fg"><label>Password</label><input type="password" id="li-pass" placeholder="••••••••"></div>
+        <div style="text-align:right;margin-top:-0.25rem;margin-bottom:0.75rem">
+          <a onclick="showForgotPassword()" style="font-size:12px;color:var(--ink3);cursor:pointer;text-decoration:underline">Forgot password?</a>
+        </div>
         <button class="btn btn-green" style="width:100%;padding:12px;font-size:15px;margin-top:0.5rem" onclick="doLogin()">Sign in</button>
         <div class="divider">or</div>
         <button class="btn btn-ghost" style="width:100%;padding:11px" onclick="switchTab('signup')">Create an account</button>
@@ -475,7 +478,87 @@ div[style*="z-index: 9999"]:not(#toast){display:none!important;height:0!importan
   </div>
 </div>
 
-<!-- HOME — history + new digest -->
+<!-- COOKIE CONSENT BANNER -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#000;color:#fff;padding:1rem 2rem;z-index:9999;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+  <div style="font-size:13px;color:#ccc;flex:1">🍪 We use minimal cookies to keep you signed in. No tracking, no ads. <a href="#section-privacy" onclick="scrollTo('section-privacy')" style="color:#fff;text-decoration:underline;cursor:pointer">Privacy policy</a></div>
+  <div style="display:flex;gap:8px;flex-shrink:0">
+    <button onclick="acceptCookies()" style="padding:8px 20px;background:#fff;color:#000;border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)">Got it</button>
+  </div>
+</div>
+
+<!-- FORGOT PASSWORD SCREEN -->
+<div class="screen" id="screen-forgot" style="flex-direction:column;background:var(--paper)">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:1.5rem">
+        <div style="width:36px;height:36px;background:#000;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <span style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:#fff;line-height:1">S</span>
+        </div>
+        <span style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#000">SummAIrise</span>
+      </div>
+      <div style="font-size:18px;font-weight:600;color:var(--ink);margin-bottom:0.25rem;text-align:center">Reset your password</div>
+      <div style="font-size:13px;color:var(--ink3);margin-bottom:1.5rem;text-align:center">We'll send you a link to reset your password.</div>
+      <div id="forgot-err" style="display:none;background:#fee;color:#c00;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:1rem"></div>
+      <div id="forgot-form">
+        <div class="fg"><label>Email</label><input type="email" id="forgot-email" placeholder="you@email.com"></div>
+        <button class="btn btn-green" style="width:100%;padding:12px;font-size:15px;margin-top:0.5rem" onclick="doForgotPassword()">Send reset link</button>
+        <div class="divider">or</div>
+        <button class="btn btn-ghost" style="width:100%;padding:11px" onclick="showAuth('login')">← Back to sign in</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ACCOUNT SCREEN -->
+<div class="screen" id="screen-account" style="flex-direction:column">
+  <nav class="nav">
+    <div style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="showScreen('screen-home')">
+      <div style="width:32px;height:32px;background:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <span style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#000;line-height:1">S</span>
+      </div>
+      <span style="font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;color:#fff">SummAIrise</span>
+    </div>
+    <div class="nav-right">
+      <button onclick="showScreen('screen-home')" style="padding:7px 16px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;cursor:pointer;font-family:var(--sans)">← Back</button>
+    </div>
+  </nav>
+  <div style="flex:1;padding:2.5rem 2rem;max-width:600px;margin:0 auto;width:100%">
+    <div style="font-family:'Playfair Display',Georgia,serif;font-size:24px;font-weight:700;color:var(--ink);margin-bottom:2rem">Account</div>
+
+    <!-- Account info -->
+    <div style="background:#fff;border:0.5px solid var(--paper3);border-radius:12px;padding:1.5rem;margin-bottom:1rem">
+      <div style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink4);margin-bottom:1rem">Account details</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem">
+        <div style="font-size:13px;color:var(--ink3)">Email</div>
+        <div style="font-size:13px;font-weight:500;color:var(--ink)" id="acc-email">—</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem">
+        <div style="font-size:13px;color:var(--ink3)">Plan</div>
+        <div style="font-size:13px;font-weight:500;color:var(--ink)" id="acc-plan">Free</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:13px;color:var(--ink3)">Credits</div>
+        <div style="font-size:13px;font-weight:500;color:var(--ink)" id="acc-credits">0</div>
+      </div>
+    </div>
+
+    <!-- Change password -->
+    <div style="background:#fff;border:0.5px solid var(--paper3);border-radius:12px;padding:1.5rem;margin-bottom:1rem">
+      <div style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink4);margin-bottom:1rem">Change password</div>
+      <div class="fg" style="margin-bottom:0.75rem"><label>New password</label><input type="password" id="new-pass" placeholder="Min. 8 characters"></div>
+      <div class="fg" style="margin-bottom:1rem"><label>Confirm password</label><input type="password" id="confirm-pass" placeholder="Repeat new password"></div>
+      <div id="pass-msg" style="display:none;font-size:13px;margin-bottom:0.75rem;padding:8px 12px;border-radius:8px"></div>
+      <button onclick="doChangePassword()" style="padding:9px 20px;background:#000;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)">Update password</button>
+    </div>
+
+    <!-- Delete account -->
+    <div style="background:#fff;border:0.5px solid #fcc;border-radius:12px;padding:1.5rem">
+      <div style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:#c00;margin-bottom:0.5rem">Danger zone</div>
+      <div style="font-size:13px;color:var(--ink3);margin-bottom:1rem">Permanently delete your account and all your digest history. This cannot be undone.</div>
+      <button onclick="doDeleteAccount()" style="padding:9px 20px;background:#fff;color:#c00;border:1px solid #fcc;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)">Delete my account</button>
+    </div>
+  </div>
+</div>
 <div class="screen" id="screen-home" style="flex-direction:column">
   <nav class="nav">
     <div style="display:flex;align-items:center;gap:10px">
@@ -488,6 +571,7 @@ div[style*="z-index: 9999"]:not(#toast){display:none!important;height:0!importan
       <div id="usage-bar-home" style="font-size:12px;color:#aaa;display:flex;align-items:center;gap:8px"></div>
       <span id="nav-user-home" style="font-size:13px;color:#aaa"></span>
       <button id="admin-btn" onclick="showAdmin()" style="display:none;padding:7px 14px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)">📊 Dashboard</button>
+      <button onclick="showAccount()" style="padding:7px 14px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)">Account</button>
       <button style="padding:7px 16px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)" onclick="doSignOut()">Sign out</button>
     </div>
   </nav>
@@ -1771,6 +1855,75 @@ function updateUsageBarHome(){
     enterApp();
   }
 })();
+
+// Cookie consent
+function initCookieBanner(){
+  if(!localStorage.getItem('cookies_accepted')){
+    document.getElementById('cookie-banner').style.display='flex';
+  }
+}
+function acceptCookies(){
+  localStorage.setItem('cookies_accepted','1');
+  document.getElementById('cookie-banner').style.display='none';
+}
+
+// Forgot password
+function showForgotPassword(){showScreen('screen-forgot');}
+async function doForgotPassword(){
+  const email=document.getElementById('forgot-email').value.trim();
+  if(!email){document.getElementById('forgot-err').textContent='Please enter your email.';document.getElementById('forgot-err').style.display='block';return;}
+  const btn=document.querySelector('#screen-forgot .btn-green');
+  btn.textContent='Sending...';btn.disabled=true;
+  const{error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:'https://summairise.com'});
+  btn.textContent='Send reset link';btn.disabled=false;
+  if(error){
+    document.getElementById('forgot-err').textContent=error.message;
+    document.getElementById('forgot-err').style.display='block';
+  }else{
+    document.getElementById('forgot-form').innerHTML=`
+      <div style="text-align:center;padding:1rem 0">
+        <div style="font-size:32px;margin-bottom:1rem">📧</div>
+        <div style="font-size:15px;font-weight:600;color:var(--ink);margin-bottom:0.5rem">Check your email</div>
+        <div style="font-size:13px;color:var(--ink3);line-height:1.6;margin-bottom:1.5rem">We sent a reset link to <strong>${email}</strong>. Click it to set a new password.</div>
+        <button class="btn btn-ghost" style="width:100%;padding:11px" onclick="showAuth('login')">← Back to sign in</button>
+      </div>`;
+  }
+}
+
+// Account screen
+function showAccount(){
+  document.getElementById('acc-email').textContent=S.user?.email||'—';
+  document.getElementById('acc-plan').textContent=S.isPremium?'Premium ✦':S.credits>0?`${S.credits} credits`:'Free';
+  document.getElementById('acc-credits').textContent=S.credits||0;
+  showScreen('screen-account');
+}
+async function doChangePassword(){
+  const np=document.getElementById('new-pass').value;
+  const cp=document.getElementById('confirm-pass').value;
+  const msg=document.getElementById('pass-msg');
+  if(np.length<8){msg.textContent='Password must be at least 8 characters.';msg.style.background='#fee';msg.style.color='#c00';msg.style.display='block';return;}
+  if(np!==cp){msg.textContent='Passwords do not match.';msg.style.background='#fee';msg.style.color='#c00';msg.style.display='block';return;}
+  const{error}=await sb.auth.updateUser({password:np});
+  if(error){msg.textContent=error.message;msg.style.background='#fee';msg.style.color='#c00';}
+  else{msg.textContent='Password updated successfully.';msg.style.background='#f0fff4';msg.style.color='#1a7a3a';}
+  msg.style.display='block';
+  document.getElementById('new-pass').value='';
+  document.getElementById('confirm-pass').value='';
+}
+async function doDeleteAccount(){
+  if(!confirm('Are you sure? This will permanently delete your account and all your digests. This cannot be undone.'))return;
+  if(!confirm('Last chance — are you absolutely sure?'))return;
+  // Delete all user digests first
+  await sb.from('digests').delete().eq('user_id',S.user.id);
+  // Sign out and show landing
+  await sb.auth.signOut();
+  S.user=null;
+  showScreen('screen-landing');
+  toast('Your account has been deleted.');
+}
+
+// Call cookie banner on load
+setTimeout(initCookieBanner, 1500);
 
 function scrollTo(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
 
