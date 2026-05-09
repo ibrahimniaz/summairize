@@ -242,6 +242,17 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
   .nav-right button{padding:5px 10px;font-size:11px}
   #screen-home .flex-row{flex-direction:column;align-items:flex-start}
   #screen-home .new-digest-btn{width:100%}
+  /* Landing page mobile fixes */
+  #screen-landing nav{padding:0 0.75rem;height:56px}
+  #screen-landing nav .nav-wordmark{font-size:16px}
+  #screen-landing nav .nav-logo{width:28px;height:28px;font-size:17px}
+  #screen-landing nav button{padding:6px 10px;font-size:12px;white-space:nowrap}
+  #screen-landing p{white-space:normal!important;font-size:13px;padding:0 0.5rem}
+  #screen-landing h1{font-size:32px!important}
+  /* Footer mobile */
+  #screen-landing>div:last-child{height:auto!important;padding:1rem 0.75rem;flex-wrap:wrap;gap:0.5rem}
+  #screen-landing>div:last-child>div{flex-direction:column;gap:0.5rem;align-items:flex-start}
+  #screen-landing>div:last-child a{font-size:11px}
 }
 /* Hide Vercel injected toolbar/banners */
 iframe[src*="vercel"],[data-vercel-tb-host],#vercel-live-feedback,
@@ -286,15 +297,15 @@ div[style*="z-index: 9999"]:not(#toast){display:none!important;height:0!importan
   <div style="height:100vh;display:flex;flex-direction:column;overflow:hidden">
   <!-- WHITE NAV — 64px -->
   <nav style="display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;flex-shrink:0;background:#fff;border-bottom:0.5px solid #eee;z-index:100">
-    <div style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="showScreen('screen-landing')">
-      <div style="width:34px;height:34px;background:#000;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+    <div style="display:flex;align-items:center;gap:8px;cursor:pointer;flex-shrink:0" onclick="showScreen('screen-landing')">
+      <div class="nav-logo" style="width:34px;height:34px;background:#000;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
         <span style="font-family:'Playfair Display',Georgia,serif;font-size:21px;font-weight:700;color:#fff;line-height:1">S</span>
       </div>
-      <span style="font-family:'Playfair Display',Georgia,serif;font-size:19px;font-weight:700;color:#000">SummAIrise</span>
+      <span class="nav-wordmark" style="font-family:'Playfair Display',Georgia,serif;font-size:19px;font-weight:700;color:#000">SummAIrise</span>
     </div>
-    <div style="display:flex;align-items:center;gap:10px">
-      <button onclick="showAuth('login')" style="padding:8px 18px;background:transparent;border:1px solid #ddd;border-radius:8px;color:#333;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)">Sign in</button>
-      <button onclick="showAuth('signup')" style="padding:8px 18px;background:#000;border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)">Get started</button>
+    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+      <button onclick="showAuth('login')" style="padding:8px 14px;background:transparent;border:1px solid #ddd;border-radius:8px;color:#333;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans);white-space:nowrap">Sign in</button>
+      <button onclick="showAuth('signup')" style="padding:8px 14px;background:#000;border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans);white-space:nowrap">Get started</button>
     </div>
   </nav>
 
@@ -304,7 +315,7 @@ div[style*="z-index: 9999"]:not(#toast){display:none!important;height:0!importan
       <div style="width:32px;height:1px;background:#444"></div>Live AI news digest<div style="width:32px;height:1px;background:#444"></div>
     </div>
     <h1 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(26px,3.5vw,44px);font-weight:700;line-height:1.2;color:#fff;margin-bottom:1rem;max-width:500px">Your sources.<br>Your topics.<br>Your digest.</h1>
-    <p style="font-size:13px;color:#aaa;line-height:1.8;margin-bottom:1.75rem;white-space:nowrap">Get a real-time digest synthesised from live news feeds — on demand, in seconds.</p>
+    <p style="font-size:13px;color:#aaa;line-height:1.8;margin-bottom:1.5rem;max-width:420px;text-align:center">Get a real-time digest synthesised from live news feeds — on demand, in seconds.</p>
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:1.5rem">
       <button onclick="showAuth('signup')" style="padding:11px 28px;background:#fff;color:#000;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;font-family:var(--sans)">Build my digest</button>
       <button onclick="showAuth('login')" style="padding:11px 20px;background:transparent;border:1px solid #444;border-radius:8px;color:#ccc;font-size:14px;font-weight:500;cursor:pointer;font-family:var(--sans)">Sign in</button>
