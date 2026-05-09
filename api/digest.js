@@ -1,4 +1,4 @@
-// SummAIrise digest API v2
+// SummAIrise digest API v3 — with server-side free tier enforcement
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -10,6 +10,26 @@ export default async function handler(req, res) {
   }
 
   try {
+    const body = req.body;
+    const isPremium = body.isPremium === true;
+    const userEmail = body.userEmail || '';
+
+    // Admin emails always get premium
+    const adminEmails = ['ibrahimniaz@hotmail.com', 'ibrahim@summairise.com'];
+    const isAdmin = adminEmails.includes(userEmail);
+    const effectivePremium = isPremium || isAdmin;
+
+    // Build the actual request to Claude
+    // Strip isPremium and userEmail from body before forwarding
+    const { isPremium: _, userEmail: __, ...claudeBody } = body;
+
+    // Enforce free tier model — even if client tries to use Sonnet
+    if (!effectivePremium) {
+      claudeBody.model = 'claude-haiku-4-5-20251001';
+    } else {
+      claudeBody.model = 'claude-sonnet-4-6';
+    }
+
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -17,7 +37,7 @@ export default async function handler(req, res) {
         'x-api-key': apiKey,
         'anthropic-version': '2023-06-01'
       },
-      body: JSON.stringify(req.body)
+      body: JSON.stringify(claudeBody)
     });
 
     const data = await response.json();
