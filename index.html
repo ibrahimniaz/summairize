@@ -449,14 +449,15 @@ div[style*="z-index: 9999"]:not(#toast){display:none!important;height:0!importan
       <div style="font-size:13px;color:var(--ink3)">Current balance</div>
       <div style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:var(--ink)" id="modal-credit-balance">0 credits</div>
     </div>
-    <div style="font-size:12px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink4);margin-bottom:0.75rem">Top up</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-      <div onclick="buyCredits(5,'0.99')" style="border:0.5px solid var(--paper3);border-radius:10px;padding:12px;text-align:center;cursor:pointer;background:#fff" onmouseover="this.style.borderColor='#000'" onmouseout="this.style.borderColor='var(--paper3)'"><div style="font-size:18px;font-weight:700;color:var(--ink)">5</div><div style="font-size:11px;color:var(--ink3);margin:2px 0">digests</div><div style="font-size:13px;font-weight:600;color:var(--ink)">£0.99</div></div>
-      <div onclick="buyCredits(20,'1.99')" style="border:0.5px solid var(--paper3);border-radius:10px;padding:12px;text-align:center;cursor:pointer;background:#fff" onmouseover="this.style.borderColor='#000'" onmouseout="this.style.borderColor='var(--paper3)'"><div style="font-size:18px;font-weight:700;color:var(--ink)">20</div><div style="font-size:11px;color:var(--ink3);margin:2px 0">digests</div><div style="font-size:13px;font-weight:600;color:var(--ink)">£1.99</div></div>
-      <div onclick="buyCredits(60,'4.99')" style="border:1.5px solid #000;border-radius:10px;padding:12px;text-align:center;cursor:pointer;background:#000;position:relative"><div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:#000;color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap">Best value</div><div style="font-size:18px;font-weight:700;color:#fff">60</div><div style="font-size:11px;color:#666;margin:2px 0">digests</div><div style="font-size:13px;font-weight:600;color:#fff">£4.99</div></div>
-      <div onclick="buyCredits(150,'9.99')" style="border:0.5px solid var(--paper3);border-radius:10px;padding:12px;text-align:center;cursor:pointer;background:#fff" onmouseover="this.style.borderColor='#000'" onmouseout="this.style.borderColor='var(--paper3)'"><div style="font-size:18px;font-weight:700;color:var(--ink)">150</div><div style="font-size:11px;color:var(--ink3);margin:2px 0">digests</div><div style="font-size:13px;font-weight:600;color:var(--ink)">£9.99</div></div>
+    <div style="font-size:12px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink4);margin-bottom:0.75rem">Select a pack</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem" id="credit-packs">
+      <div onclick="selectCreditPack(this,5,'0.99')" data-amount="5" data-price="0.99" style="border:0.5px solid var(--paper3);border-radius:10px;padding:12px;text-align:center;cursor:pointer;background:#fff;transition:all 0.15s"><div style="font-size:18px;font-weight:700;color:var(--ink)">5</div><div style="font-size:11px;color:var(--ink3);margin:2px 0">digests</div><div style="font-size:13px;font-weight:600;color:var(--ink)">£0.99</div></div>
+      <div onclick="selectCreditPack(this,20,'1.99')" data-amount="20" data-price="1.99" style="border:0.5px solid var(--paper3);border-radius:10px;padding:12px;text-align:center;cursor:pointer;background:#fff;transition:all 0.15s"><div style="font-size:18px;font-weight:700;color:var(--ink)">20</div><div style="font-size:11px;color:var(--ink3);margin:2px 0">digests</div><div style="font-size:13px;font-weight:600;color:var(--ink)">£1.99</div></div>
+      <div onclick="selectCreditPack(this,60,'4.99')" data-amount="60" data-price="4.99" style="border:0.5px solid var(--paper3);border-radius:10px;padding:12px;text-align:center;cursor:pointer;background:#fff;transition:all 0.15s;position:relative"><div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:#000;color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap">Best value</div><div style="font-size:18px;font-weight:700;color:var(--ink)">60</div><div style="font-size:11px;color:var(--ink3);margin:2px 0">digests</div><div style="font-size:13px;font-weight:600;color:var(--ink)">£4.99</div></div>
+      <div onclick="selectCreditPack(this,150,'9.99')" data-amount="150" data-price="9.99" style="border:0.5px solid var(--paper3);border-radius:10px;padding:12px;text-align:center;cursor:pointer;background:#fff;transition:all 0.15s"><div style="font-size:18px;font-weight:700;color:var(--ink)">150</div><div style="font-size:11px;color:var(--ink3);margin:2px 0">digests</div><div style="font-size:13px;font-weight:600;color:var(--ink)">£9.99</div></div>
     </div>
-    <div style="font-size:11px;color:var(--ink4);text-align:center;margin-top:1rem">Credits never expire · powered by Claude Sonnet</div>
+    <button id="credits-checkout-btn" onclick="confirmCreditPurchase()" style="width:100%;padding:12px;background:#000;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--sans);display:none">Continue to payment →</button>
+    <div style="font-size:11px;color:var(--ink4);text-align:center;margin-top:0.75rem">Credits never expire · powered by Claude Sonnet</div>
   </div>
 </div>
   <!-- AUTH -->
@@ -1779,12 +1780,34 @@ function openEmailModal(){
   document.getElementById('modal-err').style.display='none';
 }
 function closeEmailModal(){document.getElementById('email-modal').classList.add('hidden')}
-  function showCreditsModal(){
+  let selectedCreditAmount=null,selectedCreditPrice=null;
+function showCreditsModal(){
   document.getElementById('modal-credit-balance').textContent=S.credits+' credits';
+  document.getElementById('credits-checkout-btn').style.display='none';
+  document.querySelectorAll('#credit-packs>div').forEach(d=>{d.style.border='0.5px solid var(--paper3)';d.style.background='#fff';});
+  selectedCreditAmount=null;selectedCreditPrice=null;
   document.getElementById('credits-modal').classList.remove('hidden');
 }
 function closeCreditsModal(){
   document.getElementById('credits-modal').classList.add('hidden');
+}
+function selectCreditPack(el,amount,price){
+  document.querySelectorAll('#credit-packs>div').forEach(d=>{d.style.border='0.5px solid var(--paper3)';d.style.background='#fff';});
+  el.style.border='2px solid #000';el.style.background='#f0f0f0';
+  selectedCreditAmount=amount;selectedCreditPrice=price;
+  document.getElementById('credits-checkout-btn').style.display='block';
+}
+async function confirmCreditPurchase(){
+  if(!selectedCreditAmount)return;
+  if(!S.user?.id){toast('Please sign in first');return;}
+  const btn=document.getElementById('credits-checkout-btn');
+  btn.textContent='Redirecting...';btn.disabled=true;
+  try{
+    const res=await fetch('/api/create-checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({credits:selectedCreditAmount,userId:S.user.id,userEmail:S.user.email})});
+    const data=await res.json();
+    if(data.url){window.location.href=data.url;}
+    else{toast('Something went wrong — please try again');btn.textContent='Continue to payment →';btn.disabled=false;}
+  }catch(e){toast('Something went wrong — please try again');btn.textContent='Continue to payment →';btn.disabled=false;}
 }
 
 async function sendEmail(){
@@ -1891,7 +1914,13 @@ function updateUsageBarHome(){
 // Restore session on page load
 (async()=>{
   const urlParams=new URLSearchParams(window.location.search);
-  if(urlParams.get('payment')==='success'){const credits=parseInt(urlParams.get('credits')||'0');window.history.replaceState({},'','/');setTimeout(()=>toast(`✓ Payment successful — ${credits} credits added!`),1000);}
+  const isReturn=urlParams.get('payment')==='success'||urlParams.get('payment')==='cancelled';
+  if(isReturn){
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById('screen-loading').classList.add('active');
+    document.getElementById('load-sub').textContent='Restoring your session…';
+  }
+  if(urlParams.get('payment')==='success'){const credits=parseInt(urlParams.get('credits')||'0');window.history.replaceState({},'','/');setTimeout(()=>toast(`✓ Payment successful — ${credits} credits added!`),1200);}
   if(urlParams.get('payment')==='cancelled'){window.history.replaceState({},'','/');}
   const{data:{session}}=await sb.auth.getSession();
   if(session?.user){
@@ -1899,6 +1928,8 @@ function updateUsageBarHome(){
     const name=u.user_metadata?.first_name||u.email.split('@')[0];
     S.user={name,email:u.email,id:u.id};
     enterApp();
+  }else if(isReturn){
+    showScreen('screen-landing');
   }
 })();
 
