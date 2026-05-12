@@ -1072,13 +1072,18 @@ async function getTodayDigestCount(){
   return count||0;
 }
 
-async function enterApp(){
+async function loadCreditsFromDB(){
+  if(!S.user?.id||S.isPremium)return;
+  try{const res=await fetch(`/api/get-credits?userId=${S.user.id}`);const data=await res.json();S.credits=data.balance||0;}
+  catch(e){S.credits=0;}
+}
   if(ADMIN_EMAILS.includes(S.user.email)){
     S.isPremium=true;
     const adminBtn=document.getElementById('admin-btn');
     if(adminBtn)adminBtn.style.display='block';
   }
   S.digestsToday=await getTodayDigestCount();
+  await loadCreditsFromDB();
   document.getElementById('nav-user').textContent='Hi, '+S.user.name;
   document.getElementById('out-user').textContent=S.user.name;
   document.getElementById('nav-user-home').textContent='Hi, '+S.user.name;
@@ -1800,9 +1805,17 @@ function downloadPDF(){
   w.document.write('</body></html>');w.document.close();w.print();
 }
 function showPaywall(){showScreen('screen-paywall')}
-function buyCredits(amount,price){
-  toast(`Stripe integration coming soon — ${amount} credits for £${price}`);
-  setTimeout(()=>{S.credits+=amount;S.isPremium=false;updateUsageBar();showScreen('screen-config');},1800);
+async function buyCredits(amount,price){
+  if(!S.user?.id){toast('Please sign in first');return;}
+  const btn=event.currentTarget;
+  const original=btn.innerHTML;
+  btn.innerHTML='Loading...';btn.style.pointerEvents='none';
+  try{
+    const res=await fetch('/api/create-checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({credits:amount,userId:S.user.id,userEmail:S.user.email})});
+    const data=await res.json();
+    if(data.url){window.location.href=data.url;}
+    else{toast('Something went wrong — please try again');btn.innerHTML=original;btn.style.pointerEvents='';}
+  }catch(e){toast('Something went wrong — please try again');btn.innerHTML=original;btn.style.pointerEvents='';}
 }
 function getTimeUntilMidnight(){
   const now=new Date();
@@ -1847,6 +1860,9 @@ function updateUsageBarHome(){
 }
 // Restore session on page load
 (async()=>{
+  const urlParams=new URLSearchParams(window.location.search);
+  if(urlParams.get('payment')==='success'){const credits=parseInt(urlParams.get('credits')||'0');window.history.replaceState({},'','/');setTimeout(()=>toast(`✓ Payment successful — ${credits} credits added!`),1000);}
+  if(urlParams.get('payment')==='cancelled'){window.history.replaceState({},'','/');}
   const{data:{session}}=await sb.auth.getSession();
   if(session?.user){
     const u=session.user;
