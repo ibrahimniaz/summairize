@@ -1077,6 +1077,7 @@ async function loadCreditsFromDB(){
   try{const res=await fetch(`/api/get-credits?userId=${S.user.id}`);const data=await res.json();S.credits=data.balance||0;}
   catch(e){S.credits=0;}
 }
+  async function enterApp(){
   if(ADMIN_EMAILS.includes(S.user.email)){
     S.isPremium=true;
     const adminBtn=document.getElementById('admin-btn');
