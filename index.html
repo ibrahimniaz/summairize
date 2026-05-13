@@ -1691,7 +1691,10 @@ function renderOutputMeta(articles){
 }
 
 async function renderOutput(data,articles){
-  if(!S.isPremium&&S.credits>0){S.credits--}
+  if(!S.isPremium&&S.credits>0){
+  S.credits--;
+  fetch('/api/deduct-credit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:S.user.id})});
+}
   else if(!S.isPremium){S.digestsToday++}
   updateUsageBar();
   updateUsageBarHome();
