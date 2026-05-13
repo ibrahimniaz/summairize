@@ -4,9 +4,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const CREDIT_PACKS = {
   5:   { price: 99,  name: '5 Premium Digests' },
-  20:  { price: 199, name: '20 Premium Digests' },
-  60:  { price: 499, name: '60 Premium Digests' },
-  150: { price: 999, name: '150 Premium Digests' },
+  20:  { price: 299, name: '20 Premium Digests' },
+  60:  { price: 699, name: '60 Premium Digests' },
+  150: { price: 1499, name: '150 Premium Digests' },
 };
 
 export default async function handler(req, res) {
