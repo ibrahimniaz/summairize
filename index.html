@@ -929,7 +929,7 @@ div[style*="z-index: 9999"]:not(#toast){display:none!important;height:0!importan
   <nav class="nav">
     <div style="display:flex;align-items:center;gap:10px;cursor:pointer"><div style="width:32px;height:32px;background:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#000;line-height:1">S</span></div><span style="font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;color:#fff">summAIrise</span></div>
     <div class="nav-right">
-      <span id="out-user" style="font-size:13px;color:#aaa"></span>
+      <span id="out-credits" style="font-size:12px;color:#aaa"></span> <span id="out-user" style="font-size:13px;color:#aaa"></span>
       <button style="padding:7px 16px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)" onclick="restart()">New digest</button>
       <button style="padding:7px 16px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)" onclick="doSignOut()">Sign out</button>
     </div>
@@ -1669,6 +1669,7 @@ Produce one section per distinct story. Quality over quantity — 4 excellent fo
 function renderOutputMeta(articles){
   const today=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   document.getElementById('out-date').textContent=today;
+  const outCredits=document.getElementById('out-credits');if(outCredits)outCredits.textContent=S.isPremium?'✦ Premium':`Credits: ${S.credits}`;
   document.getElementById('out-tone-tag').textContent=cap(S.tone||'');
   document.getElementById('out-len-tag').textContent=cap(S.length||'');
   const kwTag=document.getElementById('out-kw-tag');
@@ -1888,15 +1889,15 @@ function updateUsageBar(){
   const el=document.getElementById('usage-bar');
   if(!el)return;
   if(S.isPremium){
-    el.innerHTML=`<span style="background:#f5f5f5;color:#000;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:500">✦ Premium · ${S.digestsToday} digests today</span>`;
+    el.innerHTML=`<span style="background:#f5f5f5;color:#000;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:500">✦ Premium</span>`;
   }else if(S.credits>0){
-    el.innerHTML=`<span style="background:#f5f5f5;color:#000;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:500">${S.credits} credits remaining</span>`;
+    el.innerHTML=`<span style="background:#f5f5f5;color:#000;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:500">Credits: ${S.credits}</span>`;
   }else{
     const left=Math.max(0,FREE_LIMIT-S.digestsToday);
     if(left===0){
       el.innerHTML=`<span style="font-size:12px;color:#c0392b">No free digests left — resets in ${getTimeUntilMidnight()}</span><button onclick="showPaywall()" style="margin-left:6px;font-size:11px;padding:2px 10px;border:0.5px solid var(--paper3);border-radius:10px;background:#fff;cursor:pointer;font-family:var(--sans);color:var(--ink2)">Top up</button>`;
     }else{
-      el.innerHTML=`<span style="font-size:12px;color:var(--ink3)">${left} free digest left today</span><button onclick="showPaywall()" style="margin-left:6px;font-size:11px;padding:2px 10px;border:0.5px solid var(--paper3);border-radius:10px;background:#fff;cursor:pointer;font-family:var(--sans);color:var(--ink2)">Top up</button>`;
+      el.innerHTML=`<span style="font-size:12px;color:var(--ink3)">Credits: 0 · ${left} free digest left today</span>`;
     }
   }
 }
