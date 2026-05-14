@@ -1,3 +1,4 @@
+export const config = { maxDuration: 60 };
 // SummAIrise digest API v3 — with server-side free tier enforcement
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
