@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     const userEmail = body.userEmail || '';
 
     // Admin emails always get premium
-    const adminEmails = ['ibrahimniaz@hotmail.com', 'ibrahim@summairise.com'];
+    const adminEmails = [];
     const isAdmin = adminEmails.includes(userEmail);
     const effectivePremium = isPremium || isAdmin;
 
