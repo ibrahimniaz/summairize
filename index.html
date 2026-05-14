@@ -1465,6 +1465,8 @@ function sendContactForm(){
   const{data:{session}}=await sb.auth.getSession();
   if(session?.user){const u=session.user;S.user={name:u.user_metadata?.first_name||u.email.split('@')[0],email:u.email,id:u.id};enterApp();}
   else if(isReturn){showScreen('screen-landing');}
+  // Handle hash routing after session check completes
+  setTimeout(handleHashRouting, 500);
 })();
 
 function initCookieBanner(){if(!localStorage.getItem('cookies_accepted')){document.getElementById('cookie-banner').style.display='flex';}}
@@ -1500,17 +1502,25 @@ function scrollToSection(id){
   history.pushState(null,null,'#'+id.replace('section-',''));
 }
 
-// On load, scroll to hash if present
-(function(){
+// Hash routing — runs after session restore settles
+function handleHashRouting(){
   const hash=window.location.hash.replace('#','');
-  if(hash){
-    const id='section-'+hash;
-    setTimeout(()=>{
-      const el=document.getElementById(id);
-      if(el){showScreen('screen-landing');el.scrollIntoView({behavior:'smooth'});}
-    },400);
-  }
-})();
+  if(!hash)return;
+  const validHashes=['about','contact','privacy','terms'];
+  if(!validHashes.includes(hash))return;
+  const id='section-'+hash;
+  // Make sure landing screen is shown
+  showScreen('screen-landing');
+  // Force the target section visible immediately (bypass reveal animation)
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.classList.add('visible');
+  // Small delay to allow DOM to settle then scroll
+  setTimeout(()=>el.scrollIntoView({behavior:'smooth'}),300);
+}
+
+// Listen for back/forward navigation
+window.addEventListener('popstate',handleHashRouting);
 
 // Ticker
 
