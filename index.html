@@ -1055,7 +1055,7 @@ function srcTag(name){return `<span class="src-logo-tag">${badge(name,'sm')}${na
 const PROXY='/api/rss?url=';
 let cfgStep=1,allArticles=[],fetchLog=[];
 
-const ADMIN_EMAILS=['ibrahimniaz@hotmail.com','ibrahim@summairise.com'];
+const ADMIN_EMAILS=[];
 const FREE_LIMIT=1;
 
 // ── Load digest counter for landing page ──
@@ -1172,11 +1172,11 @@ function updateUsageBar(){
   const navCred=document.getElementById('nav-credits-home');
   if(navCred){
     if(S.isPremium)navCred.innerHTML=`<span style="font-size:12px;color:#aaa">✦ Premium</span>`;
-    else if(S.credits>0)navCred.innerHTML=`<span style="font-size:12px;color:#aaa">Credits: ${S.credits}</span>`;
+    else if(S.credits>0)navCred.innerHTML=`<span style="font-size:12px;color:#aaa">${S.credits} credits</span>`;
     else navCred.innerHTML='';
   }
   if(S.isPremium){el.innerHTML=`<span style="background:#f5f5f5;color:#000;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:500">✦ Premium</span>`;}
-  else if(S.credits>0){el.innerHTML=`<span style="background:#f5f5f5;color:#000;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:500">Credits: ${S.credits}</span>`;}
+  else if(S.credits>0){el.innerHTML=`<span style="background:#f5f5f5;color:#000;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:500">${S.credits} credits</span>`;}
   else{
     const left=Math.max(0,FREE_LIMIT-S.digestsToday);
     if(left===0){el.innerHTML=`<span style="font-size:12px;color:#c0392b">No free digests left — resets in ${getTimeUntilMidnight()}</span><button onclick="showPaywall()" style="margin-left:6px;font-size:11px;padding:2px 10px;border:0.5px solid var(--paper3);border-radius:10px;background:#fff;cursor:pointer;font-family:var(--sans);color:var(--ink2)">Top up</button>`;}
@@ -1355,7 +1355,7 @@ function renderOutputMeta(articles){
   document.getElementById('det-src').textContent=S.sources.join(', ');document.getElementById('det-top').textContent=S.topics.join(', ');document.getElementById('det-tone').textContent=cap(S.tone||'');document.getElementById('det-win').textContent='Past '+S.window+'h';document.getElementById('det-arts').textContent=articles.length+' articles';
 }
 async function renderOutput(data,articles){
-  if(!S.isPremium&&S.credits>0){S.credits--;fetch('/api/deduct-credit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:S.user.id})});}
+  if(!S.isPremium&&S.credits>0){S.credits--;fetch('/api/deduct-credit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:S.user.id})});document.getElementById('modal-credit-balance').textContent=S.credits+' credits';}
   else if(!S.isPremium){S.digestsToday++;}
   updateUsageBar();updateUsageBarHome();await saveDigest(data.sections,articles);renderOutputMeta(articles);
   const el=document.getElementById('digest-sections');el.innerHTML='';
@@ -1387,6 +1387,11 @@ function closeEmailModal(){document.getElementById('email-modal').classList.add(
 // Credits modal
 let selectedCreditAmount=null,selectedCreditPrice=null;
 function showCreditsModal(){
+  // Always reload from DB before showing so balance is current
+  loadCreditsFromDB().then(()=>{
+    document.getElementById('modal-credit-balance').textContent=S.credits+' credits';
+    updateUsageBar();updateUsageBarHome();
+  });
   document.getElementById('modal-credit-balance').textContent=S.credits+' credits';
   document.getElementById('credits-checkout-btn').style.display='none';
   document.querySelectorAll('#credit-packs>div').forEach(d=>{d.style.border='0.5px solid var(--paper3)';d.style.background='#fff';});
