@@ -726,7 +726,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
       <span style="font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;color:#fff">SummAIrise</span>
     </div>
     <div class="nav-right">
-      <div id="usage-bar-home" style="font-size:12px;color:#aaa;display:flex;align-items:center;gap:8px"></div>
+      <div id="nav-credits-home" style="font-size:12px;color:#aaa;display:flex;align-items:center;gap:8px"></div>
       <span id="nav-user-home" style="font-size:13px;color:#aaa"></span>
       <button id="admin-btn" onclick="showAdmin()" style="display:none;padding:7px 14px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)">&#x1F4CA; Dashboard</button>
       <button onclick="showCreditsModal()" style="padding:7px 14px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)">Credits</button>
@@ -1168,6 +1168,13 @@ async function doSignOut(){await sb.auth.signOut();S.user=null;showScreen('scree
 
 function updateUsageBar(){
   const el=document.getElementById('usage-bar');if(!el)return;
+  // Also update home nav credit display
+  const navCred=document.getElementById('nav-credits-home');
+  if(navCred){
+    if(S.isPremium)navCred.innerHTML=`<span style="font-size:12px;color:#aaa">✦ Premium</span>`;
+    else if(S.credits>0)navCred.innerHTML=`<span style="font-size:12px;color:#aaa">Credits: ${S.credits}</span>`;
+    else navCred.innerHTML='';
+  }
   if(S.isPremium){el.innerHTML=`<span style="background:#f5f5f5;color:#000;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:500">✦ Premium</span>`;}
   else if(S.credits>0){el.innerHTML=`<span style="background:#f5f5f5;color:#000;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:500">Credits: ${S.credits}</span>`;}
   else{
@@ -1289,8 +1296,8 @@ async function startGenerate(){
   S.totalArticlesFetched=allArticles.length;
   if(allArticles.length===0){showScreen('screen-output');document.getElementById('digest-sections').innerHTML=`<div class="no-stories"><h3>No stories found</h3><p>We couldn't fetch articles from your selected sources within the past ${S.window} hours.</p><div style="display:flex;gap:10px;margin-top:1.25rem;flex-wrap:wrap"><button class="btn btn-green" onclick="startGenerate()">↺ Try again</button><button class="btn btn-ghost" onclick="restart()">← Adjust preferences</button></div></div>`;renderOutputMeta([]);return;}
   setLoadStep(3);
-  const capped=allArticles.length>30?allArticles.sort(()=>Math.random()-0.5).slice(0,30):allArticles;
-  const trimmed=capped.map(a=>({...a,desc:a.desc.slice(0,200)}));
+  const capped=allArticles.length>20?allArticles.sort(()=>Math.random()-0.5).slice(0,20):allArticles;
+  const trimmed=capped.map(a=>({...a,desc:a.desc.slice(0,150)}));
   try{await callClaude(trimmed);}
   catch(e){showScreen('screen-output');document.getElementById('digest-sections').innerHTML=`<div class="no-stories"><h3>Generation failed</h3><p>Something went wrong. Please try again.</p><div style="display:flex;gap:10px;margin-top:1.25rem;flex-wrap:wrap"><button class="btn btn-green" onclick="startGenerate()">↺ Try again</button><button class="btn btn-ghost" onclick="restart()">← Adjust preferences</button></div></div>`;renderOutputMeta([]);}
 }
@@ -1318,7 +1325,7 @@ Respond ONLY with valid JSON:
 
   try{
     setLoadStep(4);const effectivePremium=S.isPremium||S.credits>0;const model=effectivePremium?'claude-sonnet-4-6':'claude-haiku-4-5-20251001';
-    const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),55000);
+    const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),45000);
     const res=await fetch('/api/digest',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model,max_tokens:3000,messages:[{role:'user',content:prompt}],isPremium:effectivePremium,userEmail:S.user?.email||''}),signal:controller.signal});
     clearTimeout(timeout);if(!res.ok)throw new Error(`API error ${res.status}`);
     const data=await res.json();if(data.error)throw new Error(data.error.message||'API error');
