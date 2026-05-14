@@ -510,7 +510,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
         </div>
         <div class="faq-item">
           <div class="faq-q" onclick="toggleFaq(this)">What AI model does SummAIrise use?<div class="faq-icon">+</div></div>
-          <div class="faq-a">Free tier digests use Claude Haiku, a fast and capable model by Anthropic. Credit-based (premium) digests use Claude Sonnet — a more powerful model that produces richer analysis, better sourcing, and more nuanced writing.</div>
+          <div class="faq-a">Free tier digests use a fast, capable AI model. Credit-based (premium) digests use a more powerful model that produces richer analysis, better sourcing, and more nuanced writing.</div>
         </div>
         <div class="faq-item">
           <div class="faq-q" onclick="toggleFaq(this)">Can I get a refund?<div class="faq-icon">+</div></div>
@@ -638,7 +638,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
       <div onclick="selectCreditPack(this,150,'14.99')" data-amount="150" data-price="14.99" style="border:0.5px solid var(--paper3);border-radius:10px;padding:12px;text-align:center;cursor:pointer;background:#fff;transition:all 0.15s;position:relative"><div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:#000;color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap">Best value</div><div style="font-size:18px;font-weight:700;color:var(--ink)">150</div><div style="font-size:11px;color:var(--ink3);margin:2px 0">digests</div><div style="font-size:13px;font-weight:600;color:var(--ink)">&#xa3;14.99</div><div style="font-size:10px;color:var(--ink4);margin-top:2px">10p per digest</div></div>
     </div>
     <button id="credits-checkout-btn" onclick="confirmCreditPurchase()" style="width:100%;padding:12px;background:#000;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--sans);display:none">Continue to payment &#x2192;</button>
-    <div style="font-size:11px;color:var(--ink4);text-align:center;margin-top:0.75rem">Credits never expire &middot; powered by Claude Sonnet</div>
+    <div style="font-size:11px;color:var(--ink4);text-align:center;margin-top:0.75rem">Credits never expire</div>
   </div>
 </div>
 
@@ -825,7 +825,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
       </div>
       <div class="cfg-step hidden" id="cs2">
         <div class="step-lbl">Step 2 of 5</div><div class="step-ttl">Which topics?</div>
-        <div class="step-hint">Claude will decide which live articles are relevant to these.</div>
+        <div class="step-hint">Our AI will filter live articles relevant to your chosen topics.</div>
         <div id="free-top-banner" style="display:none;background:#fff3cd;border:0.5px solid #ffc107;border-radius:8px;padding:8px 12px;margin-bottom:0.75rem;font-size:12px;color:#856404">&#x26A1; Free tier: pick up to 2 topics. <a onclick="showPaywall()" style="color:#000;font-weight:600;cursor:pointer;text-decoration:underline">Upgrade for all 9 &#x2192;</a></div>
         <div class="chips" id="chip-topics">
           <div class="chip" onclick="toggleChip(this,'topics')">Finance</div>
@@ -937,7 +937,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
           <div style="font-size:12px;color:#ccc;display:flex;align-items:center;gap:7px"><span style="width:16px;height:16px;border-radius:50%;background:#fff;color:#000;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">&#x2713;</span>All tones &middot; all lengths</div>
           <div style="font-size:12px;color:#ccc;display:flex;align-items:center;gap:7px"><span style="width:16px;height:16px;border-radius:50%;background:#fff;color:#000;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">&#x2713;</span>6h &middot; 24h &middot; 72h window</div>
           <div style="font-size:12px;color:#ccc;display:flex;align-items:center;gap:7px"><span style="width:16px;height:16px;border-radius:50%;background:#fff;color:#000;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">&#x2713;</span>Up to 5 keywords</div>
-          <div style="font-size:12px;color:#ccc;display:flex;align-items:center;gap:7px"><span style="width:16px;height:16px;border-radius:50%;background:#fff;color:#000;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">&#x2713;</span>Claude Sonnet (better AI)</div>
+          <div style="font-size:12px;color:#ccc;display:flex;align-items:center;gap:7px"><span style="width:16px;height:16px;border-radius:50%;background:#fff;color:#000;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">&#x2713;</span>Premium AI model</div>
         </div>
         <div style="font-size:11px;color:#555;margin-bottom:8px;font-weight:500">Select a pack:</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px" id="paywall-packs">
@@ -994,7 +994,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
       <div class="load-steps">
         <div class="ls cur" id="ls1"><div class="ls-dot"></div>Fetching live RSS feeds</div>
         <div class="ls" id="ls2"><div class="ls-dot"></div>Parsing articles</div>
-        <div class="ls" id="ls3"><div class="ls-dot"></div>Sending to Claude</div>
+        <div class="ls" id="ls3"><div class="ls-dot"></div>Sending to AI</div>
         <div class="ls" id="ls4"><div class="ls-dot"></div>Writing your digest</div>
       </div>
       <div class="ticker-wrap">
@@ -1100,7 +1100,7 @@ function toggleFaq(el){
   if(!wasOpen)item.classList.add('open');
 }
 
-function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');if(id==='screen-landing')loadTrendingTopics();}
 function showAuth(tab){showScreen('screen-auth');switchTab(tab)}
 function switchTab(tab){
   document.getElementById('tab-login').classList.toggle('active',tab==='login');
@@ -1578,7 +1578,7 @@ async function loadTrendingTopics(){
     const max=sorted[0][1];
     el.innerHTML=sorted.map(([topic,count],i)=>{
       const pct=Math.round((count/max)*100);
-      const rank=i===0?'🔥':i===1?'📈':i===2?'⚡':'';
+      const rank='';
       return `<div style="display:flex;align-items:center;gap:10px;background:#f9f9f7;border:0.5px solid #eee;border-radius:12px;padding:10px 14px;min-width:180px;flex:1;max-width:260px">
         <div style="flex:1">
           <div style="font-size:13px;font-weight:600;color:#000;margin-bottom:4px">${rank} ${topic}</div>
@@ -1593,7 +1593,8 @@ async function loadTrendingTopics(){
     if(el)el.innerHTML='<div style="font-size:13px;color:#aaa">Could not load trending data.</div>';
   }
 }
-loadTrendingTopics();
+// Called after page load so Supabase is initialised
+if(document.getElementById("screen-landing").classList.contains("active")){loadTrendingTopics();}
 
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
 function restart(){
