@@ -726,8 +726,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
       <span style="font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;color:#fff">SummAIrise</span>
     </div>
     <div class="nav-right">
-      <div id="nav-credits-home" style="font-size:12px;color:#aaa;display:flex;align-items:center;gap:8px"></div>
-      <span id="nav-user-home" style="font-size:13px;color:#aaa"></span>
+      <div id="nav-credits-home"></div>
       <button id="admin-btn" onclick="showAdmin()" style="display:none;padding:7px 14px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)">&#x1F4CA; Dashboard</button>
       <button onclick="showCreditsModal()" style="padding:7px 14px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)">Credits</button>
       <button onclick="showAccount()" style="padding:7px 14px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)">Account</button>
@@ -993,8 +992,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
   <nav class="nav">
     <div style="display:flex;align-items:center;gap:10px;cursor:pointer"><div style="width:32px;height:32px;background:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#000;line-height:1">S</span></div><span style="font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;color:#fff">SummAIrise</span></div>
     <div class="nav-right">
-      <span id="out-credits" style="font-size:12px;color:#aaa;white-space:nowrap"></span>
-      <span id="out-user" style="font-size:13px;color:#aaa"></span>
+      <span id="out-credits" style="padding:7px 14px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;white-space:nowrap"></span>
       <button onclick="restart()" style="padding:7px 16px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)">New digest</button>
       <button onclick="doSignOut()" style="padding:7px 16px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)">Sign out</button>
     </div>
@@ -1140,8 +1138,8 @@ async function enterApp(){
   S.digestsToday=await getTodayDigestCount();
   await loadCreditsFromDB();
   document.getElementById('nav-user').textContent='Hi, '+S.user.name;
-  document.getElementById('out-user').textContent=S.user.name;
-  document.getElementById('nav-user-home').textContent='Hi, '+S.user.name;
+  
+  
   document.getElementById('home-name').textContent=S.user.name;
   updateUsageBar();updateUsageBarHome();renderHistory();showScreen('screen-home');
 }
@@ -1171,8 +1169,8 @@ function updateUsageBar(){
   // Also update home nav credit display
   const navCred=document.getElementById('nav-credits-home');
   if(navCred){
-    if(S.isPremium)navCred.innerHTML=`<span style="font-size:12px;color:#aaa">✦ Premium</span>`;
-    else if(S.credits>0)navCred.innerHTML=`<span style="font-size:12px;color:#aaa">${S.credits} credits</span>`;
+    if(S.isPremium)navCred.innerHTML=`<span style="padding:7px 14px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500">✦ Premium</span>`;
+    else if(S.credits>0)navCred.innerHTML=`<span style="padding:7px 14px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500">${S.credits} credits</span>`;
     else navCred.innerHTML='';
   }
   if(S.isPremium){el.innerHTML=`<span style="background:#f5f5f5;color:#000;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:500">✦ Premium</span>`;}
