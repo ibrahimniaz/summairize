@@ -406,25 +406,6 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
   <!-- ══════════════════
        ABOUT / MISSION
        ══════════════════ -->
-  <!-- TRENDING TOPICS -->
-  <div id="section-trending" class="lp-section reveal-section" style="background:#fff;padding-top:3rem;padding-bottom:3rem">
-    <div class="lp-inner-narrow">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.75rem">
-        <div>
-          <div class="section-label">What people are reading</div>
-          <h2 class="section-heading" style="margin-bottom:0;font-size:clamp(20px,2.5vw,28px)">Trending topics today</h2>
-        </div>
-        <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:#aaa">
-          <div style="width:7px;height:7px;border-radius:50%;background:#22c55e;animation:pulse 1.5s infinite"></div>
-          Live from SummAIrise users
-        </div>
-      </div>
-      <div id="trending-topics" style="display:flex;flex-wrap:wrap;gap:10px">
-        <div style="font-size:13px;color:#aaa">Loading...</div>
-      </div>
-    </div>
-  </div>
-
   <div id="section-about" class="lp-section reveal-section" style="background:#fff">
     <div class="lp-inner-narrow">
       <div class="digest-counter" id="digest-counter-live" style="display:none">
@@ -1100,7 +1081,7 @@ function toggleFaq(el){
   if(!wasOpen)item.classList.add('open');
 }
 
-function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');if(id==='screen-landing')loadTrendingTopics();}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
 function showAuth(tab){showScreen('screen-auth');switchTab(tab)}
 function switchTab(tab){
   document.getElementById('tab-login').classList.toggle('active',tab==='login');
@@ -1553,49 +1534,6 @@ function toggleAudio(){
   audioUtterance.onend=()=>{audioPlaying=false;if(btn){btn.innerHTML='&#9654; Listen';btn.style.background='transparent';}};
   window.speechSynthesis.speak(audioUtterance);audioPlaying=true;btn.innerHTML='&#9646;&#9646; Stop';btn.style.background='#222';
 }
-
-// Load trending topics from Supabase
-async function loadTrendingTopics(){
-  const el=document.getElementById('trending-topics');
-  if(!el)return;
-  try{
-    // Get last 48hrs of digests
-    const since=new Date(Date.now()-48*3600*1000).toISOString();
-    const{data}=await sb.from('digests').select('topics_arr').gte('created_at',since);
-    if(!data||data.length===0){el.innerHTML='<div style="font-size:13px;color:#aaa">No digest data yet — be the first!</div>';return;}
-
-    // Count topic frequency
-    const counts={};
-    data.forEach(d=>{
-      const topics=d.topics_arr||[];
-      topics.forEach(t=>{if(t)counts[t]=(counts[t]||0)+1;});
-    });
-
-    // Sort by frequency, take top 8
-    const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,8);
-    if(!sorted.length){el.innerHTML='<div style="font-size:13px;color:#aaa">No data yet.</div>';return;}
-
-    const max=sorted[0][1];
-    el.innerHTML=sorted.map(([topic,count],i)=>{
-      const pct=Math.round((count/max)*100);
-      const rank='';
-      return `<div style="display:flex;align-items:center;gap:10px;background:#f9f9f7;border:0.5px solid #eee;border-radius:12px;padding:10px 14px;min-width:180px;flex:1;max-width:260px">
-        <div style="flex:1">
-          <div style="font-size:13px;font-weight:600;color:#000;margin-bottom:4px">${rank} ${topic}</div>
-          <div style="height:4px;background:#eee;border-radius:2px;overflow:hidden">
-            <div style="height:4px;background:#000;border-radius:2px;width:${pct}%;transition:width 0.8s ease"></div>
-          </div>
-        </div>
-        <div style="font-size:11px;color:#aaa;white-space:nowrap">${count} digest${count!==1?'s':''}</div>
-      </div>`;
-    }).join('');
-  }catch(e){
-    if(el)el.innerHTML='<div style="font-size:13px;color:#aaa">Could not load trending data.</div>';
-  }
-}
-// Called after page load so Supabase is initialised
-if(document.getElementById("screen-landing").classList.contains("active")){loadTrendingTopics();}
-
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
 function restart(){
   S.sources=[];S.topics=[];S.tone=null;S.window=null;S.length=null;S.keyword='';
