@@ -205,6 +205,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
   .lp-section{padding:3.5rem 1.25rem}
 }
 @media(max-width:480px){
+  /* Config/app screens */
   .og.c3{grid-template-columns:1fr}
   .step-acts{flex-direction:column}.step-acts .btn{width:100%}
   .share-btn span{display:none}
@@ -212,9 +213,41 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
   .step-ttl{font-size:18px}.chips{gap:6px}.chip{font-size:12px;padding:5px 10px}
   .sec-ttl{font-size:17px!important}.sec-body{font-size:14px}
   #admin-stats{grid-template-columns:1fr!important}
-  #screen-landing nav{padding:0 1rem;height:56px}
-  .nav-wordmark{font-size:14px!important}
-  #screen-landing nav button{padding:6px 10px;font-size:12px;white-space:nowrap}
+
+  /* Landing nav — compact */
+  #screen-landing nav{padding:0 0.75rem;height:52px}
+  .nav-wordmark{font-size:16px!important}
+  #screen-landing nav .nav-contact-btn{display:none}
+  #screen-landing nav button{padding:7px 12px;font-size:12px;white-space:nowrap}
+
+  /* Hero — tighter padding */
+  #hero-text-wrap{padding:1.2rem 1rem 0!important}
+
+  /* Source pills — smaller on mobile */
+  #hero-source-pills .src-pill{font-size:10px!important;padding:3px 7px!important}
+
+  /* Step cards — horizontal scroll instead of cramped grid */
+  #hero-cards-grid{
+    display:flex!important;
+    overflow-x:auto!important;
+    gap:10px!important;
+    padding:0 1rem 1rem!important;
+    margin:0!important;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  #hero-cards-grid::-webkit-scrollbar{display:none}
+  #hero-cards-grid>div{
+    min-width:200px!important;
+    flex-shrink:0!important;
+  }
+
+  /* Sections */
+  .lp-section{padding:2.5rem 1rem}
+  .section-heading{font-size:22px!important}
+
+  /* FAQ */
+  .faq-q{font-size:14px}
 }
 </style>
 </head>
@@ -270,7 +303,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
     </nav>
 
     <!-- HERO TEXT -->
-    <div style="text-align:center;padding:1.6rem 2rem 0;position:relative;z-index:5">
+    <div style="text-align:center;padding:1.6rem 2rem 0;position:relative;z-index:5" id="hero-text-wrap">
       <h1 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(24px,3.8vw,46px);font-weight:700;line-height:1.15;color:#fff;margin-bottom:0.75rem;letter-spacing:-0.02em">Your sources.<br>Your topics.<br>Your digest.</h1>
       <p style="font-size:12px;color:#fff;line-height:1.6;margin-bottom:1.25rem;max-width:360px;margin-left:auto;margin-right:auto;text-align:center">SummAIrise reads 11 live news sources, filters by your topics, and writes your personalised digest — on demand.</p>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:0.6rem">
@@ -300,7 +333,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
 
   <!-- CARDS — bleed half out of gradient, half into white below — AIApply style -->
   <div style="background:#fff;padding-top:0">
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:1100px;margin:-110px auto 0;padding:0 2rem;position:relative;z-index:20">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:1100px;margin:-110px auto 0;padding:0 2rem;position:relative;z-index:20" id="hero-cards-grid">
 
         <!-- Card 1: Sources -->
         <div style="background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.35),0 4px 16px rgba(0,0,0,0.2);text-align:left">
@@ -1053,7 +1086,7 @@ function srcTag(name){return `<span class="src-logo-tag">${badge(name,'sm')}${na
 const PROXY='/api/rss?url=';
 let cfgStep=1,allArticles=[],fetchLog=[];
 
-const ADMIN_EMAILS=[];
+const ADMIN_EMAILS=['demo@summairise.com'];
 const FREE_LIMIT=1;
 
 // ── Load digest counter for landing page ──
@@ -1138,6 +1171,14 @@ async function enterApp(){
   S.digestsToday=await getTodayDigestCount();
   await loadCreditsFromDB();
   document.getElementById('nav-user').textContent='Hi, '+S.user.name;
+  // Update landing nav buttons for logged-in state
+  const landingNav=document.querySelector('#screen-landing nav > div:last-child');
+  if(landingNav){
+    landingNav.innerHTML=`
+      <button onclick="showScreen('screen-home')" style="padding:7px 14px;background:transparent;border:0.5px solid rgba(255,255,255,0.2);border-radius:8px;color:rgba(255,255,255,0.85);font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans);white-space:nowrap">My digests</button>
+      <button onclick="doSignOut()" style="padding:7px 14px;background:rgba(255,255,255,0.1);border:0.5px solid rgba(255,255,255,0.2);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans);white-space:nowrap">Sign out</button>
+    `;
+  }
   
   
   document.getElementById('home-name').textContent=S.user.name;
