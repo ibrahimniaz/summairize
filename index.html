@@ -887,6 +887,10 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
             <input id="kw-input" placeholder="Type keyword + Enter..." style="border:none;outline:none;font-size:13px;font-family:var(--sans);color:var(--ink);width:160px;background:transparent;padding:0;min-width:120px" onkeydown="handleKwInput(event)" oninput="resizeKwInput(this)">
           </div>
           <input type="hidden" id="kw">
+          <div id="past-kw-container" style="display:none;margin-bottom:0.75rem">
+            <div style="font-size:11px;color:var(--ink4);margin-bottom:0.5rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase">Your recent keywords</div>
+            <div id="past-kw-chips" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+          </div>
           <div style="font-size:11px;color:var(--ink4);margin-bottom:0.5rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase">Popular keywords</div>
           <div style="display:flex;flex-wrap:wrap;gap:6px" id="kw-suggestions">
             <span onclick="addKwChip('Trump')" data-kw="Trump" style="font-size:12px;padding:4px 12px;border-radius:20px;border:0.5px solid var(--paper3);background:#fff;cursor:pointer;color:var(--ink2);transition:all 0.15s">Trump</span>
@@ -1081,8 +1085,8 @@ const SUPABASE_URL='https://lmwjijzvoqleoukaxjae.supabase.co';
 const SUPABASE_KEY='sb_publishable_TbB02YbMdrvwzYuQixDV8g_mTF2eTdV';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const S={sources:[],topics:[],tone:null,window:null,length:null,keyword:'',user:{name:'',email:''},isPremium:false,credits:0,digestsToday:0};
-const RSS_FEEDS={'BBC News':'https://feeds.bbci.co.uk/news/rss.xml','Sky News':'https://feeds.skynews.com/feeds/rss/home.xml','The Guardian':'https://www.theguardian.com/world/rss','Reuters':'https://feeds.reuters.com/reuters/topNews','Al Jazeera':'https://www.aljazeera.com/xml/rss/all.xml','CNN':'http://rss.cnn.com/rss/edition.rss','AP News':'https://feeds.apnews.com/rss/apf-topnews','Deutsche Welle':'https://rss.dw.com/rdf/rss-en-all','NPR News':'https://feeds.npr.org/1001/rss.xml','France 24':'https://www.france24.com/en/rss','euronews':'https://www.euronews.com/rss'};
-const RSS_FALLBACKS={'Reuters':'https://news.google.com/rss/search?q=reuters&hl=en-GB&gl=GB&ceid=GB:en','Al Jazeera':'https://aljazeera.com/xml/rss/all.xml','France 24':'https://www.france24.com/en/top-stories/rss','euronews':'https://feeds.euronews.com/news/en','CNN':'https://rss.cnn.com/rss/cnn_topstories.rss','Deutsche Welle':'https://rss.dw.com/rdf/rss-en-news','Sky News':'https://feeds.skynews.com/feeds/rss/world.xml','AP News':'https://feeds.apnews.com/rss/apf-topnews'};
+const RSS_FEEDS={'BBC News':'https://feeds.bbci.co.uk/news/rss.xml','Sky News':'https://feeds.skynews.com/feeds/rss/home.xml','The Guardian':'https://www.theguardian.com/world/rss','Reuters':'https://feeds.reuters.com/reuters/topNews','Al Jazeera':'https://www.aljazeera.com/xml/rss/all.xml','CNN':'http://rss.cnn.com/rss/edition.rss','AP News':'https://apnews.com/rss','Deutsche Welle':'https://rss.dw.com/rdf/rss-en-all','NPR News':'https://feeds.npr.org/1001/rss.xml','France 24':'https://www.france24.com/en/rss','euronews':'https://www.euronews.com/rss'};
+const RSS_FALLBACKS={'Reuters':'https://news.google.com/rss/search?q=reuters&hl=en-GB&gl=GB&ceid=GB:en','Al Jazeera':'https://aljazeera.com/xml/rss/all.xml','France 24':'https://www.france24.com/en/top-stories/rss','euronews':'https://feeds.euronews.com/news/en','CNN':'https://rss.cnn.com/rss/cnn_topstories.rss','Deutsche Welle':'https://rss.dw.com/rdf/rss-en-news','Sky News':'https://feeds.skynews.com/feeds/rss/world.xml','AP News':'https://apnews.com/rss'};
 const SOURCE_BADGES={'BBC News':{bg:'#BB1919',color:'#fff',abbr:'BBC'},'Sky News':{bg:'#003DA5',color:'#fff',abbr:'SKY'},'The Guardian':{bg:'#052962',color:'#fff',abbr:'GDN'},'Reuters':{bg:'#FF8000',color:'#fff',abbr:'REU'},'Al Jazeera':{bg:'#008000',color:'#fff',abbr:'AJZ'},'CNN':{bg:'#CC0000',color:'#fff',abbr:'CNN'},'AP News':{bg:'#CC0000',color:'#fff',abbr:'AP'},'Deutsche Welle':{bg:'#006AB3',color:'#fff',abbr:'DW'},'NPR News':{bg:'#222222',color:'#fff',abbr:'NPR'},'France 24':{bg:'#F0063C',color:'#fff',abbr:'F24'},'euronews':{bg:'#003399',color:'#fff',abbr:'EUR'}};
 function badge(name,size){const b=SOURCE_BADGES[name]||{bg:'#888',color:'#fff',abbr:name.slice(0,3).toUpperCase()};const fs=size==='sm'?6:size==='md'?7:8;const w=size==='sm'?20:size==='md'?24:28;const h=size==='sm'?14:size==='md'?16:18;return `<span style="display:inline-flex;align-items:center;justify-content:center;background:${b.bg};color:${b.color};font-size:${fs}px;font-weight:700;border-radius:3px;padding:1px 4px;min-width:${w}px;height:${h}px;letter-spacing:0.02em;flex-shrink:0;font-family:var(--sans)">${b.abbr}</span>`;}
 function srcLogo(name){return badge(name,'sm')}
@@ -1286,7 +1290,7 @@ async function renderHistory(){
 }
 
 function showCfgStep(n){document.querySelectorAll('.cfg-step').forEach(s=>s.classList.add('hidden'));document.getElementById('cs'+n).classList.remove('hidden');cfgStep=n;document.getElementById('cprog').style.width=(n/5*100)+'%';}
-function cfgGo(n){showCfgStep(n)}
+function cfgGo(n){showCfgStep(n);if(n===5)loadPastKeywords();}
 function toggleChip(el,key){
   const isFree=!S.isPremium&&S.credits===0;const limit=isFree?2:99;
   const currentSel=Array.from(el.parentElement.querySelectorAll('.chip.sel'));
@@ -1452,14 +1456,14 @@ async function callClaude(articles){
   const wc={short:'200–250',medium:'350–420',long:'500–580'};
   const toneDesc={neutral:'balanced, objective, journalistic',analytical:'data-driven, analytical, with context and implications',conversational:'friendly, clear, accessible — explain like talking to a smart friend'};
   const kwList=S.keyword?S.keyword.split(',').map(k=>k.trim()).filter(k=>k):[];
-  const kw=kwList.length>0?`IMPORTANT: The user has specified these focus keywords: ${kwList.map(k=>`"${k}"`).join(', ')}. You MUST prioritise and include stories that mention these keywords. If no articles mention these keywords, explicitly state that no relevant stories were found for those terms. Do not include sections that are completely unrelated to these keywords.`:'';
+  const kw=kwList.length>0?`STRICT REQUIREMENT: The user has entered focus keywords: ${kwList.map(k=>`"${k}"`).join(', ')}. You MUST ONLY write sections about stories that directly mention these keywords. Do NOT include any sections on unrelated topics even if other articles exist. If fewer than 3 articles mention the keywords write fewer sections. If no articles mention the keywords return no_relevant_articles:true.`:'Cover the most newsworthy stories across the chosen topics.';
   const today=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   const articleDump=articles.map((a,i)=>`[${i+1}] SOURCE: ${a.source}\nTITLE: ${a.title}\nSUMMARY: ${a.desc}\nURL: ${a.link}\nPUBLISHED: ${a.pubDate}`).join('\n\n');
   const prompt=`You are SummAIrise, a personalised AI news digest. Today is ${today}.
 
 Below are ${articles.length} real live news articles. Synthesise them into a ${S.length} digest (${wc[S.length]} words) in a ${toneDesc[S.tone]} tone.
 
-Reader's chosen topics: ${S.topics.join(', ')}.
+${kwList.length>0?'The user has entered focus keywords - search ALL topics/categories for these keywords, ignoring the topic filter below.':'Reader\'s chosen topics: '+S.topics.join(', ')+'.'}
 ${kw}
 
 RULES: Use regular hyphens (-) not em dashes. Specific headlines. Two short paragraphs per section. Pull quote: one striking fact. Citations [number] inline. No filler.
@@ -1509,7 +1513,13 @@ async function renderOutput(data,articles){
   const kwList=S.keyword?S.keyword.split(',').map(k=>k.trim().toLowerCase()).filter(k=>k):[];
   function highlightKw(text){if(!kwList.length)return text;let out=text;kwList.forEach(kw=>{const re=new RegExp(`(${kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`,'gi');out=out.replace(re,`<mark style="background:#fff3cd;color:#000;font-weight:600;border-radius:3px;padding:0 2px">$1</mark>`);});return out;}
   const sections=[...data.sections];
-  if(kwList.length){sections.sort((a,b)=>{const aM=kwList.some(k=>(a.title+a.body).toLowerCase().includes(k));const bM=kwList.some(k=>(b.title+b.body).toLowerCase().includes(k));return bM-aM;});}
+  if(kwList.length){
+    // Filter to only keyword-relevant sections
+    const kwFiltered=sections.filter(s=>kwList.some(k=>(s.title+s.body+s.kicker).toLowerCase().includes(k)));
+    // If we filtered out everything, keep all (AI may have paraphrased)
+    const finalSections=kwFiltered.length>0?kwFiltered:sections;
+    sections.length=0;finalSections.forEach(s=>sections.push(s));
+  }
   sections.forEach((sec,i)=>{
     const div=document.createElement('div');div.className='digest-section';
     const bodyHtml=sec.body.split('\n').filter(p=>p.trim()).map(p=>`<p>${highlightKw(p)}</p>`).join('');
