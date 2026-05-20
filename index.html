@@ -1160,8 +1160,10 @@ async function doSignup(){
 async function getTodayDigestCount(){
   if(!S.user?.id)return 0;
   const today=new Date();today.setHours(0,0,0,0);
-  const{count}=await sb.from('digests').select('*',{count:'exact',head:true}).eq('user_id',S.user.id).gte('created_at',today.toISOString());
-  return count||0;
+  // Only count digests that actually have content (sections array not empty)
+  const{data}=await sb.from('digests').select('sections').eq('user_id',S.user.id).gte('created_at',today.toISOString());
+  if(!data)return 0;
+  return data.filter(d=>d.sections&&d.sections.length>0).length;
 }
 
 async function loadCreditsFromDB(){
