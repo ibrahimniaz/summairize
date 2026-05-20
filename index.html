@@ -1362,16 +1362,19 @@ function extractText(el){if(!el)return '';return(el.textContent||el.innerHTML||'
 function getItemText(item){const selectors=['content\\:encoded','encoded','description','summary','media\\:description'];for(const sel of selectors){try{const el=item.querySelector(sel)||item.getElementsByTagNameNS('*',sel.replace(/\\/g,''))[0];const text=extractText(el);if(text&&text.length>30)return text.slice(0,500);}catch(e){}}return '';}
 function getItemDate(item){const selectors=['pubDate','published','updated','dc\\:date'];for(const sel of selectors){try{const el=item.querySelector(sel)||item.getElementsByTagNameNS('*',sel.replace(/\\/g,''))[0];if(el){const d=new Date(extractText(el));if(!isNaN(d))return d;}}catch(e){}}return new Date();}
 function parseXML(text,source){
-  const xml=new DOMParser().parseFromString(text,'text/xml');const cutoff=Date.now()-parseInt(S.window)*3600*1000;const articles=[];
+  const xml=new DOMParser().parseFromString(text,'text/xml');const cutoff=Date.now()-parseInt(S.window)*3600*1000;const all=[];
   const items=Array.from(xml.querySelectorAll('item, entry'));
   for(const item of items){
-    if(articles.length>=10)break; // Max 10 per source
     const title=extractText(item.querySelector('title'));if(!title||title.length<5)continue;
     const desc=getItemText(item);const pubDate=getItemDate(item);if(pubDate.getTime()<cutoff)continue;
     let link=extractText(item.querySelector('link'));if(!link){const linkEl=item.querySelector('link');link=linkEl?.getAttribute('href')||'';}
-    articles.push({title:title.trim(),desc:desc.trim(),link:link.trim(),source,pubDate:pubDate.toISOString()});
+    all.push({title:title.trim(),desc:desc.trim(),link:link.trim(),source,pubDate:pubDate.toISOString()});
   }
-  return articles;
+  // Score before capping — keyword matches always included
+  const kws=(S.keyword||'').split(',').map(k=>k.trim().toLowerCase()).filter(k=>k);
+  const kwMatches=kws.length>0?all.filter(a=>{const t=(a.title+' '+a.desc).toLowerCase();return kws.some(k=>t.includes(k));}).slice(0,5):[];
+  const rest=all.filter(a=>!kwMatches.includes(a)).slice(0,10-kwMatches.length);
+  return [...kwMatches,...rest];
 }
 async function fetchRSS(source,url){const proxyUrl=PROXY+encodeURIComponent(url);const res=await fetchWithTimeout(proxyUrl,12000);if(!res.ok)throw new Error(`HTTP ${res.status}`);const text=await res.text();if(!text||text.length<100)throw new Error('Empty response');return parseXML(text,source);}
 async function startGenerate(){
@@ -1496,7 +1499,7 @@ async function renderOutput(data,articles){
     const div=document.createElement('div');div.className='digest-section';
     const bodyHtml=sec.body.split('\n').filter(p=>p.trim()).map(p=>`<p>${highlightKw(p)}</p>`).join('');
     const fnHtml=sec.footnotes&&sec.footnotes.length?`<div class="footnotes"><div class="fn-ttl">Sources used</div>${sec.footnotes.map(f=>`<div class="fn-item"><span class="fn-num">[${f.num}]</span><a class="fn-link" href="${f.url}" target="_blank" rel="noopener">${srcLogo(f.source)}${f.title} — ${f.source}</a></div>`).join('')}</div>`:'';
-    div.innerHTML=`<div class="sec-kicker">${sec.kicker||''}</div><div class="sec-hdr"><div class="sec-ttl">${highlightKw(sec.title)}</div><div class="vote-row"><button class="vb" id="up${i}" onclick="vote(${i},'up')" title="Helpful">▲</button><button class="vb" id="dn${i}" onclick="vote(${i},'dn')" title="Not helpful">▼</button></div></div><div class="sec-body">${bodyHtml}<div class="src-quote">${sec.quote}<cite>— ${sec.quote_source}</cite></div>${fnHtml}</div>`;
+    div.innerHTML=`<div class="sec-kicker">${sec.kicker||''}</div><div class="sec-hdr"><div class="sec-ttl">${highlightKw(sec.title)}</div></div><div class="sec-body">${bodyHtml}<div class="src-quote">${sec.quote}<cite>— ${sec.quote_source}</cite></div>${fnHtml}</div>`;
     el.appendChild(div);
   });
   showScreen('screen-output');
