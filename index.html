@@ -1207,7 +1207,22 @@ async function showAdmin(){
   list.innerHTML=rows.map((r,i)=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1.25rem;border-bottom:0.5px solid var(--paper3);gap:1rem;flex-wrap:wrap"><div style="display:flex;align-items:center;gap:10px"><div style="width:28px;height:28px;background:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:600;flex-shrink:0">${i+1}</div><div><div style="font-size:12px;color:var(--ink3);font-family:monospace">${r.id.slice(0,8)}...</div><div style="font-size:11px;color:var(--ink4)">Last: ${r.sources||'—'}</div></div></div><div style="display:flex;gap:1.5rem;align-items:center"><div style="text-align:center"><div style="font-size:16px;font-weight:600;color:var(--ink)">${r.count}</div><div style="font-size:10px;color:var(--ink4)">digests</div></div><div style="font-size:11px;color:var(--ink3)">${new Date(r.lastActive).toLocaleDateString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</div></div></div>`).join('');
 }
 
-async function doSignOut(){await sb.auth.signOut();S.user=null;showScreen('screen-landing');}
+async function doSignOut(){
+  await sb.auth.signOut();
+  S.user=null;
+  S.isPremium=false;
+  S.credits=0;
+  // Reset landing nav back to original state
+  const landingNav=document.querySelector('#screen-landing nav > div:last-child');
+  if(landingNav){
+    landingNav.innerHTML=`
+      <button onclick="scrollToSection('section-contact')" class="nav-contact-btn" style="padding:8px 16px;background:transparent;border:0.5px solid rgba(255,255,255,0.2);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans);white-space:nowrap;transition:all 0.15s">Contact</button>
+      <button onclick="showAuth('login')" style="padding:8px 16px;background:transparent;border:0.5px solid rgba(255,255,255,0.2);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans);white-space:nowrap;transition:all 0.15s">Sign in</button>
+      <button onclick="showAuth('signup')" style="padding:8px 18px;background:#fff;border:none;border-radius:8px;color:#000;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans);white-space:nowrap">Sign up</button>
+    `;
+  }
+  showScreen('screen-landing');
+}
 
 function updateUsageBar(){
   const el=document.getElementById('usage-bar');if(!el)return;
@@ -1429,12 +1444,12 @@ scored.sort((a,b)=>b._score-a._score);
 
 // Take top 25 by score — ensures keyword matches always included
 const capped=scored.slice(0,25);
-  const trimmed=capped.map(a=>({...a,desc:a.desc.slice(0,200)}));
+  const trimmed=capped.map(a=>({...a,desc:a.desc.slice(0,120)}));
   try{await callClaude(trimmed);}
   catch(e){showScreen('screen-output');document.getElementById('digest-sections').innerHTML=`<div class="no-stories"><h3>Generation failed</h3><p>Something went wrong. Please try again.</p><div style="display:flex;gap:10px;margin-top:1.25rem;flex-wrap:wrap"><button class="btn btn-green" onclick="startGenerate()">↺ Try again</button><button class="btn btn-ghost" onclick="restart()">← Adjust preferences</button></div></div>`;renderOutputMeta([]);}
 }
 async function callClaude(articles){
-  const wc={short:'280–350',medium:'500–580',long:'750–850'};
+  const wc={short:'200–250',medium:'350–420',long:'500–580'};
   const toneDesc={neutral:'balanced, objective, journalistic',analytical:'data-driven, analytical, with context and implications',conversational:'friendly, clear, accessible — explain like talking to a smart friend'};
   const kwList=S.keyword?S.keyword.split(',').map(k=>k.trim()).filter(k=>k):[];
   const kw=kwList.length>0?`IMPORTANT: The user has specified these focus keywords: ${kwList.map(k=>`"${k}"`).join(', ')}. You MUST prioritise and include stories that mention these keywords. If no articles mention these keywords, explicitly state that no relevant stories were found for those terms. Do not include sections that are completely unrelated to these keywords.`:'';
@@ -1447,7 +1462,7 @@ Below are ${articles.length} real live news articles. Synthesise them into a ${S
 Reader's chosen topics: ${S.topics.join(', ')}.
 ${kw}
 
-RULES: Be generous with topic matching. Use regular hyphens (-) not em dashes (—) in your writing. Specific kickers and headlines. Two paragraphs per section, 3-4 sentences each, all specific facts. Pull quote: most striking stat or fact. Citations use [number] inline, each footnote links to a different article. No filler phrases.
+RULES: Use regular hyphens (-) not em dashes. Specific headlines. Two short paragraphs per section. Pull quote: one striking fact. Citations [number] inline. No filler.
 
 LIVE ARTICLES:
 ${articleDump}
@@ -1457,8 +1472,8 @@ Respond ONLY with valid JSON:
 
   try{
     setLoadStep(4);const effectivePremium=S.isPremium||S.credits>0;const model=effectivePremium?'claude-sonnet-4-6':'claude-haiku-4-5-20251001';
-    const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),45000);
-    const res=await fetch('/api/digest',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model,max_tokens:3000,messages:[{role:'user',content:prompt}],isPremium:effectivePremium,userEmail:S.user?.email||''}),signal:controller.signal});
+    const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),240000);
+    const res=await fetch('/api/digest',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model,max_tokens:2000,messages:[{role:'user',content:prompt}],isPremium:effectivePremium,userEmail:S.user?.email||''}),signal:controller.signal});
     clearTimeout(timeout);if(!res.ok)throw new Error(`API error ${res.status}`);
     const data=await res.json();if(data.error)throw new Error(data.error.message||'API error');
     const raw=data.content.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
