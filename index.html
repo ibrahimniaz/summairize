@@ -126,7 +126,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
 .new-btn:hover{background:var(--paper2)}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 20px;border-radius:var(--radius);font-size:13px;font-weight:500;opacity:0;pointer-events:none;transition:opacity 0.2s;z-index:999}
 .toast.show{opacity:1}
-.fetch-log{background:var(--paper2);border-radius:var(--radius);padding:10px 14px;margin-top:1.5rem;font-size:12px;color:var(--ink3);text-align:left;max-height:80px;overflow:hidden}
+.fetch-log{background:var(--paper2);border-radius:var(--radius);padding:10px 14px;margin-top:1.5rem;font-size:12px;color:var(--ink3);text-align:left;max-height:140px;overflow-y:auto}
 .fetch-log-item.ok{color:var(--green-dark)}.fetch-log-item.err{color:#c0392b}
 .share-btn.email-btn{background:var(--green);color:#fff;border-color:var(--green)}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:200;display:flex;align-items:center;justify-content:center;padding:1.5rem}
@@ -663,7 +663,6 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
   <div class="auth-wrap">
     <div class="auth-card">
       <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:2rem">
-        <div style="width:36px;height:36px;background:#000;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:#fff;line-height:1">S</span></div>
         <span style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:#000">SummAIrise</span>
       </div>
       <div class="auth-tabs">
@@ -705,7 +704,6 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
   <div class="auth-wrap">
     <div class="auth-card">
       <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:1.5rem">
-        <div style="width:36px;height:36px;background:#000;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:#fff;line-height:1">S</span></div>
         <span style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#000">SummAIrise</span>
       </div>
       <div style="font-size:18px;font-weight:600;color:var(--ink);margin-bottom:0.25rem;text-align:center">Reset your password</div>
@@ -725,8 +723,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
 <div class="screen" id="screen-account" style="flex-direction:column">
   <nav class="nav">
     <div style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="showScreen('screen-home')">
-      <div style="width:32px;height:32px;background:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#000;line-height:1">S</span></div>
-      <span style="font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;color:#fff">SummAIrise</span>
+      <span style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#fff">SummAIrise</span>
     </div>
     <div class="nav-right"><button onclick="showScreen('screen-home')" style="padding:7px 16px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;cursor:pointer;font-family:var(--sans)">&#x2190; Back</button></div>
   </nav>
@@ -757,8 +754,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
 <div class="screen" id="screen-home" style="flex-direction:column">
   <nav class="nav">
     <div style="display:flex;align-items:center;gap:10px">
-      <div style="width:32px;height:32px;background:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#000;line-height:1">S</span></div>
-      <span style="font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;color:#fff">SummAIrise</span>
+      <span style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#fff">SummAIrise</span>
     </div>
     <div class="nav-right">
       <div id="nav-credits-home"></div>
@@ -785,8 +781,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
 <div class="screen" id="screen-admin" style="flex-direction:column">
   <nav class="nav">
     <div style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="showScreen('screen-home')">
-      <div style="width:32px;height:32px;background:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#000;line-height:1">S</span></div>
-      <span style="font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;color:#fff">SummAIrise</span>
+      <span style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#fff">SummAIrise</span>
     </div>
     <div class="nav-right"><button onclick="showScreen('screen-home')" style="padding:7px 16px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;cursor:pointer;font-family:var(--sans)">&#x2190; Back</button></div>
   </nav>
@@ -808,7 +803,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
 <!-- CONFIG -->
 <div class="screen" id="screen-config">
   <nav class="nav">
-    <div style="display:flex;align-items:center;gap:10px;cursor:pointer"><div style="width:32px;height:32px;background:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#000;line-height:1">S</span></div><span style="font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;color:#fff">SummAIrise</span></div>
+    <div style="display:flex;align-items:center;gap:10px;cursor:pointer"><span style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#fff">SummAIrise</span></div>
     <div class="nav-right">
       <div id="usage-bar" style="font-size:12px;color:var(--ink3);display:flex;align-items:center;gap:8px"></div>
       <span id="nav-user" style="font-size:13px;color:#aaa"></span>
@@ -923,7 +918,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
 
 <!-- PAYWALL -->
 <div class="screen" id="screen-paywall" style="flex-direction:column;background:var(--paper)">
-  <nav class="nav"><div style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="showScreen('screen-config')"><div style="width:32px;height:32px;background:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#000;line-height:1">S</span></div><span style="font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;color:#fff">SummAIrise</span></div></nav>
+  <nav class="nav"><div style="display:flex;align-items:center;gap:10px;cursor:pointer" onclick="showScreen('screen-config')"><span style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#fff">SummAIrise</span></div></nav>
   <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:2rem">
   <div style="max-width:640px;width:100%">
     <div style="text-align:center;margin-bottom:2rem">
@@ -1011,6 +1006,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
       </div>
       <div class="load-ttl">Building your digest</div>
       <div class="load-sub" id="load-sub">Fetching live news feeds&#x2026;</div>
+      <div id="load-estimate" style="font-size:12px;color:var(--ink4);margin-top:-1.5rem;margin-bottom:1.5rem">Estimated time: 20-40 seconds</div>
       <div class="load-steps">
         <div class="ls cur" id="ls1"><div class="ls-dot"></div>Fetching live RSS feeds</div>
         <div class="ls" id="ls2"><div class="ls-dot"></div>Parsing articles</div>
@@ -1030,7 +1026,7 @@ label{font-size:13px;color:var(--ink3);display:block;margin-bottom:5px}
 <!-- OUTPUT -->
 <div class="screen" id="screen-output">
   <nav class="nav">
-    <div style="display:flex;align-items:center;gap:10px;cursor:pointer"><div style="width:32px;height:32px;background:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#000;line-height:1">S</span></div><span style="font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;color:#fff">SummAIrise</span></div>
+    <div style="display:flex;align-items:center;gap:10px;cursor:pointer"><span style="font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#fff">SummAIrise</span></div>
     <div class="nav-right">
       <span id="out-credits" style="padding:7px 14px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;white-space:nowrap"></span>
       <button onclick="showScreen('screen-home')" style="padding:7px 16px;background:transparent;border:1px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans)">&#x2190; Home</button>
@@ -1369,6 +1365,7 @@ function parseXML(text,source){
   const xml=new DOMParser().parseFromString(text,'text/xml');const cutoff=Date.now()-parseInt(S.window)*3600*1000;const articles=[];
   const items=Array.from(xml.querySelectorAll('item, entry'));
   for(const item of items){
+    if(articles.length>=10)break; // Max 10 per source
     const title=extractText(item.querySelector('title'));if(!title||title.length<5)continue;
     const desc=getItemText(item);const pubDate=getItemDate(item);if(pubDate.getTime()<cutoff)continue;
     let link=extractText(item.querySelector('link'));if(!link){const linkEl=item.querySelector('link');link=linkEl?.getAttribute('href')||'';}
@@ -1382,6 +1379,15 @@ async function startGenerate(){
   if(!S.isPremium&&S.credits===0&&S.digestsToday>=FREE_LIMIT){showPaywall();return;}
   S.keyword=kwChips.length>0?kwChips.join(', '):(document.getElementById('kw')?.value.trim()||'');
   showScreen('screen-loading');document.getElementById('fetch-log').innerHTML='';fetchLog=[];allArticles=[];setLoadStep(1);
+  // Start elapsed timer
+  let _loadStart=Date.now();
+  if(window._loadTimer)clearInterval(window._loadTimer);
+  window._loadTimer=setInterval(()=>{
+    const el=document.getElementById('load-estimate');
+    if(!el){clearInterval(window._loadTimer);return;}
+    const elapsed=Math.round((Date.now()-_loadStart)/1000);
+    el.textContent=`${elapsed}s elapsed - please wait...`;
+  },1000);
   const fetchPromises=S.sources.map(async source=>{
     const url=RSS_FEEDS[source];if(!url)return;
     try{const arts=await fetchRSS(source,url);if(arts.length>0){allArticles.push(...arts);addFetchLog(`${source}: ${arts.length} articles`,true);}
@@ -1391,10 +1397,36 @@ async function startGenerate(){
   await Promise.allSettled(fetchPromises);
   setLoadStep(2);document.getElementById('load-sub').textContent=`Parsed ${allArticles.length} articles across ${S.sources.length} sources`;
   S.totalArticlesFetched=allArticles.length;
-  if(allArticles.length===0){showScreen('screen-output');document.getElementById('digest-sections').innerHTML=`<div class="no-stories"><h3>No stories found</h3><p>We couldn't fetch articles from your selected sources within the past ${S.window} hours.</p><div style="display:flex;gap:10px;margin-top:1.25rem;flex-wrap:wrap"><button class="btn btn-green" onclick="startGenerate()">↺ Try again</button><button class="btn btn-ghost" onclick="restart()">← Adjust preferences</button></div></div>`;renderOutputMeta([]);return;}
+  if(allArticles.length===0){if(window._loadTimer){clearInterval(window._loadTimer);window._loadTimer=null;}showScreen('screen-output');document.getElementById('digest-sections').innerHTML=`<div class="no-stories"><h3>No stories found</h3><p>We couldn't fetch articles from your selected sources within the past ${S.window} hours.</p><div style="display:flex;gap:10px;margin-top:1.25rem;flex-wrap:wrap"><button class="btn btn-green" onclick="startGenerate()">↺ Try again</button><button class="btn btn-ghost" onclick="restart()">← Adjust preferences</button></div></div>`;renderOutputMeta([]);return;}
   setLoadStep(3);
-  const capped=allArticles.length>20?allArticles.sort(()=>Math.random()-0.5).slice(0,20):allArticles;
-  const trimmed=capped.map(a=>({...a,desc:a.desc.slice(0,150)}));
+  // Smart relevance scoring: keyword > topic > recency
+const kwTerms=(S.keyword||'').split(',').map(k=>k.trim().toLowerCase()).filter(k=>k);
+const topicTerms=S.topics.map(t=>t.toLowerCase());
+
+function scoreArticle(a){
+  const text=(a.title+' '+(a.desc||'')).toLowerCase();
+  let score=0;
+  // Keyword match — highest priority
+  kwTerms.forEach(kw=>{
+    if(a.title.toLowerCase().includes(kw))score+=150; // title match = strongest
+    else if(text.includes(kw))score+=80; // body match
+  });
+  // Topic match
+  topicTerms.forEach(t=>{if(text.includes(t))score+=20;});
+  // Recency bonus
+  const ageHrs=(Date.now()-new Date(a.pubDate).getTime())/3600000;
+  if(ageHrs<3)score+=15;
+  else if(ageHrs<6)score+=10;
+  else if(ageHrs<12)score+=5;
+  return score;
+}
+
+const scored=allArticles.map(a=>({...a,_score:scoreArticle(a)}));
+scored.sort((a,b)=>b._score-a._score);
+
+// Take top 25 by score — ensures keyword matches always included
+const capped=scored.slice(0,25);
+  const trimmed=capped.map(a=>({...a,desc:a.desc.slice(0,200)}));
   try{await callClaude(trimmed);}
   catch(e){showScreen('screen-output');document.getElementById('digest-sections').innerHTML=`<div class="no-stories"><h3>Generation failed</h3><p>Something went wrong. Please try again.</p><div style="display:flex;gap:10px;margin-top:1.25rem;flex-wrap:wrap"><button class="btn btn-green" onclick="startGenerate()">↺ Try again</button><button class="btn btn-ghost" onclick="restart()">← Adjust preferences</button></div></div>`;renderOutputMeta([]);}
 }
@@ -1445,7 +1477,7 @@ function renderOutputMeta(articles){
   document.getElementById('out-len-tag').textContent=cap(S.length||'');
   const kwTag=document.getElementById('out-kw-tag');if(kwTag){kwTag.textContent=S.keyword?'🔍 '+S.keyword:'';kwTag.style.display=S.keyword?'inline-block':'none';}
   const coverageEl=document.getElementById('out-coverage');
-  if(coverageEl&&S.totalArticlesFetched){const pct=Math.round((30/S.totalArticlesFetched)*100);coverageEl.textContent=`${Math.min(30,S.totalArticlesFetched)} of ${S.totalArticlesFetched} articles analysed (${Math.min(100,pct)}% coverage)`;coverageEl.style.display='block';}
+  if(coverageEl&&S.totalArticlesFetched){const selected=Math.min(25,S.totalArticlesFetched);const pct=Math.round((selected/S.totalArticlesFetched)*100);coverageEl.textContent=`${selected} most relevant of ${S.totalArticlesFetched} articles analysed`;coverageEl.style.display='block';}
   document.getElementById('out-src-tags').innerHTML=S.sources.map(s=>srcTag(s)).join('');
   const now=new Date();const stamp=document.getElementById('updated-stamp');
   stamp.innerHTML=`<div class="updated-dot"></div>Last updated ${now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})} · ${articles.length} articles fetched`;
